@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .1),
-                            Text('Dont have an account? ',
+                            Text('Don\'t have an account? ',
                             style: TextStyle(color: Colors.white, fontSize: 20, ),
                             ),
                             TextButton(
