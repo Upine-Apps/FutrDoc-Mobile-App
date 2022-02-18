@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/screens/settings/settings.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -15,7 +16,6 @@ class _LoginState extends State<Login> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: Scaffold(
-                backgroundColor: const Color(0xFF191256),
                 body: Align(
                     alignment: Alignment.topCenter,
                     child: Container(
@@ -32,31 +32,14 @@ class _LoginState extends State<Login> {
                                         'assets/images/futrdoc-logo.png')),
                                 height:
                                     MediaQuery.of(context).size.height * .2),
-                            Text(
-                              'FutrDoc',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 40),
-                            ),
+                            Text('FutrDoc',
+                                style: Theme.of(context).textTheme.headline1),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .05),
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'USERNAME',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
                               ),
                             ),
                             SizedBox(
@@ -65,20 +48,6 @@ class _LoginState extends State<Login> {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'PASSWORD',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
                               ),
                             ),
                             SizedBox(
@@ -91,32 +60,36 @@ class _LoginState extends State<Login> {
                                 onPressed: () {},
                                 child: Text('LOGIN'),
                                 style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    primary: Color(0xFF363B8F),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
                                     textStyle: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                )),
                               ),
                             ),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .1),
-                            Text('Don\'t have an account? ',
-                            style: TextStyle(color: Colors.white, fontSize: 20, ),
+                            Text(
+                              'Don\'t have an account? ',
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
                             TextButton(
-                              onPressed: () {}, 
-                              child: Text('Sign Up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                decoration: TextDecoration.underline
-                              ),
-                              ))
+                                onPressed: () {},
+                                child: Text(
+                                  'Sign Up',
+                                  style: Theme.of(context).textTheme.button,
+                                )),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Settings()));
+                                },
+                                child: Text(
+                                  'Setting',
+                                  style: Theme.of(context).textTheme.button,
+                                ))
                           ],
                         )))))));
   }
