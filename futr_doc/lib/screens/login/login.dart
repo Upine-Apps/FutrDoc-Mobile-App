@@ -79,17 +79,7 @@ class _LoginState extends State<Login> {
                                   'Sign Up',
                                   style: Theme.of(context).textTheme.button,
                                 )),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Settings()));
-                                },
-                                child: Text(
-                                  'Setting',
-                                  style: Theme.of(context).textTheme.button,
-                                ))
+                            
                           ],
                         )))))));
   }
