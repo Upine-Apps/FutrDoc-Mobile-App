@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_conditional_rendering/flutter_conditional_rendering.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
 import 'package:provider/provider.dart';
@@ -9,19 +10,11 @@ class Settings extends StatefulWidget {
   State<StatefulWidget> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> with WidgetsBindingObserver {
+class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      getSelectPosition();
-    });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
+    getSelectPosition();
   }
 
   getSelectPosition() async {
@@ -30,27 +23,26 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
     setState(() {
       selectedPosition = themes.indexOf(prefs.getString('Theme'));
     });
-    print('selectedPosition ${selectedPosition}');
+    print('selectedPosition $selectedPosition');
   }
 
-  late int selectedPosition;
+  int selectedPosition =-1;
   List themes = ["Light", "Dark"];
 
   @override
   Widget build(BuildContext context) {
     ThemeNotifier themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
-      body: Container(
-        height: 500,
-        child: ListView.builder(
-          itemBuilder: (context, position) {
-            return _createList(
-                context, themes[position], position, themeNotifier);
-          },
-          itemCount: themes.length,
-        ),
-      ),
-    );
+        body: Container(
+                height: 500,
+                child: ListView.builder(
+                  itemBuilder: (context, position) {
+                    return _createList(
+                        context, themes[position], position, themeNotifier);
+                  },
+                  itemCount: themes.length,
+                ),
+              ));
   }
 
   _createList(context, item, position, themeNotifier) {
