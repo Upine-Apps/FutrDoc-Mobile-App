@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Settings(),
+      home: Login(),
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: themeNotifier.getThemeMode(),
