@@ -19,11 +19,9 @@ class _SettingsState extends State<Settings> {
 
   getSelectPosition() async {
     var prefs = await SharedPreferences.getInstance();
-    print('inside getSelectedPosition');
     setState(() {
       selectedPosition = themes.indexOf(prefs.getString('Theme'));
     });
-    print('selectedPosition $selectedPosition');
   }
 
   int selectedPosition =-1;

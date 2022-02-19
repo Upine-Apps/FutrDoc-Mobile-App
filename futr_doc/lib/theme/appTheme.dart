@@ -14,6 +14,10 @@ class AppTheme {
             ),
           )
         ),
+        checkboxTheme: CheckboxThemeData(
+          checkColor: MaterialStateProperty.all<Color>(AppColors.white),
+          fillColor: MaterialStateProperty.all<Color>(AppColors.grey),
+        ),
         buttonTheme: ButtonThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -26,7 +30,9 @@ class AppTheme {
               color: Colors.white,
               fontSize: 20,
               decoration: TextDecoration.underline
-            )),
+            ),
+            bodyText2: TextStyle(color: AppColors.white, fontSize: 12)
+            ),
             
 
         inputDecorationTheme: InputDecorationTheme(
@@ -48,7 +54,7 @@ class AppTheme {
 
   
     get lightTheme => ThemeData(
-      scaffoldBackgroundColor: AppColors.white,
+      scaffoldBackgroundColor: AppColors.offWhite,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 10,
@@ -58,6 +64,10 @@ class AppTheme {
             ),
           )
         ),
+        checkboxTheme: CheckboxThemeData(
+          checkColor: MaterialStateProperty.all<Color>(AppColors.black),
+          fillColor: MaterialStateProperty.all<Color>(AppColors.grey),
+        ),
       buttonTheme: ButtonThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -66,6 +76,7 @@ class AppTheme {
       textTheme: TextTheme(
           headline1: TextStyle(color: AppColors.black, fontSize: 40),
           bodyText1: TextStyle(color: AppColors.black, fontSize: 20),
+          bodyText2: TextStyle(color: AppColors.black, fontSize: 12),
            button: TextStyle(
               color: Colors.black,
               fontSize: 20,

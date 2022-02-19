@@ -3,6 +3,7 @@ import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/screens/login/signUp.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -65,7 +66,14 @@ class _LoginState extends State<Login> {
                               'Don\'t have an account? ',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            CustomTextButton(onPressed: () {}, text: 'Sign Up'),
+                            CustomTextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUp()));
+                                },
+                                text: 'Sign Up'),
                           ],
                         )))))));
   }
