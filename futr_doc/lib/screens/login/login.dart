@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
+import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
+import 'package:futr_doc/custom-widgets/customImage.dart';
+import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/screens/login/signUp.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -15,7 +20,6 @@ class _LoginState extends State<Login> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: Scaffold(
-                backgroundColor: const Color(0xFF191256),
                 body: Align(
                     alignment: Alignment.topCenter,
                     child: Container(
@@ -26,97 +30,50 @@ class _LoginState extends State<Login> {
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .15),
-                            SizedBox(
-                                child: Image(
-                                    image: AssetImage(
-                                        'assets/images/futrdoc-logo.png')),
+                            CustomImage(
+                                imagePath: 'assets/images/futrdoc-logo.png',
                                 height:
                                     MediaQuery.of(context).size.height * .2),
-                            Text(
-                              'FutrDoc',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 40),
-                            ),
+                            Text('FutrDoc',
+                                style: Theme.of(context).textTheme.headline1),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .05),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'USERNAME',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
+                            CustomTextFormField(
+                                onEditingComplete: () {},
+                                labelText: 'USERNAME'),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .025),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'PASSWORD',
-                                labelStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
+                            CustomTextFormField(
+                                onEditingComplete: () {},
+                                labelText: 'PASSWORD'),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .05),
-                            SizedBox(
+                            CustomElevatedButton(
+                              onPressed: () {},
+                              text: 'LOGIN',
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
                               width: MediaQuery.of(context).size.width * .7,
                               height: MediaQuery.of(context).size.height * .1,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: Text('LOGIN'),
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    primary: Color(0xFF363B8F),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    textStyle: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
                             ),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .1),
-                            Text('Don\'t have an account? ',
-                            style: TextStyle(color: Colors.white, fontSize: 20, ),
+                            Text(
+                              'Don\'t have an account? ',
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            TextButton(
-                              onPressed: () {}, 
-                              child: Text('Sign Up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                decoration: TextDecoration.underline
-                              ),
-                              ))
+                            CustomTextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUp()));
+                                },
+                                text: 'Sign Up'),
                           ],
                         )))))));
   }
