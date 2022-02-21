@@ -6,6 +6,8 @@ import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../custom-widgets/text-field/customEmailFormField.dart';
+import '../../custom-widgets/text-field/customPasswordFormField.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -30,6 +32,13 @@ class _SignUpState extends State<SignUp> {
   String theme = '';
   bool terms = false;
   final _signUpFormKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -58,28 +67,50 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                       CustomTextFormField(
-                          onEditingComplete: () {
-                            node.nextFocus();
-                          },
-                          labelText: 'FIRST NAME'),
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'FIRST NAME',
+                        controller: _firstNameController,
+                        onChanged: (val) {},
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomTextFormField(
-                          onEditingComplete: () { node.nextFocus();}, labelText: 'LAST NAME'),
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'LAST NAME',
+                        controller: _lastNameController,
+                        onChanged: (val) {},
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .025,
                       ),
-                      CustomTextFormField(
-                          onEditingComplete: () { node.nextFocus();}, labelText: 'EMAIL'),
+                      CustomEmailFormField(
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'EMAIL',
+                        controller: _emailController,
+                        onChanged: (val) {},
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
-                      CustomTextFormField(
-                          onEditingComplete: () { node.nextFocus();}, labelText: 'PASSWORD'),
+                      CustomPasswordFormField(
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
+                          labelText: 'PASSWORD',
+                          controller: _passwordController,
+                          onChanged: (val) {}),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
-                      CustomTextFormField(
+                      CustomPasswordFormField(
                           onEditingComplete: () {},
-                          labelText: 'CONFIM PASSWORD'),
+                          labelText: 'CONFIRM PASSWORD',
+                          controller: _passwordConfirmController,
+                          onChanged: (val) {}),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       Row(
@@ -107,7 +138,9 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .035),
                       CustomElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_signUpFormKey.currentState!.validate()) {}
+                        },
                         text: 'Sign Up',
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
