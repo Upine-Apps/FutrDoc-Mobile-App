@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
+import '../../custom-widgets/text-field/emailWithDropdown.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SignUpState extends State<SignUp> {
   getTheme() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
-      theme = prefs.getString('Theme')!;
+      theme = prefs.getString('Theme') ?? 'Light';
     });
   }
 
@@ -38,12 +39,12 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  String dropdownValue = '@utrgv.edu';
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: GestureDetector(
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
@@ -87,14 +88,17 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .025,
                       ),
-                      CustomEmailFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'EMAIL',
-                        controller: _emailController,
-                        onChanged: (val) {},
-                      ),
+                      EmailWithDropdown(
+                          onEditingComplete: () {},
+                          labelText: 'EMAIL',
+                          controller: _emailController,
+                          onChanged: (val) {},
+                          onChangedDropdown: (value) {
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                          },
+                          dropdownValue: dropdownValue),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
@@ -147,10 +151,11 @@ class _SignUpState extends State<SignUp> {
                         width: MediaQuery.of(context).size.width * .7,
                         height: MediaQuery.of(context).size.height * .1,
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .05),
                       Text(
                         'Already have an account? ',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       CustomTextButton(
                           onPressed: () {
@@ -160,7 +165,8 @@ class _SignUpState extends State<SignUp> {
                                     builder: (context) => Login()));
                           },
                           text: 'Login'),
-                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .01),
                     ]),
                   ),
                 )),

@@ -6,6 +6,7 @@ import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart'
 import 'package:futr_doc/screens/login/signUp.dart';
 
 import '../../custom-widgets/text-field/customEmailFormField.dart';
+import '../../custom-widgets/text-field/emailWithDropdown.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _LoginState extends State<Login> {
   final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  String dropdownValue = '@utrgv.edu';
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +47,17 @@ class _LoginState extends State<Login> {
                           style: Theme.of(context).textTheme.headline1),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
-                      CustomEmailFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'EMAIL',
-                        controller: _emailController,
-                        onChanged: (val) {},
-                      ),
+                      EmailWithDropdown(
+                          onEditingComplete: () {},
+                          labelText: 'EMAIL',
+                          controller: _emailController,
+                          onChanged: (val) {},
+                          onChangedDropdown: (value) {
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                          },
+                          dropdownValue: dropdownValue),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
@@ -73,10 +78,11 @@ class _LoginState extends State<Login> {
                         width: MediaQuery.of(context).size.width * .7,
                         height: MediaQuery.of(context).size.height * .1,
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .05),
                       Text(
                         'Don\'t have an account? ',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       CustomTextButton(
                           onPressed: () {
