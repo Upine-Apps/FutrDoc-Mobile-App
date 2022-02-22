@@ -3,6 +3,7 @@ import 'appColor.dart';
 
 class AppTheme {
   get darkTheme => ThemeData(
+      dividerColor: AppColors.grey,
       scaffoldBackgroundColor: AppColors.primaryDARK,
       brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -23,9 +24,10 @@ class AppTheme {
       textTheme: TextTheme(
           headline1: TextStyle(color: AppColors.white, fontSize: 40),
           bodyText1: TextStyle(color: AppColors.white, fontSize: 20),
+          headline2: TextStyle(color: AppColors.black, fontSize: 16),
           button: TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 16,
               decoration: TextDecoration.underline),
           bodyText2: TextStyle(color: AppColors.white, fontSize: 12)),
       inputDecorationTheme: InputDecorationTheme(
@@ -51,6 +53,7 @@ class AppTheme {
           )));
 
   get lightTheme => ThemeData(
+        dividerColor: AppColors.black,
         scaffoldBackgroundColor: AppColors.offWhite,
         brightness: Brightness.light,
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -73,9 +76,10 @@ class AppTheme {
             headline1: TextStyle(color: AppColors.black, fontSize: 40),
             bodyText1: TextStyle(color: AppColors.black, fontSize: 20),
             bodyText2: TextStyle(color: AppColors.black, fontSize: 12),
+            headline2: TextStyle(color: AppColors.black, fontSize: 16),
             button: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 16,
                 decoration: TextDecoration.underline)),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: AppColors.black),
