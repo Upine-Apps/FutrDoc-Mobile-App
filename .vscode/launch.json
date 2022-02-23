@@ -5,8 +5,8 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "snug",
-      "cwd": "snug",
+      "name": "futrdoc",
+      "cwd": "futrdoc",
       "request": "launch",
       "type": "dart",
       "args": ["-d", "Pixel_3_API_28"]

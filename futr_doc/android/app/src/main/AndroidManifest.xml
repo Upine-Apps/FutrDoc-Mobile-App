@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.futr_doc">
+    package="com.upine.futr_doc">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="FutrDoc"
         android:icon="@mipmap/ic_launcher">

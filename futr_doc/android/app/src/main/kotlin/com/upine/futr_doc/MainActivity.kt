@@ -1,4 +1,4 @@
-package com.example.futr_doc
+package com.upine.futr_doc
 
 import io.flutter.embedding.android.FlutterActivity
 

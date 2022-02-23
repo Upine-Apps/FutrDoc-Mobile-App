@@ -24,7 +24,7 @@ class AppTheme {
       textTheme: TextTheme(
           headline1: TextStyle(color: AppColors.white, fontSize: 40),
           bodyText1: TextStyle(color: AppColors.white, fontSize: 20),
-          headline2: TextStyle(color: AppColors.black, fontSize: 16),
+          headline2: TextStyle(color: AppColors.white, fontSize: 16),
           button: TextStyle(
               color: Colors.white,
               fontSize: 16,
