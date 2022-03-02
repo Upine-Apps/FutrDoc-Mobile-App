@@ -39,14 +39,16 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .15),
+                          height: MediaQuery.of(context).size.height * .125),
                       CustomImage(
-                          imagePath: 'assets/images/sign-up-logo.png',
-                          width: MediaQuery.of(context).size.height * .75),
+                          imagePath: 'assets/images/futrdoc-logo.png',
+                          width: MediaQuery.of(context).size.height * .25),
+                          Text('FutrDoc',
+                          style: Theme.of(context).textTheme.headline1),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .15),
+                          height: MediaQuery.of(context).size.height * .05),
                       EmailWithDropdown(
-                          onEditingComplete: () {},
+                          onEditingComplete: () { node.nextFocus();},
                           labelText: 'EMAIL',
                           controller: _emailController,
                           onChanged: (val) {},
@@ -72,7 +74,7 @@ class _LoginState extends State<Login> {
                         },
                         text: 'Login',
                         fontSize: 30,
-                        width: MediaQuery.of(context).size.width * .5,
+                        width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .075,
                       ),
                       SizedBox(

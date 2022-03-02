@@ -8,6 +8,7 @@ class AppTheme {
       brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            textStyle: TextStyle(fontWeight: FontWeight.bold),
         elevation: 10,
         primary: AppColors.accentDARK,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -22,7 +23,7 @@ class AppTheme {
           ),
           buttonColor: AppColors.accentDARK),
       textTheme: TextTheme(
-          headline1: TextStyle(color: AppColors.white, fontSize: 40),
+          headline1: TextStyle(color: AppColors.white, fontSize: 40,),
           bodyText1: TextStyle(color: AppColors.white, fontSize: 20),
           headline2: TextStyle(color: AppColors.white, fontSize: 16),
           button: TextStyle(
@@ -58,6 +59,7 @@ class AppTheme {
         brightness: Brightness.light,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(fontWeight: FontWeight.bold),
           elevation: 10,
           primary: AppColors.accentDARK,
           shape:
@@ -80,7 +82,8 @@ class AppTheme {
             button: TextStyle(
                 color: Colors.black,
                 fontSize: 16,
-                decoration: TextDecoration.underline)),
+                decoration: TextDecoration.underline),
+                ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: AppColors.black),
           border: OutlineInputBorder(),

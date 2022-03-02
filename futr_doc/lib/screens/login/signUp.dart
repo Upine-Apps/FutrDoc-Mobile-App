@@ -91,7 +91,7 @@ class _SignUpState extends State<SignUp> {
                         height: MediaQuery.of(context).size.height * .025,
                       ),
                       EmailWithDropdown(
-                          onEditingComplete: () {},
+                          onEditingComplete: () { node.nextFocus();},
                           labelText: 'EMAIL',
                           controller: _emailController,
                           onChanged: (val) {},
@@ -159,7 +159,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         text: 'Sign up',
                         fontSize: 30,
-                        width: MediaQuery.of(context).size.width * .5,
+                        width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .075,
                       ),
                       SizedBox(
