@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
+import '../../custom-widgets/text-field/customPhoneField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
 import 'login.dart';
 
@@ -39,6 +40,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   String dropdownValue = '@utrgv.edu';
   @override
   Widget build(BuildContext context) {
@@ -59,12 +61,12 @@ class _SignUpState extends State<SignUp> {
                     key: _signUpFormKey,
                     child: Column(children: <Widget>[
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .075),
+                          height: MediaQuery.of(context).size.height * .15),
                       CustomImage(
                           imagePath: theme == 'Dark'
                               ? 'assets/images/sign-up-logo.png'
                               : 'assets/images/sign-up-logo-light.png',
-                          height: MediaQuery.of(context).size.height * .035),
+                          width: MediaQuery.of(context).size.height * .75),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                       CustomTextFormField(
@@ -99,6 +101,16 @@ class _SignUpState extends State<SignUp> {
                             });
                           },
                           dropdownValue: dropdownValue),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      CustomPhoneField(
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'PHONE NUMBER',
+                        controller: _phoneController,
+                        onChanged: (val) {},
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
@@ -145,11 +157,10 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () {
                           if (_signUpFormKey.currentState!.validate()) {}
                         },
-                        text: 'Sign Up',
+                        text: 'Sign up',
                         fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        width: MediaQuery.of(context).size.width * .7,
-                        height: MediaQuery.of(context).size.height * .1,
+                        width: MediaQuery.of(context).size.width * .5,
+                        height: MediaQuery.of(context).size.height * .075,
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
@@ -166,7 +177,7 @@ class _SignUpState extends State<SignUp> {
                           },
                           text: 'Login'),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .01),
+                          height: MediaQuery.of(context).size.height * .05),
                     ]),
                   ),
                 )),

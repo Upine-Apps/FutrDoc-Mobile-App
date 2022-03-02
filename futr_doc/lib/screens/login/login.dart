@@ -41,12 +41,10 @@ class _LoginState extends State<Login> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .15),
                       CustomImage(
-                          imagePath: 'assets/images/futrdoc-logo.png',
-                          height: MediaQuery.of(context).size.height * .2),
-                      Text('FutrDoc',
-                          style: Theme.of(context).textTheme.headline1),
+                          imagePath: 'assets/images/sign-up-logo.png',
+                          width: MediaQuery.of(context).size.height * .75),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .05),
+                          height: MediaQuery.of(context).size.height * .15),
                       EmailWithDropdown(
                           onEditingComplete: () {},
                           labelText: 'EMAIL',
@@ -72,11 +70,10 @@ class _LoginState extends State<Login> {
                         onPressed: () {
                           if (_loginFormKey.currentState!.validate()) {}
                         },
-                        text: 'LOGIN',
+                        text: 'Login',
                         fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        width: MediaQuery.of(context).size.width * .7,
-                        height: MediaQuery.of(context).size.height * .1,
+                        width: MediaQuery.of(context).size.width * .5,
+                        height: MediaQuery.of(context).size.height * .075,
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
