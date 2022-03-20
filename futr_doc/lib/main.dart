@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/screens/login/login.dart';
+import 'package:futr_doc/screens/login/loginHero.dart';
 import 'package:futr_doc/screens/settings/settings.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: LoginHero(),
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: themeNotifier.getThemeMode(),
