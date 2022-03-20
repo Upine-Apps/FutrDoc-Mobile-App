@@ -8,7 +8,6 @@ class AppTheme {
       brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            textStyle: TextStyle(fontWeight: FontWeight.bold),
         elevation: 10,
         primary: AppColors.accentDARK,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -29,7 +28,7 @@ class AppTheme {
           button: TextStyle(
               color: Colors.white,
               fontSize: 16,
-              decoration: TextDecoration.underline,
+              
               fontFamily: 'Share'),
           bodyText2: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: 'Share')),
       inputDecorationTheme: InputDecorationTheme(
@@ -60,7 +59,7 @@ class AppTheme {
         brightness: Brightness.light,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(fontWeight: FontWeight.bold),
+              
           elevation: 10,
           primary: AppColors.accentDARK,
           shape:
@@ -83,7 +82,7 @@ class AppTheme {
             button: TextStyle(
                 color: Colors.black,
                 fontSize: 16,
-                decoration: TextDecoration.underline, fontFamily: 'Share'),
+                 fontFamily: 'Share'),
                 ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: AppColors.black),

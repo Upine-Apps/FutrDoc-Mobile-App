@@ -31,7 +31,7 @@ class CustomElevatedButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
                 primary: color,
                 textStyle: TextStyle(
-                  fontSize: fontSize ?? 20,
+                  fontSize: fontSize,
                   fontWeight: fontWeight,
                 ))));
   }

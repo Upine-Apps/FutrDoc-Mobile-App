@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
+import 'package:futr_doc/screens/login/login.dart';
+import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,7 +64,10 @@ class _LoginHeroState extends State<LoginHero> {
             ),
             CustomElevatedButton(
               onPressed: () {
-
+                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
               },
               text: 'Log In',
               color: AppColors.lighterBlue,
@@ -74,13 +79,22 @@ class _LoginHeroState extends State<LoginHero> {
             ),
               CustomElevatedButton(
               onPressed: () {
+                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUp()));
 
               },
               text: 'Register',
-              
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
-              )
+              ),
+              SizedBox(
+              height: MediaQuery.of(context).size.height * .025
+            ),
+            CustomTextButton(onPressed: () {}, text: 'Forgot your password?'),
+            
+            CustomTextButton(onPressed: () {}, text: 'Learn more!')
 
             
           ],)
