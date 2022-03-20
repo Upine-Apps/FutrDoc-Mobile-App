@@ -39,7 +39,7 @@ class _LoginHeroState extends State<LoginHero> {
               height: MediaQuery.of(context).size.height * .25
             ),
             CustomImage(
-              imagePath: theme == 'Dark' ? 'assets/images/futrdoc-logo.png' : 'assets/images/futrdoc-logo-light.png',
+              imagePath: theme == 'Dark' ? 'assets/images/futrdoc-logo-dark.png' : 'assets/images/futrdoc-logo-light.png',
               ),
               SizedBox(
               height: MediaQuery.of(context).size.height * .01
@@ -70,7 +70,7 @@ class _LoginHeroState extends State<LoginHero> {
                                     builder: (context) => Login()));
               },
               text: 'Log In',
-              color: AppColors.lighterBlue,
+              
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
               ),
@@ -86,6 +86,8 @@ class _LoginHeroState extends State<LoginHero> {
 
               },
               text: 'Register',
+              textColor: AppColors.offWhite,
+              color: AppColors.lighterBlue,
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
               ),

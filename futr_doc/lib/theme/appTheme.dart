@@ -3,13 +3,14 @@ import 'appColor.dart';
 
 class AppTheme {
   get darkTheme => ThemeData(
+    primaryColor: AppColors.primaryDARK,
       dividerColor: AppColors.grey,
       scaffoldBackgroundColor: AppColors.primaryDARK,
       brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         elevation: 10,
-        primary: AppColors.accentDARK,
+        primary: AppColors.offWhite,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       )),
       checkboxTheme: CheckboxThemeData(
@@ -30,6 +31,7 @@ class AppTheme {
               fontSize: 16,
               
               fontFamily: 'Share'),
+          
           bodyText2: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: 'Share')),
       inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: AppColors.white),
@@ -54,6 +56,7 @@ class AppTheme {
           )));
 
   get lightTheme => ThemeData(
+    primaryColor: AppColors.offWhite,
         dividerColor: AppColors.black,
         scaffoldBackgroundColor: AppColors.offWhite,
         brightness: Brightness.light,

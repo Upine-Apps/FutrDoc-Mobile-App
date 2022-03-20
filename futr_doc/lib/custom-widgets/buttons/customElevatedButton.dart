@@ -8,6 +8,7 @@ class CustomElevatedButton extends StatelessWidget {
   final double? height;
   final double? width;
   final Color? color;
+  final Color? textColor;
 
   const CustomElevatedButton(
       {Key? key,
@@ -17,7 +18,8 @@ class CustomElevatedButton extends StatelessWidget {
       this.fontWeight,
       this.height,
       this.width,
-      this.color})
+      this.color,
+      this.textColor})
       : super(key: key);
 
   @override
@@ -27,7 +29,8 @@ class CustomElevatedButton extends StatelessWidget {
         width: width,
         child: ElevatedButton(
             onPressed: onPressed,
-            child: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(text,
+                style: TextStyle(color: textColor != null ? textColor : Theme.of(context).primaryColor)),
             style: ElevatedButton.styleFrom(
                 primary: color,
                 textStyle: TextStyle(
