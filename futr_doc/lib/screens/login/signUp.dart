@@ -3,6 +3,7 @@ import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/screens/account_recovery/recoveryCode.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -174,7 +175,12 @@ class _SignUpState extends State<SignUp> {
                             var result = await UserService.instance
                                 .registerUser(email, phone_number,
                                     terms.toString(), password, dropdownValue);
-                            print(result);
+                            if (result['status'] == true) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RecoveryCode()));
+                            }
                           }
                         },
                         text: 'Register',

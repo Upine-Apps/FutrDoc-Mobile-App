@@ -3,6 +3,7 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
+import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 
@@ -15,6 +16,8 @@ final TextEditingController _codeController = TextEditingController();
 final _recoveryCodeKey = GlobalKey<FormState>();
 
 class _RecoveryCodeState extends State<RecoveryCode> {
+  String code = '';
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -61,18 +64,27 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                             onEditingComplete: () {},
                             labelText: 'CODE',
                             controller: _codeController,
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              setState(() {
+                                code = val!;
+                              });
+                            },
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           CustomElevatedButton(
-                            onPressed: () {
-                              if(_recoveryCodeKey.currentState!.validate()) {
-                                 Navigator.push(
+                            onPressed: () async {
+                              if (_recoveryCodeKey.currentState!.validate()) {
+                              
+                                var response = await UserService.instance
+                                    .validateSMS('shamer@utrgv.edu', code);
+                                if(response['status'] ==true) {
+                                    Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ResetPasswod()));
+                                    builder: (context) => ResetPassword()));
+                                }
                               }
                             },
                             text: 'Continue',
@@ -82,7 +94,8 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .025,
                           ),
-                          CustomTextButton(onPressed: () {}, text: 'Resend code')
+                          CustomTextButton(
+                              onPressed: () {}, text: 'Resend code')
                         ],
                       ),
                     ))

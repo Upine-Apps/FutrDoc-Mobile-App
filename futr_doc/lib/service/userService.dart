@@ -35,8 +35,10 @@ class UserService {
       "password": password
     };
     try {
-      var data = await http.post(Uri.parse(url), headers: headers, body: body);
-      return {data};
+      var response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      return {'status': true};
     } catch (err) {
       return {'status': false};
     }
@@ -69,7 +71,7 @@ class UserService {
   Future getEmailCode(String username, String password) async {
     final url = '$_hostUrl/getEmailCode';
     var headers = await getHeaders();
-    Object body = {username: username, password: password};
+    Object body = {'username': username, 'password': password};
     try {
       var data = await http.post(Uri.parse(url), headers: headers, body: body);
       return {data};
@@ -78,13 +80,22 @@ class UserService {
     }
   }
 
-  Future validateSMS(String username, String code) async {
+  Future validateSMS(String email, String code) async {
     final url = '$_hostUrl/validateSMS';
     var headers = await getHeaders();
-    Object body = {username: username, code: code};
+    Object body = {
+      'username': email,
+      'code': code,
+    };
     try {
-      var data = await http.post(Uri.parse(url), headers: headers, body: body);
-      return {data};
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        return {'status': false};
+      }
     } catch (err) {
       return {'status': false};
     }
@@ -101,8 +112,14 @@ class UserService {
       'refreshToken': headers['refreshToken']
     };
     try {
-      var data = await http.post(Uri.parse(url), headers: headers, body: body);
-      return {data};
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        return {'status': false};
+      }
     } catch (err) {
       return {'status': false};
     }

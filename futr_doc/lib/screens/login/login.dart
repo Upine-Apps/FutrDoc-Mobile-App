@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
@@ -10,6 +11,7 @@ import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
 
@@ -33,7 +35,7 @@ class _LoginState extends State<Login> {
   }
 
   String theme = '';
-  String username = '';
+  String email = '';
   String password = '';
   String domain = '';
   final _loginFormKey = GlobalKey<FormState>();
@@ -110,14 +112,12 @@ class _LoginState extends State<Login> {
                               controller: _emailController,
                               onChanged: (val) {
                                 setState(() {
-                                  domain = val!;
-                                  this.username = '$domain+$dropdownValue';
+                                  email = val!;
                                 });
                               },
                               onChangedDropdown: (value) {
                                 setState(() {
                                   dropdownValue = value!;
-                                  this.username = '$domain+$dropdownValue';
                                 });
                               },
                               dropdownValue: dropdownValue),
@@ -137,10 +137,12 @@ class _LoginState extends State<Login> {
                           SizedBox(
                               height: MediaQuery.of(context).size.height * .05),
                           CustomElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_loginFormKey.currentState!.validate()) {
-                                UserService.instance
-                                    .authenticateUser(username, password);
+                                var response = await UserService.instance
+                                    .authenticateUser(
+                                        email + dropdownValue, password);
+                                if (response['status'] == true) {}
                               }
                             },
                             text: 'Login',
