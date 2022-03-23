@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class UserService {
   Future<Map<String, String>> getHeaders() async {
@@ -16,7 +17,7 @@ class UserService {
     return _headers;
   }
 
-  static final _hostUrl = '54.91.210.147:3000/user';
+  static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
@@ -38,8 +39,20 @@ class UserService {
     var headers = await getHeaders();
     Object body = {username: username, password: password};
     try {
-      var data = await http.post(Uri.parse(url), headers: headers, body: body);
-      return {data};
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+        Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+        prefs.then((value) {
+          value.setString('accessToken', data['accessToken']);
+          value.setString('idToken', data['idToken']);
+          value.setString('refreshToken', data['refreshToken']);
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+      return {'status': true};
     } catch (err) {
       return {'status': false};
     }
