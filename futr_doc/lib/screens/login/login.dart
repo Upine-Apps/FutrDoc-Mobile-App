@@ -6,6 +6,7 @@ import 'package:futr_doc/custom-widgets/halfCircle.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
+import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +33,9 @@ class _LoginState extends State<Login> {
   }
 
   String theme = '';
-
+  String username = '';
+  String password = '';
+  String domain = '';
   final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -90,7 +93,7 @@ class _LoginState extends State<Login> {
                         ],
                       )),
                   MyArc(
-                    width: MediaQuery.of(context).size.width ,
+                    width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * .1,
                   ),
                   Container(
@@ -105,10 +108,16 @@ class _LoginState extends State<Login> {
                               },
                               labelText: 'EMAIL',
                               controller: _emailController,
-                              onChanged: (val) {},
+                              onChanged: (val) {
+                                setState(() {
+                                  domain = val!;
+                                  this.username = '$domain+$dropdownValue';
+                                });
+                              },
                               onChangedDropdown: (value) {
                                 setState(() {
                                   dropdownValue = value!;
+                                  this.username = '$domain+$dropdownValue';
                                 });
                               },
                               dropdownValue: dropdownValue),
@@ -119,39 +128,48 @@ class _LoginState extends State<Login> {
                             onEditingComplete: () {},
                             labelText: 'PASSWORD',
                             controller: _passwordController,
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              setState(() {
+                                password = val!;
+                              });
+                            },
                           ),
                           SizedBox(
                               height: MediaQuery.of(context).size.height * .05),
                           CustomElevatedButton(
                             onPressed: () {
-                              if (_loginFormKey.currentState!.validate()) {}
+                              if (_loginFormKey.currentState!.validate()) {
+                                UserService.instance
+                                    .authenticateUser(username, password);
+                              }
                             },
                             text: 'Login',
                             width: MediaQuery.of(context).size.width * .75,
                             height: MediaQuery.of(context).size.height * .05,
                           ),
                           SizedBox(
-                              height: MediaQuery.of(context).size.height * .025),
-                              CustomTextButton(
+                              height:
+                                  MediaQuery.of(context).size.height * .025),
+                          CustomTextButton(
                               onPressed: () {
                                 Navigator.of(context).push(_createRoute(true));
                               },
                               text: 'Forgot your password?'),
                           Row(
-                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                            'Don\'t have an account? ',
-                            style: Theme.of(context).textTheme.bodyText2,
+                                'Don\'t have an account? ',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ),
+                              CustomTextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(_createRoute(false));
+                                  },
+                                  text: 'Register here!'),
+                            ],
                           ),
-                          CustomTextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(_createRoute(false));
-                              },
-                              text: 'Register here!'),
-                          ],),
-                          
                         ],
                       ),
                     ),
@@ -167,7 +185,8 @@ class _LoginState extends State<Login> {
 
   Route _createRoute(first) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => first == true ? ForgotPassword() : SignUp(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          first == true ? ForgotPassword() : SignUp(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
