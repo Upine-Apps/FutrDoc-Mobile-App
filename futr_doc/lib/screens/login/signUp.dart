@@ -3,6 +3,7 @@ import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
@@ -34,6 +35,9 @@ class _SignUpState extends State<SignUp> {
 
   String theme = '';
   bool terms = false;
+  String email = '';
+  String phone_number = '';
+  String password = '';
   final _signUpFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
@@ -61,11 +65,9 @@ class _SignUpState extends State<SignUp> {
                   child: Form(
                     key: _signUpFormKey,
                     child: Column(children: <Widget>[
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * .1),
+                      SizedBox(height: MediaQuery.of(context).size.height * .1),
                       Text('Welcome to the easiest way to track your hours!',
-                      style: Theme.of(context).textTheme.headline2
-                      ),
+                          style: Theme.of(context).textTheme.headline2),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                       // CustomTextFormField(
@@ -90,10 +92,16 @@ class _SignUpState extends State<SignUp> {
                       //   height: MediaQuery.of(context).size.height * .025,
                       // ),
                       EmailWithDropdown(
-                          onEditingComplete: () { node.nextFocus();},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           labelText: 'EMAIL',
                           controller: _emailController,
-                          onChanged: (val) {},
+                          onChanged: (val) {
+                            setState(() {
+                              email = val!;
+                            });
+                          },
                           onChangedDropdown: (value) {
                             setState(() {
                               dropdownValue = value!;
@@ -108,7 +116,11 @@ class _SignUpState extends State<SignUp> {
                         },
                         labelText: 'PHONE NUMBER',
                         controller: _phoneController,
-                        onChanged: (val) {},
+                        onChanged: (val) {
+                          setState(() {
+                            phone_number = val!;
+                          });
+                        },
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
@@ -118,7 +130,11 @@ class _SignUpState extends State<SignUp> {
                           },
                           labelText: 'PASSWORD',
                           controller: _passwordController,
-                          onChanged: (val) {}),
+                          onChanged: (val) {
+                            setState(() {
+                              password = val!;
+                            });
+                          }),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
@@ -153,8 +169,13 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .035),
                       CustomElevatedButton(
-                        onPressed: () {
-                          if (_signUpFormKey.currentState!.validate()) {}
+                        onPressed: () async {
+                          if (_signUpFormKey.currentState!.validate()) {
+                            var result = await UserService.instance
+                                .registerUser(email, phone_number,
+                                    terms.toString(), password, dropdownValue);
+                            print(result);
+                          }
                         },
                         text: 'Register',
                         textColor: AppColors.offWhite,
@@ -164,21 +185,21 @@ class _SignUpState extends State<SignUp> {
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                               Text(
-                        'Already have an account? ',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                      CustomTextButton(
-                          onPressed: () {
-                          Navigator.of(context).push(_createRoute());
-                          },
-                          text: 'Login'),
-                            ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
-                     
+                          CustomTextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(_createRoute());
+                              },
+                              text: 'Login'),
+                        ],
+                      ),
+
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                     ]),
@@ -187,6 +208,7 @@ class _SignUpState extends State<SignUp> {
           ))),
     );
   }
+
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => Login(),

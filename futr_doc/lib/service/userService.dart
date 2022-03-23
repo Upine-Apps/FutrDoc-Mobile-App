@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,15 +18,21 @@ class UserService {
     return _headers;
   }
 
-  static final _hostUrl = '54.91.210.147:3000/user';
+  static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
-  Future registerUser(String username, String password) async {
-    final url = '$_hostUrl';
+  Future registerUser(String email, String phone_number, String legal,
+      String password, String dropDownValue) async {
+    final url = _hostUrl;
     var headers = await getHeaders();
-    Object body = {username: username, password: password};
+    Object body = {
+      "email": email + dropDownValue,
+      "phone_number": '+1' + phone_number,
+      "legal": legal,
+      "password": password
+    };
     try {
       var data = await http.post(Uri.parse(url), headers: headers, body: body);
       return {data};
