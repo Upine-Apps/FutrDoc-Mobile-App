@@ -4,13 +4,14 @@ import 'appColor.dart';
 class AppTheme {
   get darkTheme => ThemeData(
     primaryColor: AppColors.primaryDARK,
+    secondaryHeaderColor: AppColors.offWhite,
       dividerColor: AppColors.grey,
       scaffoldBackgroundColor: AppColors.primaryDARK,
       brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         elevation: 10,
-        primary: AppColors.offWhite,
+        primary: AppColors.darkButtonColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       )),
       checkboxTheme: CheckboxThemeData(
@@ -23,40 +24,41 @@ class AppTheme {
           ),
           buttonColor: AppColors.accentDARK),
       textTheme: TextTheme(
-          headline1: TextStyle(color: AppColors.white, fontSize: 40, fontFamily: 'Share'),
+          headline1: TextStyle(color: AppColors.white, fontSize: 60, fontFamily: 'Share'),
           bodyText1: TextStyle(color: AppColors.white, fontSize: 20, fontFamily: 'Share'),
-          headline2: TextStyle(color: AppColors.white, fontSize: 16, fontFamily: 'Share'),
+          headline2: TextStyle(color: AppColors.white, fontSize: 40, fontFamily: 'Share'),
+          headline3: TextStyle(color: AppColors.white, fontSize: 30, fontFamily: 'Share'),
+
           button: TextStyle(
               color: Colors.white,
               fontSize: 16,
               
               fontFamily: 'Share'),
           
-          bodyText2: TextStyle(color: AppColors.white, fontSize: 12, fontFamily: 'Share')),
+          bodyText2: TextStyle(color: AppColors.white, fontSize: 16, fontFamily: 'Share')),
       inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: AppColors.white),
-          border: OutlineInputBorder(),
-          hintStyle: TextStyle(color: Colors.white),
+          labelStyle: TextStyle(color: AppColors.offWhite, fontFamily: 'Share', fontSize: 16),
           errorStyle: TextStyle(
             color: Color(0xFFCF6679),
           ),
-          enabledBorder: OutlineInputBorder(
+           border: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
           ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFCF6679)),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black),
           ),
-          focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFCF6679))),
-          disabledBorder: OutlineInputBorder(
+          disabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
-          )));
+          ),
+          ));
 
   get lightTheme => ThemeData(
     primaryColor: AppColors.offWhite,
+        secondaryHeaderColor: AppColors.primaryDARK,
         dividerColor: AppColors.black,
         scaffoldBackgroundColor: AppColors.offWhite,
         brightness: Brightness.light,
@@ -64,7 +66,7 @@ class AppTheme {
             style: ElevatedButton.styleFrom(
               
           elevation: 10,
-          primary: AppColors.accentDARK,
+          primary: AppColors.primaryDARK,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         )),
@@ -80,26 +82,27 @@ class AppTheme {
         textTheme: TextTheme(
             headline1: TextStyle(color: AppColors.primaryDARK, fontSize: 60, fontFamily: 'Share'),
             bodyText1: TextStyle(color: AppColors.primaryDARK, fontSize: 20, fontFamily: 'Share'),
-            bodyText2: TextStyle(color: AppColors.primaryDARK, fontSize: 12, fontFamily: 'Share'),
-            headline2: TextStyle(color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
+            bodyText2: TextStyle(color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
+            headline2: TextStyle(color: AppColors.primaryDARK, fontSize: 40, fontFamily: 'Share'),
+            headline3: TextStyle(color: AppColors.primaryDARK, fontSize: 30, fontFamily: 'Share'),
             button: TextStyle(
-                color: Colors.black,
+                color: AppColors.primaryDARK,
                 fontSize: 16,
                  fontFamily: 'Share'),
                 ),
         inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: AppColors.black),
-          border: OutlineInputBorder(),
-          enabledBorder: OutlineInputBorder(
+          labelStyle: TextStyle(color: AppColors.primaryDARK, fontFamily: 'Share', fontSize: 16),
+          border: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
           ),
-          errorBorder: OutlineInputBorder(
+          errorBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
           ),
-          disabledBorder: OutlineInputBorder(
+          disabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),
         ),

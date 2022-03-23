@@ -36,6 +36,7 @@ class CustomElevatedButton extends StatelessWidget {
                 textStyle: TextStyle(
                   fontSize: fontSize,
                   fontWeight: fontWeight,
+                  fontFamily: 'Share'
                 ))));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
+import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/theme/appColor.dart';
@@ -36,7 +37,7 @@ class _LoginHeroState extends State<LoginHero> {
         child: SingleChildScrollView(
           child:Column(children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * .25
+              height: MediaQuery.of(context).size.height * .2
             ),
             CustomImage(
               imagePath: theme == 'Dark' ? 'assets/images/futrdoc-logo-dark.png' : 'assets/images/futrdoc-logo-light.png',
@@ -55,12 +56,14 @@ class _LoginHeroState extends State<LoginHero> {
               width: MediaQuery.of(context).size.width * 1,
               alignment: Alignment.center,
               child: Text(
-                'Tracking your shadowing hours\n just got easier',
-                style: Theme.of(context).textTheme.bodyText1
+                'Tracking your shadowing\nand volunteer hours\njust got easier',
+                style: Theme.of(context).textTheme.bodyText1,
+                textAlign: TextAlign.center,
               ),
+              
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * .15
+              height: MediaQuery.of(context).size.height * .1
             ),
             CustomElevatedButton(
               onPressed: () {
@@ -94,7 +97,12 @@ class _LoginHeroState extends State<LoginHero> {
               SizedBox(
               height: MediaQuery.of(context).size.height * .025
             ),
-            CustomTextButton(onPressed: () {}, text: 'Forgot your password?'),
+            CustomTextButton(onPressed: () {
+              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ForgotPassword()));
+            }, text: 'Forgot your password?'),
             
             CustomTextButton(onPressed: () {}, text: 'Learn more!')
 

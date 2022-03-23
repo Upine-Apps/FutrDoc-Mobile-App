@@ -8,4 +8,5 @@ class AppColors {
   static const grey = Colors.grey;
   static const offWhite = Color(0xFFf5f5f5);
   static const lighterBlue = Color(0xFF5D4EFF);
+  static const darkButtonColor = Color(0xFFE2DFFF);
 }

@@ -10,6 +10,7 @@ import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
 import '../../custom-widgets/text-field/customPhoneField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
+import '../../theme/appColor.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -61,35 +62,33 @@ class _SignUpState extends State<SignUp> {
                     key: _signUpFormKey,
                     child: Column(children: <Widget>[
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .15),
-                      CustomImage(
-                          imagePath: theme == 'Dark'
-                              ? 'assets/images/sign-up-logo.png'
-                              : 'assets/images/sign-up-logo-light.png',
-                          width: MediaQuery.of(context).size.height * .75),
+                          height: MediaQuery.of(context).size.height * .1),
+                      Text('Welcome to the easiest way to track your hours!',
+                      style: Theme.of(context).textTheme.headline2
+                      ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
-                      CustomTextFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'FIRST NAME',
-                        controller: _firstNameController,
-                        onChanged: (val) {},
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * .025),
-                      CustomTextFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'LAST NAME',
-                        controller: _lastNameController,
-                        onChanged: (val) {},
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .025,
-                      ),
+                      // CustomTextFormField(
+                      //   onEditingComplete: () {
+                      //     node.nextFocus();
+                      //   },
+                      //   labelText: 'FIRST NAME',
+                      //   controller: _firstNameController,
+                      //   onChanged: (val) {},
+                      // ),
+                      // SizedBox(
+                      //     height: MediaQuery.of(context).size.height * .025),
+                      // CustomTextFormField(
+                      //   onEditingComplete: () {
+                      //     node.nextFocus();
+                      //   },
+                      //   labelText: 'LAST NAME',
+                      //   controller: _lastNameController,
+                      //   onChanged: (val) {},
+                      // ),
+                      // SizedBox(
+                      //   height: MediaQuery.of(context).size.height * .025,
+                      // ),
                       EmailWithDropdown(
                           onEditingComplete: () { node.nextFocus();},
                           labelText: 'EMAIL',
@@ -157,31 +156,53 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () {
                           if (_signUpFormKey.currentState!.validate()) {}
                         },
-                        text: 'Sign up',
-                        fontSize: 30,
+                        text: 'Register',
+                        textColor: AppColors.offWhite,
+                        color: AppColors.lighterBlue,
                         width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .075,
+                        height: MediaQuery.of(context).size.height * .05,
                       ),
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * .05),
-                      Text(
+                          height: MediaQuery.of(context).size.height * .025),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                               Text(
                         'Already have an account? ',
-                        style: Theme.of(context).textTheme.headline2,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                       CustomTextButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()));
+                          Navigator.of(context).push(_createRoute());
                           },
                           text: 'Login'),
+                            ],
+                          ),
+                     
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                     ]),
                   ),
                 )),
           ))),
+    );
+  }
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, -1.0);
+        const end = Offset.zero;
+        const curve = Curves.decelerate;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
