@@ -4,6 +4,7 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
 import 'package:futr_doc/screens/account_recovery/recoveryCode.dart';
+import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -179,7 +180,7 @@ class _SignUpState extends State<SignUp> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => RecoveryCode()));
+                                      builder: (context) => PhoneOTP()));
                             }
                           }
                         },
