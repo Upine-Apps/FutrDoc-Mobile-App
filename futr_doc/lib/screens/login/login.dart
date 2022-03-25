@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
@@ -11,7 +10,6 @@ import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
 

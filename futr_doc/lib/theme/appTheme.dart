@@ -46,10 +46,10 @@ class AppTheme {
             borderSide: BorderSide(color: Colors.grey),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(color: AppColors.offWhite),
           ),
           errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(color: AppColors.offWhite),
           ),
           disabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
