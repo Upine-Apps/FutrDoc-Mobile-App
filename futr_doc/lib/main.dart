@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/screens/login/loginHero.dart';
+import 'package:futr_doc/screens/login/phoneOTP.dart';
+import 'package:futr_doc/screens/login/profileSetup.dart';
+import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:futr_doc/screens/settings/settings.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
