@@ -5,10 +5,19 @@ import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../custom-widgets/customToast.dart';
 
 class PhoneOTP extends StatefulWidget {
+  final String email;
+  final String phone_number;
+  final String password;
+  PhoneOTP(
+      {required this.email,
+      required this.phone_number,
+      required this.password});
   @override
   _PhoneOTPState createState() => _PhoneOTPState();
 }
@@ -27,9 +36,10 @@ class _PhoneOTPState extends State<PhoneOTP> {
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
-            child: Scaffold(
-                body: SingleChildScrollView(
-                    child: Column(
+            child: OKToast(
+                child: Scaffold(
+                    body: SingleChildScrollView(
+                        child: Column(
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .075,
@@ -59,11 +69,9 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.width * .05
-                          ),
+                              height: MediaQuery.of(context).size.width * .05),
                           Text('Enter the code we just sent to your phone',
-                          style: Theme.of(context).textTheme.bodyText2
-                          ),
+                              style: Theme.of(context).textTheme.bodyText2),
                           SizedBox(
                             height: MediaQuery.of(context).size.width * .5,
                           ),
@@ -83,14 +91,19 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           CustomElevatedButton(
                             onPressed: () async {
                               if (_phoneOTPKey.currentState!.validate()) {
-                              
                                 var response = await UserService.instance
-                                    .validateSMS('shamer@utrgv.edu', code);
-                                if(response['status'] ==true) {
-                                    Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EmailOTP()));
+                                    .validateSMS(widget.email, code);
+                                if (response['status'] == false) {
+                                  CustomToast.showDialog(
+                                      'Wrong code provided', context);
+                                } else if (response['status'] == true) {
+                                  _codeController.clear();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EmailOTP(
+                                              email: widget.email,
+                                              password: widget.password)));
                                 }
                               }
                             },
@@ -102,11 +115,15 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {}, text: 'Resend code')
+                              onPressed: () {
+                                CustomToast.showDialog(
+                                    'Just sent you a message!', context);
+                              },
+                              text: 'Resend code')
                         ],
                       ),
                     ))
               ],
-            )))));
+            ))))));
   }
 }

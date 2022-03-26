@@ -10,8 +10,10 @@ import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customEmailFormField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
+import '../home/homeScreen.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -40,6 +42,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   String dropdownValue = '@utrgv.edu';
+  bool isSpinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +142,16 @@ class _LoginState extends State<Login> {
                               if (_loginFormKey.currentState!.validate()) {
                                 var response = await UserService.instance
                                     .authenticateUser(
-                                        email + dropdownValue, password);
-                                if (response['status'] == true) {}
+                                        'admin@upineapps.com', password);
+                                if (response['status'] == false) {
+                                  setState(() => isSpinner = false);
+                                  // CustomToast.showToast();
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomeScreen()));
+                                }
                               }
                             },
                             text: 'Login',

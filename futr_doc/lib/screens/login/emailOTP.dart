@@ -5,10 +5,15 @@ import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/profileSetup.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../custom-widgets/customToast.dart';
 
 class EmailOTP extends StatefulWidget {
+  final String email;
+  final String password;
+  EmailOTP({required this.email, required this.password});
   @override
   _EmailOTPState createState() => _EmailOTPState();
 }
@@ -20,6 +25,15 @@ class _EmailOTPState extends State<EmailOTP> {
   String code = '';
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await UserService.instance
+          .getEmailCode(widget.email, widget.password, context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => true,
@@ -27,9 +41,10 @@ class _EmailOTPState extends State<EmailOTP> {
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
-            child: Scaffold(
-                body: SingleChildScrollView(
-                    child: Column(
+            child: OKToast(
+                child: Scaffold(
+                    body: SingleChildScrollView(
+                        child: Column(
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .075,
@@ -59,10 +74,10 @@ class _EmailOTPState extends State<EmailOTP> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.width * .05
-                          ),
-                          Text('Enter the code we just sent to your email',
-                          style: Theme.of(context).textTheme.bodyText2,
+                              height: MediaQuery.of(context).size.width * .05),
+                          Text(
+                            'Enter the code we just sent to your email',
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.width * .5,
@@ -83,14 +98,21 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomElevatedButton(
                             onPressed: () async {
                               if (_emailOTPKey.currentState!.validate()) {
-                              
                                 var response = await UserService.instance
-                                    .validateSMS('shamer@utrgv.edu', code);
-                                if(response['status'] ==true) {
-                                    Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileSetup()));
+                                    .validateEmail(widget.email, code, context);
+                                if (response['status'] == false) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSetup()));
+                                } else if (response['status'] == true) {
+                                  _codeController.clear();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSetup()));
                                 }
                               }
                             },
@@ -102,11 +124,17 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {}, text: 'Resend code')
+                              onPressed: () async {
+                                await UserService.instance.getEmailCode(
+                                    widget.email, widget.password, context);
+                                CustomToast.showDialog(
+                                    'Just sent you an email!', context);
+                              },
+                              text: 'Resend code')
                         ],
                       ),
                     ))
               ],
-            )))));
+            ))))));
   }
 }

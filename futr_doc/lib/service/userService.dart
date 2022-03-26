@@ -1,20 +1,24 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:futr_doc/models/Tokens.dart';
+import 'package:futr_doc/providers/tokenProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../models/User.dart';
+import '../providers/UserProvider.dart';
 
 class UserService {
-  Future<Map<String, String>> getHeaders() async {
+  Future<Map<String, String>> getHeaders(String? tokens) async {
     final prefs = await SharedPreferences.getInstance();
     String accessToken = prefs.getString('accessToken') ?? '';
     String idToken = prefs.getString('idToken') ?? '';
     String refreshToken = prefs.getString('refreshToken') ?? '';
     final _headers = {
       "Content-Type": "application/x-www-form-urlencoded",
-      'accessToken': accessToken,
-      'idToken': idToken,
-      'refreshToken': refreshToken
+      "Cognito": tokens ?? ''
     };
     return _headers;
   }
@@ -24,12 +28,31 @@ class UserService {
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
+  //GET
+  Future getUser(String id) async {
+    final url = '$_hostUrl/';
+    var headers = await getHeaders(null);
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+        print(data);
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+      return {'status': true};
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  //POST
   Future registerUser(String email, String phone_number, String legal,
-      String password, String dropDownValue) async {
+      String password, String dropDownValue, BuildContext context) async {
     final url = _hostUrl;
-    var headers = await getHeaders();
+    var headers = await getHeaders(null);
     Object body = {
-      "email": email + dropDownValue,
+      "email": 'tate@upineapps.com',
       "phone_number": '+1' + phone_number,
       "legal": legal,
       "password": password
@@ -38,15 +61,20 @@ class UserService {
       var response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(data);
+      context.read<UserProvider>().addToList(User.jsonToUser(data['user']));
+      print(context.read<UserProvider>().myList);
       return {'status': true};
     } catch (err) {
+      print(err);
+      context.read<UserProvider>().clearList();
       return {'status': false};
     }
   }
 
   Future authenticateUser(String username, String password) async {
     final url = '$_hostUrl/login';
-    var headers = await getHeaders();
+    var headers = await getHeaders(null);
     Object body = {username: username, password: password};
     try {
       http.Response response =
@@ -68,21 +96,38 @@ class UserService {
     }
   }
 
-  Future getEmailCode(String username, String password) async {
+  Future getEmailCode(
+      String username, String password, BuildContext context) async {
     final url = '$_hostUrl/getEmailCode';
-    var headers = await getHeaders();
+    var headers = await getHeaders(null);
     Object body = {'username': username, 'password': password};
     try {
-      var data = await http.post(Uri.parse(url), headers: headers, body: body);
+      var response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(Token.jsonToToken(data));
+      context.read<TokenProvider>().setToken(Token.jsonToToken(data));
       return {data};
     } catch (err) {
       return {'status': false};
     }
   }
 
+  // Future getPhoneCode(String username, String password) async {
+  //   final url = '$_hostUrl/getEmailCode';
+  //   var headers = await getHeaders();
+  //   Object body = {'username': username, 'password': password};
+  //   try {
+  //     var data = await http.post(Uri.parse(url), headers: headers, body: body);
+  //     return {data};
+  //   } catch (err) {
+  //     return {'status': false};
+  //   }
+  // }
+
   Future validateSMS(String email, String code) async {
     final url = '$_hostUrl/validateSMS';
-    var headers = await getHeaders();
+    var headers = await getHeaders(null);
     Object body = {
       'username': email,
       'code': code,
@@ -101,19 +146,24 @@ class UserService {
     }
   }
 
-  Future validateEmail(String username, String code) async {
+  Future validateEmail(
+      String username, String code, BuildContext context) async {
     final url = '$_hostUrl/validateEmail';
-    var headers = await getHeaders();
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    print('hi');
+    print(tokens);
+    print('hi');
+    var headers = await getHeaders(jsonEncode(tokens));
+    print(headers);
     Object body = {
       'username': username,
       'code': code,
-      'accessToken': headers['accessToken'],
-      'idToken': headers['idToken'],
-      'refreshToken': headers['refreshToken']
     };
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
+      print(response.body);
       if (response.statusCode == 200) {
         return {'status': true};
       } else {
