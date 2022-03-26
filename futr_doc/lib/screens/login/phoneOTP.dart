@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
-import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
-import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -22,7 +20,7 @@ class PhoneOTP extends StatefulWidget {
   _PhoneOTPState createState() => _PhoneOTPState();
 }
 
-final TextEditingController _codeController = TextEditingController();
+final TextEditingController _phoneCodeController = TextEditingController();
 final _phoneOTPKey = GlobalKey<FormState>();
 
 class _PhoneOTPState extends State<PhoneOTP> {
@@ -78,7 +76,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           CustomCodeField(
                             onEditingComplete: () {},
                             labelText: 'CODE',
-                            controller: _codeController,
+                            controller: _phoneCodeController,
                             onChanged: (val) {
                               setState(() {
                                 code = val!;
@@ -97,7 +95,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
                                 } else if (response['status'] == true) {
-                                  _codeController.clear();
+                                  _phoneCodeController.clear();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

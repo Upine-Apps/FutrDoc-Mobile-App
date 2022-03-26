@@ -18,7 +18,7 @@ class EmailOTP extends StatefulWidget {
   _EmailOTPState createState() => _EmailOTPState();
 }
 
-final TextEditingController _codeController = TextEditingController();
+final TextEditingController _emailCodeController = TextEditingController();
 final _emailOTPKey = GlobalKey<FormState>();
 
 class _EmailOTPState extends State<EmailOTP> {
@@ -85,7 +85,7 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomCodeField(
                             onEditingComplete: () {},
                             labelText: 'CODE',
-                            controller: _codeController,
+                            controller: _emailCodeController,
                             onChanged: (val) {
                               setState(() {
                                 code = val!;
@@ -101,13 +101,10 @@ class _EmailOTPState extends State<EmailOTP> {
                                 var response = await UserService.instance
                                     .validateEmail(widget.email, code, context);
                                 if (response['status'] == false) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileSetup()));
+                                  CustomToast.showDialog(
+                                      'Wrong code provided', context);
                                 } else if (response['status'] == true) {
-                                  _codeController.clear();
+                                  _emailCodeController.clear();
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

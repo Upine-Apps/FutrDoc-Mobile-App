@@ -199,7 +199,10 @@ class _SignUpState extends State<SignUp> {
                                 } else {
                                   setState(() {
                                     isSpinner = false;
+                                    terms = false;
                                   });
+                                  _clearAllController();
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -268,5 +271,12 @@ class _SignUpState extends State<SignUp> {
         );
       },
     );
+  }
+
+  void _clearAllController() {
+    _emailController.clear();
+    _phoneController.clear();
+    _passwordController.clear();
+    _passwordConfirmController.clear();
   }
 }

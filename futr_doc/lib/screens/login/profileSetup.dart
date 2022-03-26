@@ -42,67 +42,85 @@ class _ProfileSetupState extends State<ProfileSetup> {
                                     'Tell me about yourself!',
                                     style:
                                         Theme.of(context).textTheme.headline2,
-                                        textAlign: TextAlign.center,
+                                    textAlign: TextAlign.center,
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.width * .05,
+                                    height:
+                                        MediaQuery.of(context).size.width * .05,
                                   ),
-                                  Text('C\'mon, don\'t be shy!',
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                  
+                                  Text(
+                                    'C\'mon, don\'t be shy!',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * .1
-                                  ),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .1),
                                   CustomTextFormField(
                                     controller: _firstNameController,
                                     onEditingComplete: () {},
-                                    onChanged: (val){},
+                                    onChanged: (val) {},
                                     labelText: 'FIRST NAME',
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * .025,
+                                    height: MediaQuery.of(context).size.height *
+                                        .025,
                                   ),
                                   CustomTextFormField(
-                                    controller: _lastNameController,
-                                    onEditingComplete: (){},
-                                    onChanged: (val) {},
-                                    labelText: 'LAST NAME'
-                                  ),
+                                      controller: _lastNameController,
+                                      onEditingComplete: () {},
+                                      onChanged: (val) {},
+                                      labelText: 'LAST NAME'),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * .025,
+                                    height: MediaQuery.of(context).size.height *
+                                        .025,
                                   ),
                                   CustomYearField(
                                     controller: _schoolYearController,
-                                    onEditingComplete: (){},
+                                    onEditingComplete: () {},
                                     onChanged: (val) {},
                                     labelText: 'YEAR IN SCHOOL',
                                   ),
                                   SizedBox(
-                                    height:MediaQuery.of(context).size.height * .025
-                                  ),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .025),
                                   CustomTextFormField(
                                     controller: _degreeController,
-                                    onEditingComplete: (){},
+                                    onEditingComplete: () {},
                                     onChanged: (val) {},
                                     labelText: 'DEGREE',
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height * .15),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .15),
                                   CustomElevatedButton(
                                     onPressed: () {
-                                      if(_profileSetupFormKey.currentState!.validate()) {
-                                         Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Walkthrough()));
+                                      if (_profileSetupFormKey.currentState!
+                                          .validate()) {
+                                        clearControllers();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Walkthrough()));
                                       }
                                     },
                                     text: 'Complete',
-                                      width: MediaQuery.of(context).size.width * .75,
-                                      height: MediaQuery.of(context).size.height * .05,
+                                    width:
+                                        MediaQuery.of(context).size.width * .75,
+                                    height: MediaQuery.of(context).size.height *
+                                        .05,
                                   )
-
                                 ]))))))));
+  }
+
+  void clearControllers() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _degreeController.clear();
+    _schoolYearController.clear();
   }
 }

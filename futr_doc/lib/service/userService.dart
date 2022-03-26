@@ -151,11 +151,7 @@ class UserService {
     final url = '$_hostUrl/validateEmail';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
-    print('hi');
-    print(tokens);
-    print('hi');
     var headers = await getHeaders(jsonEncode(tokens));
-    print(headers);
     Object body = {
       'username': username,
       'code': code,
@@ -173,5 +169,17 @@ class UserService {
     } catch (err) {
       return {'status': false};
     }
+  }
+
+  Future updateUser(String firstName, String lastName, String schoolYear,
+      String degree, BuildContext context) async {
+    final url = '$_hostUrl/user';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    Object body = {
+      'first_name': firstName,
+      'last_name': lastName,
+    };
   }
 }
