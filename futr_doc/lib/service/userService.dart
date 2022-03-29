@@ -105,23 +105,23 @@ class UserService {
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       print(Token.jsonToToken(data));
       context.read<TokenProvider>().setToken(Token.jsonToToken(data));
-      return {data};
+      return {'status': true};
     } catch (err) {
       return {'status': false};
     }
   }
 
-  // Future getPhoneCode(String username, String password) async {
-  //   final url = '$_hostUrl/getEmailCode';
-  //   var headers = await getHeaders();
-  //   Object body = {'username': username, 'password': password};
-  //   try {
-  //     var data = await http.post(Uri.parse(url), headers: headers, body: body);
-  //     return {data};
-  //   } catch (err) {
-  //     return {'status': false};
-  //   }
-  // }
+  Future getPhoneCode(String username) async {
+    final url = '$_hostUrl/resend-sms';
+    // var headers = await getHeaders();
+    // Object body = {'username': username, 'password': password};
+    // try {
+    //   var data = await http.post(Uri.parse(url), headers: headers, body: body);
+    //   return {data};
+    // } catch (err) {
+    //   return {'status': false};
+    // }
+  }
 
   Future validateSMS(String email, String code) async {
     final url = '$_hostUrl/validateSMS';

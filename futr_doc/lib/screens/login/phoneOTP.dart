@@ -113,9 +113,16 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {
-                                CustomToast.showDialog(
-                                    'Just sent you a message!', context);
+                              onPressed: () async{
+                                 var response = await UserService.instance
+                                    .getPhoneCode(widget.email);
+                                if (response['status'] == false) {
+                                  CustomToast.showDialog(
+                                      'Error sending sms code', context);
+                                } else if (response['status'] == true) {
+                                 CustomToast.showDialog(
+                                      'Just sent you a message!', context);
+                                }
                               },
                               text: 'Resend code')
                         ],
