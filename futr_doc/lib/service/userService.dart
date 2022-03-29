@@ -61,13 +61,11 @@ class UserService {
       var response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      print(data);
-      context.read<UserProvider>().addToList(User.jsonToUser(data['user']));
-      print(context.read<UserProvider>().myList);
+      context.read<UserProvider>().setUser(User.jsonToUser(data['user']));
       return {'status': true};
     } catch (err) {
       print(err);
-      context.read<UserProvider>().clearList();
+      context.read<UserProvider>().clearUser();
       return {'status': false};
     }
   }
@@ -177,9 +175,18 @@ class UserService {
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
+    final User user = context.read<UserProvider>().users;
     Object body = {
-      'first_name': firstName,
-      'last_name': lastName,
+      'id': user.id,
+      'first_name': firstName, 'last_name': lastName,
+      //Need to implement schoolYear and degree in the backend and DB
     };
+    try {
+      http.Response response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+      return {'status': true};
+    } catch (err) {
+      return {'status': false};
+    }
   }
 }
