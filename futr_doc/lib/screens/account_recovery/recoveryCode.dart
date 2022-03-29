@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
+import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 
@@ -76,15 +77,14 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                           CustomElevatedButton(
                             onPressed: () async {
                               if (_recoveryCodeKey.currentState!.validate()) {
-                              
                                 var response = await UserService.instance
-                                    .validateSMS('shamer@utrgv.edu', code);
-                                if(response['status'] ==true) {
-                                    Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ResetPassword()));
-                                }
+                                    .validateSms('shamer@utrgv.edu', code);
+                                if (response['status'] == true) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()));
+                                } // do we need to put else statement?
                               }
                             },
                             text: 'Continue',

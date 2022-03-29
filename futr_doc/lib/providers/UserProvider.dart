@@ -14,11 +14,10 @@ final User initialData = User(
     legal: true);
 
 class UserProvider with ChangeNotifier {
-  // All users (that will be displayed on the Home screen)
   User _user = initialData;
 
-  // Retrieve all users
-  User get users => _user;
+  // Retrieve user
+  User get user => _user;
 
   setUser(User user) {
     _user = user;

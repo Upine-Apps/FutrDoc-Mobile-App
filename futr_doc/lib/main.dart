@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: ProfileSetup(),
+          home: LoginHero(),
           theme: AppTheme().lightTheme,
           darkTheme: AppTheme().darkTheme,
           themeMode: themeNotifier.getThemeMode(),

@@ -94,37 +94,8 @@ class UserService {
     }
   }
 
-  Future getEmailCode(
-      String username, String password, BuildContext context) async {
-    final url = '$_hostUrl/getEmailCode';
-    var headers = await getHeaders(null);
-    Object body = {'username': username, 'password': password};
-    try {
-      var response =
-          await http.post(Uri.parse(url), headers: headers, body: body);
-      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      print(Token.jsonToToken(data));
-      context.read<TokenProvider>().setToken(Token.jsonToToken(data));
-      return {'status': true};
-    } catch (err) {
-      return {'status': false};
-    }
-  }
-
-  Future getPhoneCode(String username) async {
-    final url = '$_hostUrl/resend-sms';
-    // var headers = await getHeaders();
-    // Object body = {'username': username, 'password': password};
-    // try {
-    //   var data = await http.post(Uri.parse(url), headers: headers, body: body);
-    //   return {data};
-    // } catch (err) {
-    //   return {'status': false};
-    // }
-  }
-
-  Future validateSMS(String email, String code) async {
-    final url = '$_hostUrl/validateSMS';
+  Future validateSms(String email, String code) async {
+    final url = '$_hostUrl/validate-sms';
     var headers = await getHeaders(null);
     Object body = {
       'username': email,
@@ -144,9 +115,30 @@ class UserService {
     }
   }
 
+  Future resendSms(String email) async {
+    final url = '$_hostUrl/resend-sms';
+    var headers = await getHeaders(null);
+    Object body = {
+      'username': email,
+    };
+    try {
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+        return {'status': false, 'message': data['message']};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
   Future validateEmail(
       String username, String code, BuildContext context) async {
-    final url = '$_hostUrl/validateEmail';
+    final url = '$_hostUrl/validate-email';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
@@ -169,29 +161,100 @@ class UserService {
     }
   }
 
+  Future getEmailCode(
+      String username, String password, BuildContext context) async {
+    final url = '$_hostUrl/get-email-code';
+    var headers = await getHeaders(null);
+    Object body = {'username': username, 'password': password};
+    try {
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      context.read<TokenProvider>().setToken(Token.jsonToToken(data));
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
   Future updateUser(String firstName, String lastName, String schoolYear,
       String degree, BuildContext context) async {
     final url = '$_hostUrl/user';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
-    final User user = context.read<UserProvider>().users;
+    final User user = context.read<UserProvider>().user;
     Object body = {
       'id': user.id,
-      'first_name': firstName, 'last_name': lastName,
-      //Need to implement schoolYear and degree in the backend and DB
+      'first_name': firstName,
+      'last_name': lastName,
+      'school_year': schoolYear,
+      'degree': degree
     };
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
-      user.first_name = firstName;
-      user.last_name = lastName;
-      user.schoolYear = schoolYear;
-      user.degree = degree;
-      context.read<UserProvider>().setUser(user);
-      return {'status': true};
+      if (response.statusCode == 200) {
+        //why are we doing all of this? Didn't we just read it from the provider?
+        user.first_name = firstName;
+        user.last_name = lastName;
+        user.schoolYear = schoolYear;
+        user.degree = degree;
+        context.read<UserProvider>().setUser(user);
+        return {'status': true};
+      } else {
+        return {'status': false};
+      }
     } catch (err) {
       return {'status': false};
     }
   }
+
+  //Account Recovery
+  Future startForgotPassword(String phone_number) async {
+    final url = '$_hostUrl/start-forgot-password';
+    var headers = await getHeaders(null);
+    Object body = {'username': phone_number};
+    try {
+      http.Response response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future completeForgotPassword(
+      String phone_number, String code, String password) async {
+    final url = '$_hostUrl/complete-forgot-password';
+    var headers = await getHeaders(null);
+    Object body = {
+      'username': phone_number,
+      'code': code,
+      'password': password
+    };
+    try {
+      http.Response response =
+          await http.put(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  // Future changeUserAttribute() async{
+  //   //create type on the frontend as well
+  // }
 }

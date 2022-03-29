@@ -90,7 +90,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             onPressed: () async {
                               if (_phoneOTPKey.currentState!.validate()) {
                                 var response = await UserService.instance
-                                    .validateSMS(widget.email, code);
+                                    .validateSms(widget.email, code);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
@@ -113,14 +113,14 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () async{
-                                 var response = await UserService.instance
-                                    .getPhoneCode(widget.email);
+                              onPressed: () async {
+                                var response = await UserService.instance
+                                    .resendSms(widget.email);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
-                                      'Error sending sms code', context);
+                                      'Error sending SMS code', context);
                                 } else if (response['status'] == true) {
-                                 CustomToast.showDialog(
+                                  CustomToast.showDialog(
                                       'Just sent you a message!', context);
                                 }
                               },
