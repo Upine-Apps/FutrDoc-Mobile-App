@@ -1,12 +1,14 @@
 class User {
-  final int id;
-  final String? first_name;
-  final String? last_name;
-  final String email;
-  final String phone_number;
-  final String? institution;
-  final String? student_id;
-  final bool legal;
+  int id;
+  String? first_name;
+  String? last_name;
+  String email;
+  String phone_number;
+  String? institution;
+  String? student_id;
+  String? degree;
+  String? schoolYear;
+  bool legal;
 
   User(
       {required this.id,
@@ -16,6 +18,8 @@ class User {
       required this.phone_number,
       this.institution,
       this.student_id,
+      this.degree,
+      this.schoolYear,
       required this.legal});
 
   static User jsonToUser(data) {

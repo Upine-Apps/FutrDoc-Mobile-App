@@ -184,6 +184,11 @@ class UserService {
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
+      user.first_name = firstName;
+      user.last_name = lastName;
+      user.schoolYear = schoolYear;
+      user.degree = degree;
+      context.read<UserProvider>().setUser(user);
       return {'status': true};
     } catch (err) {
       return {'status': false};
