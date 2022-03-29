@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
-import 'package:futr_doc/screens/account_recovery/recoveryCode.dart';
+import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
+import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
-import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
+import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/login/login.dart';
-import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 
-class RecoveryCode extends StatefulWidget {
+class MfaNeeded extends StatefulWidget {
+  final String email;
+  final String password;
+  MfaNeeded({required this.email, required this.password});
   @override
-  _RecoveryCodeState createState() => _RecoveryCodeState();
+  _MfaNeededState createState() => _MfaNeededState();
 }
 
 final TextEditingController _codeController = TextEditingController();
 final _recoveryCodeKey = GlobalKey<FormState>();
 
-class _RecoveryCodeState extends State<RecoveryCode> {
+class _MfaNeededState extends State<MfaNeeded> {
   String code = '';
 
   @override
@@ -78,13 +81,17 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                             onPressed: () async {
                               if (_recoveryCodeKey.currentState!.validate()) {
                                 var response = await UserService.instance
-                                    .validateSms('shamer@utrgv.edu', code);
+                                    .authenticateUser('tate@upineapps.com',
+                                        widget.password, code);
                                 if (response['status'] == true) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Login()));
-                                } // do we need to put else statement?
+                                          builder: (context) => HomeScreen()));
+                                } else {
+                                  CustomToast.showDialog('Incorrect code',
+                                      context); // do we need to put else statement?
+                                }
                               }
                             },
                             text: 'Continue',
@@ -95,7 +102,18 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {}, text: 'Resend code')
+                              onPressed: () async {
+                                var response = await UserService.instance
+                                    .resendSms(widget.email);
+                                if (response['status'] == true) {
+                                  CustomToast.showDialog(
+                                      'Code resent!', context);
+                                } else {
+                                  CustomToast.showDialog(
+                                      response['message'], context);
+                                }
+                              },
+                              text: 'Resend code')
                         ],
                       ),
                     ))

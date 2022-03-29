@@ -114,8 +114,9 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           ),
                           CustomTextButton(
                               onPressed: () async {
+                                var username = widget.email;
                                 var response = await UserService.instance
-                                    .resendSms(widget.email);
+                                    .resendSms(username);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
                                       'Error sending SMS code', context);

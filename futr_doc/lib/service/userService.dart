@@ -70,10 +70,16 @@ class UserService {
     }
   }
 
-  Future authenticateUser(String username, String password) async {
+  Future authenticateUser(String username, String password,
+      [String? code]) async {
     final url = '$_hostUrl/login';
     var headers = await getHeaders(null);
-    Object body = {username: username, password: password};
+    Object body = {
+      'username': username,
+      'password': password,
+      'code': code
+    }; //not sure if this is going to go through correctly
+    print(body);
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);

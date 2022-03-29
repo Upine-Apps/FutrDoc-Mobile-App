@@ -5,6 +5,7 @@ import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/halfCircle.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
+import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
@@ -149,12 +150,23 @@ class _LoginState extends State<Login> {
                                   });
                                   var response = await UserService.instance
                                       .authenticateUser(
-                                          'admin@upineapps.com', password);
+                                          'tate@upineapps.com', password);
                                   if (response['status'] == false) {
                                     setState(() => isSpinner = false);
-                                    CustomToast.showDialog(
-                                        'Failed to login, try again', context);
-
+                                    if (response['message'] == 'MFA_NEEDED') {
+                                      _clearControllers();
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MfaNeeded(
+                                                  email: email,
+                                                  password: password)));
+                                    } //make "MFA_NEEDED" a global constant
+                                    else {
+                                      CustomToast.showDialog(
+                                          'Failed to login, try again',
+                                          context);
+                                    }
                                     // CustomToast.showToast();
                                   } else {
                                     _clearControllers();
