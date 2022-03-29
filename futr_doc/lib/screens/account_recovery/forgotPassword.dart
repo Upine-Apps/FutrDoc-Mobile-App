@@ -106,11 +106,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       CustomElevatedButton(
                         onPressed: () async {
                           if (_forgotPasswordKey.currentState!.validate()) {
+                            print('here');
                             var response = await UserService.instance
                                 .startForgotPassword(phone_number);
                             if (response['status'] == true) {
                               Navigator.of(context).push(_createRoute(true));
-                            } // do we need to put else statement?
+                            } else {
+                              print(
+                                  'ERROR'); // do we need to put else statement?
+                            }
                           }
                         },
                         text: 'Submit',

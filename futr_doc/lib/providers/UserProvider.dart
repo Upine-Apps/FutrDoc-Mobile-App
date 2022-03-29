@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/User.dart';
 
 final User initialData = User(
-    id: 1,
+    id: '1',
     first_name: 'Tate',
     last_name: 'Walker',
     email: 'admin@upineapps.com',

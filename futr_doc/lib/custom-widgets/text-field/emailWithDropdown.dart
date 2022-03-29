@@ -33,11 +33,16 @@ class EmailWithDropdown extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
-              items: <String>['@utrgv.edu', '@tamu.edu', '@baylor.edu']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                '@utrgv.edu',
+                '@tamu.edu',
+                '@baylor.edu',
+                '@upineapps.com'
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: Theme.of(context).textTheme.bodyText2),
+                  child:
+                      Text(value, style: Theme.of(context).textTheme.bodyText2),
                 );
               }).toList(),
             ),

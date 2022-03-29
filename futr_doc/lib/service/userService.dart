@@ -22,9 +22,11 @@ class UserService {
     };
     return _headers;
   }
+  //Uncomment for prod testing
+  // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
-  static final _hostUrl = 'http://54.91.210.147:3000/user';
-
+  //Uncomment for local testing
+  static final _hostUrl = 'http://10.0.2.2:3000/user';
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
@@ -52,7 +54,7 @@ class UserService {
     final url = _hostUrl;
     var headers = await getHeaders(null);
     Object body = {
-      "email": 'tate@upineapps.com',
+      "email": email + dropDownValue,
       "phone_number": '+1' + phone_number,
       "legal": legal,
       "password": password
@@ -70,15 +72,16 @@ class UserService {
     }
   }
 
-  Future authenticateUser(String username, String password,
+  Future authenticateUser(String phone_number, String password,
       [String? code]) async {
     final url = '$_hostUrl/login';
     var headers = await getHeaders(null);
-    Object body = {
-      'username': username,
-      'password': password,
-      'code': code
-    }; //not sure if this is going to go through correctly
+    Object body = code != null
+        ? {'username': '+1' + phone_number, 'password': password, 'code': code}
+        : {
+            'username': '+1' + phone_number,
+            'password': password
+          }; //not sure if this is going to go through correctly
     print(body);
     try {
       http.Response response =
@@ -93,18 +96,20 @@ class UserService {
         });
       } else {
         print('Request failed with status: ${response.statusCode}.');
+        return {'status': false};
       }
       return {'status': true};
     } catch (err) {
+      print(err);
       return {'status': false};
     }
   }
 
-  Future validateSms(String email, String code) async {
+  Future validateSms(String phone_number, String code) async {
     final url = '$_hostUrl/validate-sms';
     var headers = await getHeaders(null);
     Object body = {
-      'username': email,
+      'username': '+1' + phone_number,
       'code': code,
     };
     try {
@@ -121,11 +126,11 @@ class UserService {
     }
   }
 
-  Future resendSms(String email) async {
+  Future resendSms(String phone_number) async {
     final url = '$_hostUrl/resend-sms';
     var headers = await getHeaders(null);
     Object body = {
-      'username': email,
+      'username': '+1' + phone_number,
     };
     try {
       http.Response response =
@@ -143,13 +148,13 @@ class UserService {
   }
 
   Future validateEmail(
-      String username, String code, BuildContext context) async {
+      String phone_number, String code, BuildContext context) async {
     final url = '$_hostUrl/validate-email';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
     Object body = {
-      'username': username,
+      'username': '+1' + phone_number,
       'code': code,
     };
     try {
@@ -168,10 +173,10 @@ class UserService {
   }
 
   Future getEmailCode(
-      String username, String password, BuildContext context) async {
+      String phone_number, String password, BuildContext context) async {
     final url = '$_hostUrl/get-email-code';
     var headers = await getHeaders(null);
-    Object body = {'username': username, 'password': password};
+    Object body = {'username': '+1' + phone_number, 'password': password};
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
@@ -189,13 +194,14 @@ class UserService {
 
   Future updateUser(String firstName, String lastName, String schoolYear,
       String degree, BuildContext context) async {
-    final url = '$_hostUrl/user';
+    final url = '$_hostUrl';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
+    print('here');
     final User user = context.read<UserProvider>().user;
     Object body = {
-      'id': user.id,
+      'id': user.id.toString(),
       'first_name': firstName,
       'last_name': lastName,
       'school_year': schoolYear,
@@ -204,6 +210,7 @@ class UserService {
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         //why are we doing all of this? Didn't we just read it from the provider?
         user.first_name = firstName;
@@ -213,9 +220,12 @@ class UserService {
         context.read<UserProvider>().setUser(user);
         return {'status': true};
       } else {
+        print(response.statusCode);
+        print(data['message']);
         return {'status': false};
       }
     } catch (err) {
+      print(err);
       return {'status': false};
     }
   }
@@ -224,10 +234,13 @@ class UserService {
   Future startForgotPassword(String phone_number) async {
     final url = '$_hostUrl/start-forgot-password';
     var headers = await getHeaders(null);
-    Object body = {'username': phone_number};
+    Object body = {'username': '+1' + phone_number};
+    print(body);
+    print(url);
     try {
       http.Response response =
-          await http.put(Uri.parse(url), headers: headers, body: body);
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         return {'status': true};
       } else {
@@ -243,13 +256,13 @@ class UserService {
     final url = '$_hostUrl/complete-forgot-password';
     var headers = await getHeaders(null);
     Object body = {
-      'username': phone_number,
+      'username': '+1' + phone_number,
       'code': code,
       'password': password
     };
     try {
       http.Response response =
-          await http.put(Uri.parse(url), headers: headers, body: body);
+          await http.post(Uri.parse(url), headers: headers, body: body);
       if (response.statusCode == 200) {
         return {'status': true};
       } else {

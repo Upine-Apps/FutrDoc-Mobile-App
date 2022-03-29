@@ -4,6 +4,7 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/halfCircle.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart';
+import 'package:futr_doc/custom-widgets/text-field/customPhoneField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
 import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
@@ -13,8 +14,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/customToast.dart';
-import '../../custom-widgets/text-field/customEmailFormField.dart';
-import '../../custom-widgets/text-field/emailWithDropdown.dart';
 import '../home/homeScreen.dart';
 
 class Login extends StatefulWidget {
@@ -37,13 +36,12 @@ class _LoginState extends State<Login> {
   }
 
   String theme = '';
-  String email = '';
+  String phone_number = '';
   String password = '';
   String domain = '';
   final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  String dropdownValue = '@utrgv.edu';
+  final TextEditingController _phoneController = TextEditingController();
   bool isSpinner = false;
 
   @override
@@ -109,23 +107,18 @@ class _LoginState extends State<Login> {
                         key: _loginFormKey,
                         child: Column(
                           children: [
-                            EmailWithDropdown(
-                                onEditingComplete: () {
-                                  node.nextFocus();
-                                },
-                                labelText: 'EMAIL',
-                                controller: _emailController,
-                                onChanged: (val) {
-                                  setState(() {
-                                    email = val!;
-                                  });
-                                },
-                                onChangedDropdown: (value) {
-                                  setState(() {
-                                    dropdownValue = value!;
-                                  });
-                                },
-                                dropdownValue: dropdownValue),
+                            CustomPhoneField(
+                              onEditingComplete: () {
+                                node.nextFocus();
+                              },
+                              labelText: 'PHONE',
+                              controller: _phoneController,
+                              onChanged: (val) {
+                                setState(() {
+                                  phone_number = val!;
+                                });
+                              },
+                            ),
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * .025),
@@ -149,18 +142,19 @@ class _LoginState extends State<Login> {
                                     isSpinner = true;
                                   });
                                   var response = await UserService.instance
-                                      .authenticateUser(
-                                          'tate@upineapps.com', password);
+                                      .authenticateUser(phone_number, password);
                                   if (response['status'] == false) {
                                     setState(() => isSpinner = false);
                                     if (response['message'] == 'MFA_NEEDED') {
                                       _clearControllers();
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => MfaNeeded(
-                                                  email: email,
-                                                  password: password)));
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MfaNeeded(
+                                              phone_number: phone_number,
+                                              password: password),
+                                        ),
+                                      );
                                     } //make "MFA_NEEDED" a global constant
                                     else {
                                       CustomToast.showDialog(
@@ -241,7 +235,7 @@ class _LoginState extends State<Login> {
   }
 
   void _clearControllers() {
-    _emailController.clear();
+    _phoneController.clear();
     _passwordController.clear();
   }
 }

@@ -11,9 +11,9 @@ import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 
 class EmailOTP extends StatefulWidget {
-  final String email;
+  final String phone_number;
   final String password;
-  EmailOTP({required this.email, required this.password});
+  EmailOTP({required this.phone_number, required this.password});
   @override
   _EmailOTPState createState() => _EmailOTPState();
 }
@@ -29,7 +29,7 @@ class _EmailOTPState extends State<EmailOTP> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       await UserService.instance
-          .getEmailCode(widget.email, widget.password, context);
+          .getEmailCode(widget.phone_number, widget.password, context);
     });
   }
 
@@ -69,7 +69,7 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           Text(
-                            'Sweet! Last one I promise, lets verify your email.',
+                            'Sweet! Last one I promise, let\'s verify your email.',
                             style: Theme.of(context).textTheme.headline3,
                             textAlign: TextAlign.center,
                           ),
@@ -99,7 +99,8 @@ class _EmailOTPState extends State<EmailOTP> {
                             onPressed: () async {
                               if (_emailOTPKey.currentState!.validate()) {
                                 var response = await UserService.instance
-                                    .validateEmail(widget.email, code, context);
+                                    .validateEmail(
+                                        widget.phone_number, code, context);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
@@ -123,7 +124,9 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomTextButton(
                               onPressed: () async {
                                 await UserService.instance.getEmailCode(
-                                    widget.email, widget.password, context);
+                                    widget.phone_number,
+                                    widget.password,
+                                    context);
                                 CustomToast.showDialog(
                                     'Just sent you an email!', context);
                               },

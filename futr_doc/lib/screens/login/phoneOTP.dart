@@ -9,13 +9,9 @@ import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 
 class PhoneOTP extends StatefulWidget {
-  final String email;
   final String phone_number;
   final String password;
-  PhoneOTP(
-      {required this.email,
-      required this.phone_number,
-      required this.password});
+  PhoneOTP({required this.phone_number, required this.password});
   @override
   _PhoneOTPState createState() => _PhoneOTPState();
 }
@@ -90,7 +86,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             onPressed: () async {
                               if (_phoneOTPKey.currentState!.validate()) {
                                 var response = await UserService.instance
-                                    .validateSms(widget.email, code);
+                                    .validateSms(widget.phone_number, code);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
@@ -100,7 +96,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => EmailOTP(
-                                              email: widget.email,
+                                              phone_number: widget.phone_number,
                                               password: widget.password)));
                                 }
                               }
@@ -114,9 +110,8 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           ),
                           CustomTextButton(
                               onPressed: () async {
-                                var username = widget.email;
                                 var response = await UserService.instance
-                                    .resendSms(username);
+                                    .resendSms(widget.phone_number);
                                 if (response['status'] == false) {
                                   CustomToast.showDialog(
                                       'Error sending SMS code', context);

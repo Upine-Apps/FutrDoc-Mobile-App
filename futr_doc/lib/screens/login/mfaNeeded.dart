@@ -9,9 +9,9 @@ import 'package:futr_doc/service/userService.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 
 class MfaNeeded extends StatefulWidget {
-  final String email;
+  final String phone_number;
   final String password;
-  MfaNeeded({required this.email, required this.password});
+  MfaNeeded({required this.phone_number, required this.password});
   @override
   _MfaNeededState createState() => _MfaNeededState();
 }
@@ -81,7 +81,7 @@ class _MfaNeededState extends State<MfaNeeded> {
                             onPressed: () async {
                               if (_recoveryCodeKey.currentState!.validate()) {
                                 var response = await UserService.instance
-                                    .authenticateUser('tate@upineapps.com',
+                                    .authenticateUser(widget.phone_number,
                                         widget.password, code);
                                 if (response['status'] == true) {
                                   Navigator.push(
@@ -104,7 +104,7 @@ class _MfaNeededState extends State<MfaNeeded> {
                           CustomTextButton(
                               onPressed: () async {
                                 var response = await UserService.instance
-                                    .resendSms(widget.email);
+                                    .resendSms(widget.phone_number);
                                 if (response['status'] == true) {
                                   CustomToast.showDialog(
                                       'Code resent!', context);

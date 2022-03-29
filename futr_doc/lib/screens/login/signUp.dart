@@ -204,12 +204,14 @@ class _SignUpState extends State<SignUp> {
                                   _clearAllController();
 
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PhoneOTP(
-                                              phone_number: phone_number,
-                                              password: password,
-                                              email: 'tate@upineapps.com')));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PhoneOTP(
+                                        phone_number: phone_number,
+                                        password: password,
+                                      ),
+                                    ),
+                                  );
                                 }
                               }
                             }
