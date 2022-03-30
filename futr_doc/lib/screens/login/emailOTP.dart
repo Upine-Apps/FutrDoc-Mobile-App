@@ -102,6 +102,7 @@ class _EmailOTPState extends State<EmailOTP> {
                                     .validateEmail(
                                         widget.phone_number, code, context);
                                 if (response['status'] == false) {
+                                  print('here');
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
                                 } else if (response['status'] == true) {

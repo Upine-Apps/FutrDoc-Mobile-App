@@ -22,7 +22,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
 
   String first_name = '';
   String last_name = '';
-  String school_year = '';
+  String school_year = 'Freshman';
   String degree = '';
 
   @override
@@ -101,6 +101,8 @@ class _ProfileSetupState extends State<ProfileSetup> {
                         labelText: 'School year',
                         initialValue: 'Freshman',
                         onChanged: (val) {
+                          print('val');
+                          print(val);
                           setState(() {
                             school_year = val!;
                           });
@@ -131,6 +133,8 @@ class _ProfileSetupState extends State<ProfileSetup> {
                       CustomElevatedButton(
                         onPressed: () async {
                           if (_profileSetupFormKey.currentState!.validate()) {
+                            print('SCHOOL YEAR');
+                            print(school_year);
                             var response = await UserService.instance
                                 .updateUser(first_name, last_name, school_year,
                                     degree, context);

@@ -26,7 +26,7 @@ class UserService {
   // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing
-  static final _hostUrl = 'http://localhost:3000/user';
+  static final _hostUrl = 'http://10.0.2.2:3000/user';
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
@@ -205,14 +205,15 @@ class UserService {
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
     print('here');
+    print(schoolYear);
+    print(schoolYear.runtimeType);
     final User user = context.read<UserProvider>().user;
     var institution = getInstitution(user.email, context);
-    print(institution.runtimeType);
     Object body = {
       'id': user.id.toString(),
       'first_name': firstName,
       'last_name': lastName,
-      'institution': institution.toString(),
+      'institution': institution,
       'school_year': schoolYear,
       'degree': degree,
     };
