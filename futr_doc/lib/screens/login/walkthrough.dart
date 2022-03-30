@@ -59,7 +59,7 @@ class _WalkthroughState extends State<Walkthrough> {
                 child: CustomImage(
               imagePath: theme == 'Dark'
                   ? 'assets/images/resources-dark.png'
-                  : 'assets/images/resources-dark.png',
+                  : 'assets/images/resources-light.png',
             )),
             decoration: getPageDecoration(),
           )
