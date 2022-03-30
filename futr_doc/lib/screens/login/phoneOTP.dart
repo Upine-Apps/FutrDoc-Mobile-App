@@ -21,7 +21,7 @@ final _phoneOTPKey = GlobalKey<FormState>();
 
 class _PhoneOTPState extends State<PhoneOTP> {
   String code = '';
-
+  bool isSpinner = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -85,12 +85,21 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           CustomElevatedButton(
                             onPressed: () async {
                               if (_phoneOTPKey.currentState!.validate()) {
+                                setState(() {
+                                  isSpinner = true;
+                                });
                                 var response = await UserService.instance
                                     .validateSms(widget.phone_number, code);
                                 if (response['status'] == false) {
+                                  setState(() {
+                                    isSpinner = false;
+                                  });
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
                                 } else if (response['status'] == true) {
+                                  setState(() {
+                                    isSpinner = false;
+                                  });
                                   _phoneCodeController.clear();
                                   Navigator.push(
                                       context,

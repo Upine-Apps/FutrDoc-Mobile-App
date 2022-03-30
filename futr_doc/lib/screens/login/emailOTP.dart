@@ -23,7 +23,7 @@ final _emailOTPKey = GlobalKey<FormState>();
 
 class _EmailOTPState extends State<EmailOTP> {
   String code = '';
-
+  bool isSpinner = false;
   @override
   void initState() {
     super.initState();
@@ -98,14 +98,22 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomElevatedButton(
                             onPressed: () async {
                               if (_emailOTPKey.currentState!.validate()) {
+                                setState(() {
+                                  isSpinner = true;
+                                });
                                 var response = await UserService.instance
                                     .validateEmail(
                                         widget.phone_number, code, context);
                                 if (response['status'] == false) {
-                                  print('here');
+                                  setState(() {
+                                    isSpinner = false;
+                                  });
                                   CustomToast.showDialog(
                                       'Wrong code provided', context);
                                 } else if (response['status'] == true) {
+                                  setState(() {
+                                    isSpinner = false;
+                                  });
                                   _emailCodeController.clear();
                                   Navigator.push(
                                       context,

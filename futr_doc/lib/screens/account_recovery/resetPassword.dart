@@ -41,7 +41,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final _resetPasswordKey = GlobalKey<FormState>();
-
+  bool isSpinner = false;
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
@@ -131,13 +131,22 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   CustomToast.showDialog(
                                       'Passwords do not match', context);
                                 } else {
+                                  setState(() {
+                                    isSpinner = true;
+                                  });
                                   var response = await UserService.instance
                                       .completeForgotPassword(
                                           widget.phone_number, code, password);
                                   if (response['status'] == false) {
+                                     setState(() {
+                                    isSpinner = false;
+                                  });
                                     CustomToast.showDialog(
                                         'Wrong code provided', context);
                                   } else if (response['status'] == true) {
+                                     setState(() {
+                                    isSpinner = false;
+                                  });
                                     _clearAllController();
                                   }
                                   Navigator.push(
@@ -156,7 +165,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                                 var response = await UserService.instance
                                     .resendSms(widget.phone_number);
                                 if (response['status'] == true) {
-                                  CustomToast.showDialog('Code resent!', context);
+                                  CustomToast.showDialog(
+                                      'Code resent!', context);
                                 } else {
                                   CustomToast.showDialog(
                                       response['message'], context);

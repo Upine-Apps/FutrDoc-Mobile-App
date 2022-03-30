@@ -22,7 +22,7 @@ final _recoveryCodeKey = GlobalKey<FormState>();
 
 class _MfaNeededState extends State<MfaNeeded> {
   String code = '';
-
+  bool isSpinner = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -82,15 +82,25 @@ class _MfaNeededState extends State<MfaNeeded> {
                             CustomElevatedButton(
                               onPressed: () async {
                                 if (_recoveryCodeKey.currentState!.validate()) {
+                                  setState(() {
+                                    isSpinner = true;
+                                  });
                                   var response = await UserService.instance
                                       .authenticateUser(widget.phone_number,
                                           widget.password, code);
                                   if (response['status'] == true) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HomeScreen()));
+                                            builder: (context) =>
+                                                HomeScreen()));
                                   } else {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
                                     CustomToast.showDialog('Incorrect code',
                                         context); // do we need to put else statement?
                                   }
