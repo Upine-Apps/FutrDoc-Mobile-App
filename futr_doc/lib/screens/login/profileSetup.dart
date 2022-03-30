@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
+import 'package:futr_doc/custom-widgets/customDropDown.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
 import 'package:futr_doc/custom-widgets/text-field/customYearField.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
@@ -26,6 +27,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return WillPopScope(
       onWillPop: () async => true,
       child: GestureDetector(
@@ -58,7 +60,9 @@ class _ProfileSetupState extends State<ProfileSetup> {
                       SizedBox(height: MediaQuery.of(context).size.height * .1),
                       CustomTextFormField(
                         controller: _firstNameController,
-                        onEditingComplete: () {},
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
                         onChanged: (val) {
                           setState(() {
                             first_name = val!;
@@ -71,7 +75,9 @@ class _ProfileSetupState extends State<ProfileSetup> {
                       ),
                       CustomTextFormField(
                           controller: _lastNameController,
-                          onEditingComplete: () {},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           onChanged: (val) {
                             setState(() {
                               last_name = val!;
@@ -81,15 +87,32 @@ class _ProfileSetupState extends State<ProfileSetup> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .025,
                       ),
-                      CustomYearField(
-                        controller: _schoolYearController,
-                        onEditingComplete: () {},
+                      // CustomYearField(
+                      //   controller: _schoolYearController,
+                      //   onEditingComplete: () {},
+                      //   onChanged: (val) {
+                      //     setState(() {
+                      //       school_year = val!;
+                      //     });
+                      //   },
+                      //   labelText: 'YEAR IN SCHOOL',
+                      // ),
+                      CustomDropDown(
+                        labelText: 'School year',
+                        initialValue: 'Freshman',
                         onChanged: (val) {
                           setState(() {
                             school_year = val!;
                           });
+                          node.nextFocus();
                         },
-                        labelText: 'YEAR IN SCHOOL',
+                        items: <String>[
+                          'Freshman',
+                          'Sophomore',
+                          'Junior',
+                          'Senior',
+                          'Grad-Student'
+                        ],
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),

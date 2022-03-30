@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
+import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +68,10 @@ class _WalkthroughState extends State<Walkthrough> {
         showSkipButton: true,
         skip: Text('Skip', style: Theme.of(context).textTheme.bodyText2),
         onSkip: () {
-          // Add push replacement to home screen
+           Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()));
 
         },
         dotsDecorator: getDotDecoration(),
@@ -76,7 +80,10 @@ class _WalkthroughState extends State<Walkthrough> {
           style: Theme.of(context).textTheme.bodyText2,
         ),
         onDone: () {
-          // Add push replacement to home screen
+           Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()));
         },
 
       );

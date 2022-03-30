@@ -145,6 +145,8 @@ class _LoginState extends State<Login> {
                                       .authenticateUser(phone_number, password);
                                   if (response['status'] == false) {
                                     setState(() => isSpinner = false);
+                                    CustomToast.showDialog(
+                                        'Failed to login', context);
                                     if (response['message'] == 'MFA_NEEDED') {
                                       _clearControllers();
                                       Navigator.push(
@@ -157,6 +159,7 @@ class _LoginState extends State<Login> {
                                       );
                                     } //make "MFA_NEEDED" a global constant
                                     else {
+                                       setState(() => isSpinner = false);
                                       CustomToast.showDialog(
                                           'Failed to login, try again',
                                           context);

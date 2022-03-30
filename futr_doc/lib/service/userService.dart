@@ -26,7 +26,7 @@ class UserService {
   // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing
-  static final _hostUrl = 'http://10.0.2.2:3000/user';
+  static final _hostUrl = 'http://localhost:3000/user';
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
@@ -63,6 +63,9 @@ class UserService {
       var response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      data['user']['id'] = '${data['user']['id']}';
+
+      print(data['user']['id'].runtimeType);
       context.read<UserProvider>().setUser(User.jsonToUser(data['user']));
       return {'status': true};
     } catch (err) {
@@ -106,6 +109,7 @@ class UserService {
   }
 
   Future validateSms(String phone_number, String code) async {
+    print('inside call');
     final url = '$_hostUrl/validate-sms';
     var headers = await getHeaders(null);
     Object body = {
@@ -113,6 +117,8 @@ class UserService {
       'code': code,
     };
     try {
+      print(body);
+      print(url);
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       if (response.statusCode == 200) {
@@ -200,13 +206,17 @@ class UserService {
     var headers = await getHeaders(jsonEncode(tokens));
     print('here');
     final User user = context.read<UserProvider>().user;
+    var institution = getInstitution(user.email, context);
+    print(institution.runtimeType);
     Object body = {
       'id': user.id.toString(),
       'first_name': firstName,
       'last_name': lastName,
+      'institution': institution.toString(),
       'school_year': schoolYear,
-      'degree': degree
+      'degree': degree,
     };
+    print(body);
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
@@ -271,6 +281,23 @@ class UserService {
       }
     } catch (err) {
       return {'status': false};
+    }
+  }
+
+  getInstitution(String email, BuildContext context) {
+    var index = email.indexOf('@');
+    var emailEnd = email.substring(index, email.length);
+    switch (emailEnd) {
+      case 'utrgv.edu':
+        return 'Univeristy of Texas Rio Grande Valley';
+      case 'tamu.edu':
+        return 'Texas A&M University';
+      case 'baylor.edu':
+        return 'Baylor University';
+      case 'upineapps.com':
+        return 'Upine Apps University';
+      default:
+        return 'Upine Apps University';
     }
   }
 
