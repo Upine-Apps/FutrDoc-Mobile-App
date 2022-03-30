@@ -3,7 +3,6 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/service/userService.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
@@ -25,15 +24,14 @@ class _PhoneOTPState extends State<PhoneOTP> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => true,
-        child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: OKToast(
-                child: Scaffold(
-                    body: SingleChildScrollView(
-                        child: Column(
+      onWillPop: () async => true,
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .075,
@@ -49,40 +47,40 @@ class _PhoneOTPState extends State<PhoneOTP> {
                       },
                     )),
                 Container(
-                    width: MediaQuery.of(context).size.width * .75,
-                    child: Form(
-                      key: _phoneOTPKey,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * .1,
-                          ),
-                          Text(
-                            'Lets verify your phone number',
-                            style: Theme.of(context).textTheme.headline3,
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                              height: MediaQuery.of(context).size.width * .05),
-                          Text('Enter the code we just sent to your phone',
-                              style: Theme.of(context).textTheme.bodyText2),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * .5,
-                          ),
-                          CustomCodeField(
-                            onEditingComplete: () {},
-                            labelText: 'CODE',
-                            controller: _phoneCodeController,
-                            onChanged: (val) {
-                              setState(() {
-                                code = val!;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * .1,
-                          ),
-                          CustomElevatedButton(
+                  width: MediaQuery.of(context).size.width * .75,
+                  child: Form(
+                    key: _phoneOTPKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * .1,
+                        ),
+                        Text(
+                          'Lets verify your phone number',
+                          style: Theme.of(context).textTheme.headline3,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * .05),
+                        Text('Enter the code we just sent to your phone',
+                            style: Theme.of(context).textTheme.bodyText2),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * .5,
+                        ),
+                        CustomCodeField(
+                          onEditingComplete: () {},
+                          labelText: 'CODE',
+                          controller: _phoneCodeController,
+                          onChanged: (val) {
+                            setState(() {
+                              code = val!;
+                            });
+                          },
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * .1,
+                        ),
+                        CustomElevatedButton(
                             onPressed: () async {
                               if (_phoneOTPKey.currentState!.validate()) {
                                 setState(() {
@@ -113,27 +111,32 @@ class _PhoneOTPState extends State<PhoneOTP> {
                             text: 'Continue',
                             width: MediaQuery.of(context).size.width * .75,
                             height: MediaQuery.of(context).size.height * .05,
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .025,
-                          ),
-                          CustomTextButton(
-                              onPressed: () async {
-                                var response = await UserService.instance
-                                    .resendSms(widget.phone_number);
-                                if (response['status'] == false) {
-                                  CustomToast.showDialog(
-                                      'Error sending SMS code', context);
-                                } else if (response['status'] == true) {
-                                  CustomToast.showDialog(
-                                      'Just sent you a message!', context);
-                                }
-                              },
-                              text: 'Resend code')
-                        ],
-                      ),
-                    ))
+                            spinner: isSpinner),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .025,
+                        ),
+                        CustomTextButton(
+                            onPressed: () async {
+                              var response = await UserService.instance
+                                  .resendSms(widget.phone_number);
+                              if (response['status'] == false) {
+                                CustomToast.showDialog(
+                                    'Error sending SMS code', context);
+                              } else if (response['status'] == true) {
+                                CustomToast.showDialog(
+                                    'Just sent you a message!', context);
+                              }
+                            },
+                            text: 'Resend code')
+                      ],
+                    ),
+                  ),
+                ),
               ],
-            ))))));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

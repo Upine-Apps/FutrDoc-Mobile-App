@@ -10,6 +10,7 @@ import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:futr_doc/screens/settings/settings.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/UserProvider.dart';
@@ -40,16 +41,19 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => UserProvider()),
-          ChangeNotifierProvider(create: (context) => TokenProvider())
-        ],
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => TokenProvider())
+      ],
+      child: OKToast(
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: LoginHero(),
           theme: AppTheme().lightTheme,
           darkTheme: AppTheme().darkTheme,
           themeMode: themeNotifier.getThemeMode(),
-        ));
+        ),
+      ),
+    );
   }
 }

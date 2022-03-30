@@ -43,259 +43,323 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MediaQuery.of(context).size.height * .1),
                               Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text('Welcome back, \n${user.first_name}!',
-                                  style: Theme.of(context).textTheme.headline2,
-                                  textAlign: TextAlign.left
-                                ),
+                                child: Text(
+                                    'Welcome back, \n${user.first_name}!',
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                    textAlign: TextAlign.left),
                               ),
-                               SizedBox(
+                              SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .01),
                               Align(
-                                 alignment: Alignment.centerLeft,
+                                alignment: Alignment.centerLeft,
                                 child: Text('You have 5 shadowing hours today',
-                                  style: Theme.of(context).textTheme.bodyText2
-                                ),
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2),
                               ),
-                               SizedBox(
+                              SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .05),
                               Row(
                                 children: [
                                   Text('Shadowing',
-                                    style: Theme.of(context).textTheme.bodyText1
-                                  ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
                                   Spacer(),
                                   CustomElevatedButton(
                                     onPressed: () {},
                                     text: 'Add',
-                                    width: MediaQuery.of(context).size.width * .15,
-                                    height: MediaQuery.of(context).size.height * .025,
+                                    width:
+                                        MediaQuery.of(context).size.width * .15,
+                                    height: MediaQuery.of(context).size.height *
+                                        .025,
                                   )
                                 ],
                               ),
-                               SizedBox(
+                              SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .01),
                               Card(
-                                shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 1.5,
-                                  decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15))),
-                                  padding: EdgeInsets.all(20),
-                                  child: Column(children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '3 Hours',
-                                        style: Theme.of(context).textTheme.headline4,
-                                        
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: MediaQuery.of(context).size.height * .01,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Completed yesterday at \nHope Family Center',
-                                      style: Theme.of(context).textTheme.headline5
-                                      ),
-                                    )
-                                  ],)
-                                )
-                              ),
-                               SizedBox(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(15.0)),
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          1.5,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15))),
+                                      padding: EdgeInsets.all(20),
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              '3 Hours',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                .01,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                'Completed yesterday at \nHope Family Center',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline5),
+                                          )
+                                        ],
+                                      ))),
+                              SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .05),
                               Row(
                                 children: [
                                   Text('Data Dashboard',
-                                    style: Theme.of(context).textTheme.bodyText1
-                                  ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
                                   Spacer(),
                                   CustomElevatedButton(
                                     onPressed: () {},
-                                    text: 'Add',
-                                    width: MediaQuery.of(context).size.width * .15,
-                                    height: MediaQuery.of(context).size.height * .025,
+                                    text: 'View',
+                                    width:
+                                        MediaQuery.of(context).size.width * .2,
+                                    height: MediaQuery.of(context).size.height *
+                                        .025,
                                   )
                                 ],
                               ),
-                               SizedBox(
+                              SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * .01),
-                              Row(children: [
-                                Column(children: [
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * .355,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15)
-                                        )
+                              Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .3525,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            padding: EdgeInsets.all(20),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text('296',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4)),
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      .01,
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      'Total shadowing \nhours completed',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5),
+                                                )
+                                              ],
+                                            )),
                                       ),
-                                      padding: EdgeInsets.all(20),
-                                      child: Column(children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('296',
-                                          style: Theme.of(context).textTheme.headline4)
-                                        ),
-                                         SizedBox(
-                                      height: MediaQuery.of(context).size.height * .01,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Total shadowing \nhours completedr',
-                                      style: Theme.of(context).textTheme.headline5
-                                      ),)
-                                      ],)
-                                    ),
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .3525,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            padding: EdgeInsets.all(20),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text('17',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4)),
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      .01,
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text('Monthly hours',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5),
+                                                )
+                                              ],
+                                            )),
+                                      )
+                                    ],
                                   ),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * .355,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15)
-                                        )
+                                  Spacer(),
+                                  Column(
+                                    children: [
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .3525,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            padding: EdgeInsets.all(20),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text('2',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4)),
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      .01,
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text('Specialities',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5),
+                                                )
+                                              ],
+                                            )),
                                       ),
-                                      padding: EdgeInsets.all(20),
-                                      child: Column(children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('17',
-                                          style: Theme.of(context).textTheme.headline4)
-                                        ),
-                                         SizedBox(
-                                      height: MediaQuery.of(context).size.height * .01,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Monthly hours',
-                                      style: Theme.of(context).textTheme.headline5
-                                      ),)
-                                      ],)
-                                    ),
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .3525,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            padding: EdgeInsets.all(20),
+                                            child: Column(
+                                              children: [
+                                                Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text('5',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4)),
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      .01,
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                      'Differrent shadowing',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5),
+                                                )
+                                              ],
+                                            )),
+                                      )
+                                    ],
                                   )
-                                ],),
-                                Spacer(),
-                                Column(children: [
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * .355,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15)
-                                        )
-                                      ),
-                                      padding: EdgeInsets.all(20),
-                                      child: Column(children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('2',
-                                          style: Theme.of(context).textTheme.headline4)
-                                        ),
-                                         SizedBox(
-                                      height: MediaQuery.of(context).size.height * .01,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Specialities',
-                                      style: Theme.of(context).textTheme.headline5
-                                      ),)
-                                      ],)
-                                    ),
-                                  ),
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width * .355,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15)
-                                        )
-                                      ),
-                                      padding: EdgeInsets.all(20),
-                                      child: Column(children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text('5',
-                                          style: Theme.of(context).textTheme.headline4)
-                                        ),
-                                         SizedBox(
-                                      height: MediaQuery.of(context).size.height * .01,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Differrent shadowing',
-                                      style: Theme.of(context).textTheme.headline5
-                                      ),)
-                                      ],)
-                                    ),
-                                  )
-                                ],)
-                              ],),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height * .05
+                                ],
                               ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .05),
                               CustomElevatedButton(
-                                onPressed: (){},
-                                text: 'FutrDoc Report (PDF)',
-                                 width: MediaQuery.of(context).size.width * .75,
-                                height: MediaQuery.of(context).size.height * .05,
-                                color: AppColors.grey
-                              ),
+                                  onPressed: () {},
+                                  text: 'FutrDoc Report (PDF)',
+                                  width:
+                                      MediaQuery.of(context).size.width * .75,
+                                  height:
+                                      MediaQuery.of(context).size.height * .05,
+                                  color: AppColors.grey),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * .025
-                              ),
+                                  height: MediaQuery.of(context).size.height *
+                                      .025),
                               CustomElevatedButton(
-                                onPressed: (){},
-                                text: 'Find Opportunities',
-                                 width: MediaQuery.of(context).size.width * .75,
-                                height: MediaQuery.of(context).size.height * .05,
-                                color: AppColors.grey
-                              ),
+                                  onPressed: () {},
+                                  text: 'Find Opportunities',
+                                  width:
+                                      MediaQuery.of(context).size.width * .75,
+                                  height:
+                                      MediaQuery.of(context).size.height * .05,
+                                  color: AppColors.grey),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * .025
-                              ),
+                                  height: MediaQuery.of(context).size.height *
+                                      .025),
                               CustomElevatedButton(
-                                onPressed: (){},
-                                text: 'Resources',
-                                 width: MediaQuery.of(context).size.width * .75,
-                                height: MediaQuery.of(context).size.height * .05,
-                                color: AppColors.grey
-                              ),
+                                  onPressed: () {},
+                                  text: 'Resources',
+                                  width:
+                                      MediaQuery.of(context).size.width * .75,
+                                  height:
+                                      MediaQuery.of(context).size.height * .05,
+                                  color: AppColors.grey),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * .025
-                              ),
+                                  height: MediaQuery.of(context).size.height *
+                                      .025),
                               CustomElevatedButton(
-                                onPressed: (){},
-                                text: 'Blog Posts',
-                                 width: MediaQuery.of(context).size.width * .75,
-                                height: MediaQuery.of(context).size.height * .05,
-                                color: AppColors.grey
-                              ),
+                                  onPressed: () {},
+                                  text: 'Blog Posts',
+                                  width:
+                                      MediaQuery.of(context).size.width * .75,
+                                  height:
+                                      MediaQuery.of(context).size.height * .05,
+                                  color: AppColors.grey),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * .05
-                              ),
-                              
-                        
+                                  height:
+                                      MediaQuery.of(context).size.height * .05),
                             ],
                           ),
                         ))))));

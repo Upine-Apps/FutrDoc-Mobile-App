@@ -36,7 +36,7 @@ class CustomElevatedButton extends StatelessWidget {
             onPressed: onPressed,
             child: spinner == true
                 ? SpinKitWave(
-                    color: Theme.of(context).secondaryHeaderColor,
+                    color: Theme.of(context).primaryColor,
                     size: 20.0,
                     type: SpinKitWaveType.start)
                 : Text(text,

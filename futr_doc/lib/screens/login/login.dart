@@ -10,7 +10,6 @@ import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/customToast.dart';
@@ -53,89 +52,86 @@ class _LoginState extends State<Login> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: OKToast(
-          child: Scaffold(
-            body: Align(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.only(
-                            right: MediaQuery.of(context).size.width * .2,
-                            left: MediaQuery.of(context).size.width * .2),
-                        color: Theme.of(context).secondaryHeaderColor,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .125),
-                            CustomImage(
-                              imagePath: theme == 'Dark'
-                                  ? 'assets/images/futrdoc-logo-light.png'
-                                  : 'assets/images/futrdoc-logo-dark.png',
-                            ),
-                            Text(
-                              'FutrDoc',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 60,
-                                  fontFamily: 'Share'),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              'Tracking your shadowing and volunteer hours just got easier',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 16,
-                                  fontFamily: 'Share'),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .05),
-                          ],
-                        )),
-                    MyArc(
+        child: Scaffold(
+          body: Align(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * .1,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * .75,
-                      child: Form(
-                        key: _loginFormKey,
-                        child: Column(
-                          children: [
-                            CustomPhoneField(
-                              onEditingComplete: () {
-                                node.nextFocus();
-                              },
-                              labelText: 'PHONE',
-                              controller: _phoneController,
-                              onChanged: (val) {
-                                setState(() {
-                                  phone_number = val!;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .025),
-                            CustomPasswordFormField(
-                              onEditingComplete: () {},
-                              labelText: 'PASSWORD',
-                              controller: _passwordController,
-                              onChanged: (val) {
-                                setState(() {
-                                  password = val!;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .05),
-                            CustomElevatedButton(
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width * .2,
+                          left: MediaQuery.of(context).size.width * .2),
+                      color: Theme.of(context).secondaryHeaderColor,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * .125),
+                          CustomImage(
+                            imagePath: theme == 'Dark'
+                                ? 'assets/images/futrdoc-logo-light.png'
+                                : 'assets/images/futrdoc-logo-dark.png',
+                          ),
+                          Text(
+                            'FutrDoc',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 60,
+                                fontFamily: 'Share'),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            'Tracking your shadowing and volunteer hours just got easier',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 16,
+                                fontFamily: 'Share'),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height * .05),
+                        ],
+                      )),
+                  MyArc(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * .1,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .75,
+                    child: Form(
+                      key: _loginFormKey,
+                      child: Column(
+                        children: [
+                          CustomPhoneField(
+                            onEditingComplete: () {
+                              node.nextFocus();
+                            },
+                            labelText: 'PHONE',
+                            controller: _phoneController,
+                            onChanged: (val) {
+                              setState(() {
+                                phone_number = val!;
+                              });
+                            },
+                          ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * .025),
+                          CustomPasswordFormField(
+                            onEditingComplete: () {},
+                            labelText: 'PASSWORD',
+                            controller: _passwordController,
+                            onChanged: (val) {
+                              setState(() {
+                                password = val!;
+                              });
+                            },
+                          ),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height * .05),
+                          CustomElevatedButton(
                               onPressed: () async {
                                 if (_loginFormKey.currentState!.validate()) {
                                   setState(() {
@@ -159,7 +155,7 @@ class _LoginState extends State<Login> {
                                       );
                                     } //make "MFA_NEEDED" a global constant
                                     else {
-                                       setState(() => isSpinner = false);
+                                      setState(() => isSpinner = false);
                                       CustomToast.showDialog(
                                           'Failed to login, try again',
                                           context);
@@ -178,37 +174,35 @@ class _LoginState extends State<Login> {
                               text: 'Login',
                               width: MediaQuery.of(context).size.width * .75,
                               height: MediaQuery.of(context).size.height * .05,
-                            ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .025),
-                            CustomTextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .push(_createRoute(true));
-                                },
-                                text: 'Forgot your password?'),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Don\'t have an account? ',
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                ),
-                                CustomTextButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .push(_createRoute(false));
-                                    },
-                                    text: 'Register here!'),
-                              ],
-                            ),
-                          ],
-                        ),
+                              spinner: isSpinner),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * .025),
+                          CustomTextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(_createRoute(true));
+                              },
+                              text: 'Forgot your password?'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Don\'t have an account? ',
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ),
+                              CustomTextButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(_createRoute(false));
+                                  },
+                                  text: 'Register here!'),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

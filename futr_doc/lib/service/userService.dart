@@ -22,11 +22,16 @@ class UserService {
     };
     return _headers;
   }
-  //Uncomment for prod testing
-  // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
-  //Uncomment for local testing
-  static final _hostUrl = 'http://10.0.2.2:3000/user';
+  //Uncomment for prod testing
+  static final _hostUrl = 'http://54.91.210.147:3000/user';
+
+  //Uncomment for local testing on Android
+  // static final _hostUrl = 'http://10.0.2.2:3000/user';
+
+  //Uncomment for local testing on iOS
+  // static final _hostUrl = 'http://localhost:3000/user';
+
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
 
@@ -121,6 +126,9 @@ class UserService {
       print(url);
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(data);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         return {'status': true};
       } else {

@@ -19,7 +19,6 @@ import '../../custom-widgets/text-field/emailWithDropdown.dart';
 import '../../models/User.dart';
 import '../../theme/appColor.dart';
 import 'login.dart';
-import 'package:oktoast/oktoast.dart';
 import '../../providers/UserProvider.dart';
 
 class SignUp extends StatefulWidget {
@@ -68,183 +67,178 @@ class _SignUpState extends State<SignUp> {
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
-          child: OKToast(
-            child: Scaffold(
-                body: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                  width: MediaQuery.of(context).size.width * .75,
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _signUpFormKey,
-                      child: Column(children: <Widget>[
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .1),
-                        Text('Welcome to the easiest way to track your hours!',
-                            style: Theme.of(context).textTheme.headline2),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .05),
-                        EmailWithDropdown(
-                            onEditingComplete: () {
-                              node.nextFocus();
-                            },
-                            labelText: 'EMAIL',
-                            controller: _emailController,
-                            onChanged: (val) {
-                              setState(() {
-                                email = val!;
-                              });
-                            },
-                            onChangedDropdown: (value) {
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                            dropdownValue: dropdownValue),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .025),
-                        CustomPhoneField(
+          child: Scaffold(
+              body: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+                width: MediaQuery.of(context).size.width * .75,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _signUpFormKey,
+                    child: Column(children: <Widget>[
+                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      Text('Welcome to the easiest way to track your hours!',
+                          style: Theme.of(context).textTheme.headline2),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .05),
+                      EmailWithDropdown(
                           onEditingComplete: () {
                             node.nextFocus();
                           },
-                          labelText: 'PHONE NUMBER',
-                          controller: _phoneController,
+                          labelText: 'EMAIL',
+                          controller: _emailController,
                           onChanged: (val) {
                             setState(() {
-                              phone_number = val!;
+                              email = val!;
                             });
                           },
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .025),
-                        CustomPasswordFormField(
-                            onEditingComplete: () {
-                              node.nextFocus();
-                            },
-                            labelText: 'PASSWORD',
-                            controller: _passwordController,
-                            onChanged: (val) {
+                          onChangedDropdown: (value) {
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                          },
+                          dropdownValue: dropdownValue),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      CustomPhoneField(
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'PHONE NUMBER',
+                        controller: _phoneController,
+                        onChanged: (val) {
+                          setState(() {
+                            phone_number = val!;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      CustomPasswordFormField(
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
+                          labelText: 'PASSWORD',
+                          controller: _passwordController,
+                          onChanged: (val) {
+                            setState(() {
+                              password = val!;
+                            });
+                          }),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      CustomPasswordFormField(
+                          onEditingComplete: () {},
+                          labelText: 'CONFIRM PASSWORD',
+                          controller: _passwordConfirmController,
+                          onChanged: (val) {
+                            setState(() {
+                              confirmPassword = val!;
+                            });
+                          }),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                              value: terms,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  terms = value!;
+                                });
+                              }),
+                          Container(
+                            width: MediaQuery.of(context).size.width * .6,
+                            child: TextButton(
+                              onPressed: () async {
+                                await launch('https://google.com');
+                              },
+                              child: Text(
+                                  'I AGREE TO THE PRIVACY POLICY AND TERMS OF SERVICE',
+                                  style: Theme.of(context).textTheme.bodyText2),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .035),
+                      CustomElevatedButton(
+                        onPressed: () async {
+                          if (_signUpFormKey.currentState!.validate()) {
+                            if (terms == false) {
+                              CustomToast.showDialog(
+                                  'Please accept the Terms and Conditions',
+                                  context);
+                            } else if (confirmPassword != password) {
+                              CustomToast.showDialog(
+                                  'Passwords do not match', context);
+                            } else {
                               setState(() {
-                                password = val!;
+                                isSpinner = true;
                               });
-                            }),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .025),
-                        CustomPasswordFormField(
-                            onEditingComplete: () {},
-                            labelText: 'CONFIRM PASSWORD',
-                            controller: _passwordConfirmController,
-                            onChanged: (val) {
-                              setState(() {
-                                confirmPassword = val!;
-                              });
-                            }),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .025),
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                                value: terms,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    terms = value!;
-                                  });
-                                }),
-                            Container(
-                              width: MediaQuery.of(context).size.width * .6,
-                              child: TextButton(
-                                onPressed: () async {
-                                  await launch('https://google.com');
-                                },
-                                child: Text(
-                                    'I AGREE TO THE PRIVACY POLICY AND TERMS OF SERVICE',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .035),
-                        CustomElevatedButton(
-                          onPressed: () async {
-                            if (_signUpFormKey.currentState!.validate()) {
-                              if (terms == false) {
+                              var result = await UserService.instance
+                                  .registerUser(
+                                      email,
+                                      phone_number,
+                                      terms.toString(),
+                                      password,
+                                      dropdownValue,
+                                      context);
+                              if (result['status'] == false) {
+                                setState(() {
+                                  isSpinner = false;
+                                });
                                 CustomToast.showDialog(
-                                    'Please accept the Terms and Conditions',
-                                    context);
-                              } else if (confirmPassword != password) {
-                                CustomToast.showDialog(
-                                    'Passwords do not match', context);
+                                    'Error creating user, try again', context);
                               } else {
                                 setState(() {
-                                  isSpinner = true;
+                                  isSpinner = false;
+                                  terms = false;
                                 });
-                                var result = await UserService.instance
-                                    .registerUser(
-                                        email,
-                                        phone_number,
-                                        terms.toString(),
-                                        password,
-                                        dropdownValue,
-                                        context);
-                                if (result['status'] == false) {
-                                  setState(() {
-                                    isSpinner = false;
-                                  });
-                                  CustomToast.showDialog(
-                                      'Error creating user, try again',
-                                      context);
-                                } else {
-                                  setState(() {
-                                    isSpinner = false;
-                                    terms = false;
-                                  });
-                                  _clearAllController();
+                                _clearAllController();
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PhoneOTP(
-                                        phone_number: phone_number,
-                                        password: password,
-                                      ),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PhoneOTP(
+                                      phone_number: phone_number,
+                                      password: password,
                                     ),
-                                  );
-                                }
+                                  ),
+                                );
                               }
                             }
-                          },
-                          text: 'Register',
-                          textColor: AppColors.offWhite,
-                          color: AppColors.lighterBlue,
-                          width: MediaQuery.of(context).size.width * .75,
-                          height: MediaQuery.of(context).size.height * .05,
-                          spinner: isSpinner,
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .025),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Already have an account? ',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                            CustomTextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(_createRoute());
-                                },
-                                text: 'Login'),
-                          ],
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * .05),
-                      ]),
-                    ),
-                  )),
-            )),
-          )),
+                          }
+                        },
+                        text: 'Register',
+                        textColor: AppColors.offWhite,
+                        color: AppColors.lighterBlue,
+                        width: MediaQuery.of(context).size.width * .75,
+                        height: MediaQuery.of(context).size.height * .05,
+                        spinner: isSpinner,
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          CustomTextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(_createRoute());
+                              },
+                              text: 'Login'),
+                        ],
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .05),
+                    ]),
+                  ),
+                )),
+          ))),
     );
   }
 

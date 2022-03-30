@@ -5,7 +5,6 @@ import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/profileSetup.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
@@ -41,10 +40,9 @@ class _EmailOTPState extends State<EmailOTP> {
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
-            child: OKToast(
-                child: Scaffold(
-                    body: SingleChildScrollView(
-                        child: Column(
+            child: Scaffold(
+                body: SingleChildScrollView(
+                    child: Column(
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .075,
@@ -96,37 +94,37 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           CustomElevatedButton(
-                            onPressed: () async {
-                              if (_emailOTPKey.currentState!.validate()) {
-                                setState(() {
-                                  isSpinner = true;
-                                });
-                                var response = await UserService.instance
-                                    .validateEmail(
-                                        widget.phone_number, code, context);
-                                if (response['status'] == false) {
+                              onPressed: () async {
+                                if (_emailOTPKey.currentState!.validate()) {
                                   setState(() {
-                                    isSpinner = false;
+                                    isSpinner = true;
                                   });
-                                  CustomToast.showDialog(
-                                      'Wrong code provided', context);
-                                } else if (response['status'] == true) {
-                                  setState(() {
-                                    isSpinner = false;
-                                  });
-                                  _emailCodeController.clear();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileSetup()));
+                                  var response = await UserService.instance
+                                      .validateEmail(
+                                          widget.phone_number, code, context);
+                                  if (response['status'] == false) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
+                                    CustomToast.showDialog(
+                                        'Wrong code provided', context);
+                                  } else if (response['status'] == true) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
+                                    _emailCodeController.clear();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfileSetup()));
+                                  }
                                 }
-                              }
-                            },
-                            text: 'Continue',
-                            width: MediaQuery.of(context).size.width * .75,
-                            height: MediaQuery.of(context).size.height * .05,
-                          ),
+                              },
+                              text: 'Continue',
+                              width: MediaQuery.of(context).size.width * .75,
+                              height: MediaQuery.of(context).size.height * .05,
+                              spinner: isSpinner),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .025,
                           ),
@@ -144,6 +142,6 @@ class _EmailOTPState extends State<EmailOTP> {
                       ),
                     ))
               ],
-            ))))));
+            )))));
   }
 }
