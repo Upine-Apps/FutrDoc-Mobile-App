@@ -240,13 +240,6 @@ class _SignUpState extends State<SignUp> {
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * .05),
-                        // Container(
-                        //     width: 200,
-                        //     height: 200,
-                        //     decoration: BoxDecoration(
-                        //         color: AppColors.transparentGray,
-                        //         borderRadius: BorderRadius.circular(30)),
-                        //     child: spinkit),
                       ]),
                     ),
                   )),
