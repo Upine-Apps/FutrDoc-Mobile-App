@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
+import 'package:futr_doc/custom-widgets/loadingOverlay.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
-import 'package:futr_doc/screens/account_recovery/recoveryCode.dart';
+import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
-import '../../custom-widgets/text-field/customEmailFormField.dart';
+import '../../custom-widgets/customCheckBox.dart';
+import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
 import '../../custom-widgets/text-field/customPhoneField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
+import '../../models/User.dart';
 import '../../theme/appColor.dart';
 import 'login.dart';
+import '../../providers/UserProvider.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -40,6 +45,8 @@ class _SignUpState extends State<SignUp> {
   String email = '';
   String phone_number = '';
   String password = '';
+  String confirmPassword = '';
+  bool isSpinner = false;
   final _signUpFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
@@ -48,6 +55,8 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  static const spinkit =
+      SpinKitWave(color: Colors.white, size: 25.0, type: SpinKitWaveType.start);
   String dropdownValue = '@utrgv.edu';
   @override
   Widget build(BuildContext context) {
@@ -72,27 +81,6 @@ class _SignUpState extends State<SignUp> {
                           style: Theme.of(context).textTheme.headline2),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
-                      // CustomTextFormField(
-                      //   onEditingComplete: () {
-                      //     node.nextFocus();
-                      //   },
-                      //   labelText: 'FIRST NAME',
-                      //   controller: _firstNameController,
-                      //   onChanged: (val) {},
-                      // ),
-                      // SizedBox(
-                      //     height: MediaQuery.of(context).size.height * .025),
-                      // CustomTextFormField(
-                      //   onEditingComplete: () {
-                      //     node.nextFocus();
-                      //   },
-                      //   labelText: 'LAST NAME',
-                      //   controller: _lastNameController,
-                      //   onChanged: (val) {},
-                      // ),
-                      // SizedBox(
-                      //   height: MediaQuery.of(context).size.height * .025,
-                      // ),
                       EmailWithDropdown(
                           onEditingComplete: () {
                             node.nextFocus();
@@ -143,7 +131,11 @@ class _SignUpState extends State<SignUp> {
                           onEditingComplete: () {},
                           labelText: 'CONFIRM PASSWORD',
                           controller: _passwordConfirmController,
-                          onChanged: (val) {}),
+                          onChanged: (val) {
+                            setState(() {
+                              confirmPassword = val!;
+                            });
+                          }),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       Row(
@@ -173,14 +165,48 @@ class _SignUpState extends State<SignUp> {
                       CustomElevatedButton(
                         onPressed: () async {
                           if (_signUpFormKey.currentState!.validate()) {
-                            var result = await UserService.instance
-                                .registerUser(email, phone_number,
-                                    terms.toString(), password, dropdownValue);
-                            if (result['status'] == true) {
-                              Navigator.push(
+                            if (terms == false) {
+                              CustomToast.showDialog(
+                                  'Please accept the Terms and Conditions',
+                                  context);
+                            } else if (confirmPassword != password) {
+                              CustomToast.showDialog(
+                                  'Passwords do not match', context);
+                            } else {
+                              setState(() {
+                                isSpinner = true;
+                              });
+                              var result = await UserService.instance
+                                  .registerUser(
+                                      email,
+                                      phone_number,
+                                      terms.toString(),
+                                      password,
+                                      dropdownValue,
+                                      context);
+                              if (result['status'] == false) {
+                                setState(() {
+                                  isSpinner = false;
+                                });
+                                CustomToast.showDialog(
+                                    'Error creating user, try again', context);
+                              } else {
+                                setState(() {
+                                  isSpinner = false;
+                                  terms = false;
+                                });
+                                _clearAllController();
+
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PhoneOTP()));
+                                    builder: (context) => PhoneOTP(
+                                      phone_number: phone_number,
+                                      password: password,
+                                    ),
+                                  ),
+                                );
+                              }
                             }
                           }
                         },
@@ -189,6 +215,7 @@ class _SignUpState extends State<SignUp> {
                         color: AppColors.lighterBlue,
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
+                        spinner: isSpinner,
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
@@ -206,7 +233,6 @@ class _SignUpState extends State<SignUp> {
                               text: 'Login'),
                         ],
                       ),
-
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
                     ]),
@@ -233,5 +259,12 @@ class _SignUpState extends State<SignUp> {
         );
       },
     );
+  }
+
+  void _clearAllController() {
+    _emailController.clear();
+    _phoneController.clear();
+    _passwordController.clear();
+    _passwordConfirmController.clear();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -9,6 +10,8 @@ class CustomElevatedButton extends StatelessWidget {
   final double? width;
   final Color? color;
   final Color? textColor;
+  final bool? spinner;
+  final double? elevation;
 
   const CustomElevatedButton(
       {Key? key,
@@ -19,7 +22,9 @@ class CustomElevatedButton extends StatelessWidget {
       this.height,
       this.width,
       this.color,
-      this.textColor})
+      this.textColor,
+      this.spinner,
+      this.elevation})
       : super(key: key);
 
   @override
@@ -29,14 +34,22 @@ class CustomElevatedButton extends StatelessWidget {
         width: width,
         child: ElevatedButton(
             onPressed: onPressed,
-            child: Text(text,
-                style: TextStyle(color: textColor != null ? textColor : Theme.of(context).primaryColor)),
+            child: spinner == true
+                ? SpinKitWave(
+                    color: Theme.of(context).primaryColor,
+                    size: 20.0,
+                    type: SpinKitWaveType.start)
+                : Text(text,
+                    style: TextStyle(
+                        color: textColor != null
+                            ? textColor
+                            : Theme.of(context).primaryColor)),
             style: ElevatedButton.styleFrom(
+                elevation: elevation ?? 10,
                 primary: color,
                 textStyle: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  fontFamily: 'Share'
-                ))));
+                    fontSize: fontSize ?? 16,
+                    fontWeight: fontWeight,
+                    fontFamily: 'Share'))));
   }
 }

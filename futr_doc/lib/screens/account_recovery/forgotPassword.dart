@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
-import 'package:futr_doc/screens/account_recovery/recoveryCode.dart';
+import 'package:futr_doc/custom-widgets/customToast.dart';
+import 'package:futr_doc/screens/login/mfaNeeded.dart';
+import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
+import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/text-field/customPhoneField.dart';
@@ -28,6 +31,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   String theme = '';
+  String phone_number = '';
+  bool isSpinner = false;
   final _forgotPasswordKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
 
@@ -90,21 +95,41 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         onEditingComplete: () {},
                         labelText: 'PHONE NUMBER',
                         controller: _phoneController,
-                        onChanged: (val) {},
+                        onChanged: (val) {
+                          setState(() {
+                            phone_number = val!;
+                          });
+                        },
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       CustomElevatedButton(
-                        onPressed: () {
-                          if (_forgotPasswordKey.currentState!.validate()) {
-                            Navigator.of(context).push(_createRoute(true));
-                          }
-                        },
-                        text: 'Submit',
-                        width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .05,
-                      ),
+                          onPressed: () async {
+                            if (_forgotPasswordKey.currentState!.validate()) {
+                              setState(() {
+                                isSpinner = true;
+                              });
+                              var response = await UserService.instance
+                                  .startForgotPassword(phone_number);
+                              if (response['status'] == true) {
+                                setState(() {
+                                  isSpinner = false;
+                                });
+                                Navigator.of(context).push(_createRoute(true));
+                              } else {
+                                setState(() {
+                                  isSpinner = false;
+                                });
+                                CustomToast.showDialog(
+                                    'Failed to send code', context);
+                              }
+                            }
+                          },
+                          text: 'Submit',
+                          width: MediaQuery.of(context).size.width * .75,
+                          height: MediaQuery.of(context).size.height * .05,
+                          spinner: isSpinner),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .025,
                       ),
@@ -133,8 +158,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Route _createRoute(first) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          first == true ? RecoveryCode() : SignUp(),
+      pageBuilder: (context, animation, secondaryAnimation) => first == true
+          ? ResetPassword(
+              phone_number: phone_number,
+            )
+          : SignUp(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;

@@ -7,17 +7,30 @@ import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../custom-widgets/customToast.dart';
 
 class EmailOTP extends StatefulWidget {
+  final String phone_number;
+  final String password;
+  EmailOTP({required this.phone_number, required this.password});
   @override
   _EmailOTPState createState() => _EmailOTPState();
 }
 
-final TextEditingController _codeController = TextEditingController();
+final TextEditingController _emailCodeController = TextEditingController();
 final _emailOTPKey = GlobalKey<FormState>();
 
 class _EmailOTPState extends State<EmailOTP> {
   String code = '';
+  bool isSpinner = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      await UserService.instance
+          .getEmailCode(widget.phone_number, widget.password, context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +67,15 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           Text(
-                            'Sweet! Last one I promise, lets verify your email.',
+                            'Sweet! Last one I promise, let\'s verify your email.',
                             style: Theme.of(context).textTheme.headline3,
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.width * .05
-                          ),
-                          Text('Enter the code we just sent to your email',
-                          style: Theme.of(context).textTheme.bodyText2,
+                              height: MediaQuery.of(context).size.width * .05),
+                          Text(
+                            'Enter the code we just sent to your email',
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.width * .5,
@@ -70,7 +83,7 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomCodeField(
                             onEditingComplete: () {},
                             labelText: 'CODE',
-                            controller: _codeController,
+                            controller: _emailCodeController,
                             onChanged: (val) {
                               setState(() {
                                 code = val!;
@@ -81,28 +94,50 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           CustomElevatedButton(
-                            onPressed: () async {
-                              if (_emailOTPKey.currentState!.validate()) {
-                              
-                                var response = await UserService.instance
-                                    .validateSMS('shamer@utrgv.edu', code);
-                                if(response['status'] ==true) {
+                              onPressed: () async {
+                                if (_emailOTPKey.currentState!.validate()) {
+                                  setState(() {
+                                    isSpinner = true;
+                                  });
+                                  var response = await UserService.instance
+                                      .validateEmail(
+                                          widget.phone_number, code, context);
+                                  if (response['status'] == false) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
+                                    CustomToast.showDialog(
+                                        'Wrong code provided', context);
+                                  } else if (response['status'] == true) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
+                                    _emailCodeController.clear();
                                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileSetup()));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfileSetup()));
+                                  }
                                 }
-                              }
-                            },
-                            text: 'Continue',
-                            width: MediaQuery.of(context).size.width * .75,
-                            height: MediaQuery.of(context).size.height * .05,
-                          ),
+                              },
+                              text: 'Continue',
+                              width: MediaQuery.of(context).size.width * .75,
+                              height: MediaQuery.of(context).size.height * .05,
+                              spinner: isSpinner),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {}, text: 'Resend code')
+                              onPressed: () async {
+                                await UserService.instance.getEmailCode(
+                                    widget.phone_number,
+                                    widget.password,
+                                    context);
+                                CustomToast.showDialog(
+                                    'Just sent you an email!', context);
+                              },
+                              text: 'Resend code')
                         ],
                       ),
                     ))

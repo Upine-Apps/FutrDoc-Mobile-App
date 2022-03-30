@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
+import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
-import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
-import 'package:futr_doc/screens/login/signUp.dart';
+import 'package:futr_doc/screens/home/homeScreen.dart';
+import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 
-class RecoveryCode extends StatefulWidget {
+class MfaNeeded extends StatefulWidget {
+  final String phone_number;
+  final String password;
+  MfaNeeded({required this.phone_number, required this.password});
   @override
-  _RecoveryCodeState createState() => _RecoveryCodeState();
+  _MfaNeededState createState() => _MfaNeededState();
 }
 
 final TextEditingController _codeController = TextEditingController();
 final _recoveryCodeKey = GlobalKey<FormState>();
 
-class _RecoveryCodeState extends State<RecoveryCode> {
+class _MfaNeededState extends State<MfaNeeded> {
   String code = '';
-
+  bool isSpinner = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -74,28 +78,52 @@ class _RecoveryCodeState extends State<RecoveryCode> {
                             height: MediaQuery.of(context).size.width * .1,
                           ),
                           CustomElevatedButton(
-                            onPressed: () async {
-                              if (_recoveryCodeKey.currentState!.validate()) {
-                              
-                                var response = await UserService.instance
-                                    .validateSMS('shamer@utrgv.edu', code);
-                                if(response['status'] ==true) {
+                              onPressed: () async {
+                                if (_recoveryCodeKey.currentState!.validate()) {
+                                  setState(() {
+                                    isSpinner = true;
+                                  });
+                                  var response = await UserService.instance
+                                      .authenticateUser(widget.phone_number,
+                                          widget.password, code);
+                                  if (response['status'] == true) {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
                                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ResetPassword()));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                HomeScreen()));
+                                  } else {
+                                    setState(() {
+                                      isSpinner = false;
+                                    });
+                                    CustomToast.showDialog('Incorrect code',
+                                        context); // do we need to put else statement?
+                                  }
                                 }
-                              }
-                            },
-                            text: 'Continue',
-                            width: MediaQuery.of(context).size.width * .75,
-                            height: MediaQuery.of(context).size.height * .05,
-                          ),
+                              },
+                              text: 'Continue',
+                              width: MediaQuery.of(context).size.width * .75,
+                              height: MediaQuery.of(context).size.height * .05,
+                              spinner: isSpinner),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .025,
                           ),
                           CustomTextButton(
-                              onPressed: () {}, text: 'Resend code')
+                              onPressed: () async {
+                                var response = await UserService.instance
+                                    .resendSms(widget.phone_number);
+                                if (response['status'] == true) {
+                                  CustomToast.showDialog(
+                                      'Code resent!', context);
+                                } else {
+                                  CustomToast.showDialog(
+                                      response['message'], context);
+                                }
+                              },
+                              text: 'Resend code')
                         ],
                       ),
                     ))

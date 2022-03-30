@@ -4,14 +4,16 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/halfCircle.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart';
+import 'package:futr_doc/custom-widgets/text-field/customPhoneField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
+import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../custom-widgets/text-field/customEmailFormField.dart';
-import '../../custom-widgets/text-field/emailWithDropdown.dart';
+import '../../custom-widgets/customToast.dart';
+import '../home/homeScreen.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -33,13 +35,13 @@ class _LoginState extends State<Login> {
   }
 
   String theme = '';
-  String email = '';
+  String phone_number = '';
   String password = '';
   String domain = '';
   final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  String dropdownValue = '@utrgv.edu';
+  final TextEditingController _phoneController = TextEditingController();
+  bool isSpinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -102,23 +104,18 @@ class _LoginState extends State<Login> {
                       key: _loginFormKey,
                       child: Column(
                         children: [
-                          EmailWithDropdown(
-                              onEditingComplete: () {
-                                node.nextFocus();
-                              },
-                              labelText: 'EMAIL',
-                              controller: _emailController,
-                              onChanged: (val) {
-                                setState(() {
-                                  email = val!;
-                                });
-                              },
-                              onChangedDropdown: (value) {
-                                setState(() {
-                                  dropdownValue = value!;
-                                });
-                              },
-                              dropdownValue: dropdownValue),
+                          CustomPhoneField(
+                            onEditingComplete: () {
+                              node.nextFocus();
+                            },
+                            labelText: 'PHONE',
+                            controller: _phoneController,
+                            onChanged: (val) {
+                              setState(() {
+                                phone_number = val!;
+                              });
+                            },
+                          ),
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * .025),
@@ -135,18 +132,49 @@ class _LoginState extends State<Login> {
                           SizedBox(
                               height: MediaQuery.of(context).size.height * .05),
                           CustomElevatedButton(
-                            onPressed: () async {
-                              if (_loginFormKey.currentState!.validate()) {
-                                var response = await UserService.instance
-                                    .authenticateUser(
-                                        email + dropdownValue, password);
-                                if (response['status'] == true) {}
-                              }
-                            },
-                            text: 'Login',
-                            width: MediaQuery.of(context).size.width * .75,
-                            height: MediaQuery.of(context).size.height * .05,
-                          ),
+                              onPressed: () async {
+                                if (_loginFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    isSpinner = true;
+                                  });
+                                  var response = await UserService.instance
+                                      .authenticateUser(phone_number, password);
+                                  if (response['status'] == false) {
+                                    setState(() => isSpinner = false);
+                                    CustomToast.showDialog(
+                                        'Failed to login', context);
+                                    if (response['message'] == 'MFA_NEEDED') {
+                                      _clearControllers();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MfaNeeded(
+                                              phone_number: phone_number,
+                                              password: password),
+                                        ),
+                                      );
+                                    } //make "MFA_NEEDED" a global constant
+                                    else {
+                                      setState(() => isSpinner = false);
+                                      CustomToast.showDialog(
+                                          'Failed to login, try again',
+                                          context);
+                                    }
+                                    // CustomToast.showToast();
+                                  } else {
+                                    _clearControllers();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                HomeScreen()));
+                                  }
+                                }
+                              },
+                              text: 'Login',
+                              width: MediaQuery.of(context).size.width * .75,
+                              height: MediaQuery.of(context).size.height * .05,
+                              spinner: isSpinner),
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * .025),
@@ -201,5 +229,10 @@ class _LoginState extends State<Login> {
         );
       },
     );
+  }
+
+  void _clearControllers() {
+    _phoneController.clear();
+    _passwordController.clear();
   }
 }
