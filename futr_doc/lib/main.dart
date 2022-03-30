@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
+import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/screens/login/loginHero.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: LoginHero(),
+          home: HomeScreen(),
           theme: AppTheme().lightTheme,
           darkTheme: AppTheme().darkTheme,
           themeMode: themeNotifier.getThemeMode(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/loadingOverlay.dart';

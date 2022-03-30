@@ -11,6 +11,7 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? color;
   final Color? textColor;
   final bool? spinner;
+  final double? elevation;
 
   const CustomElevatedButton(
       {Key? key,
@@ -22,7 +23,8 @@ class CustomElevatedButton extends StatelessWidget {
       this.width,
       this.color,
       this.textColor,
-      this.spinner})
+      this.spinner,
+      this.elevation})
       : super(key: key);
 
   @override
@@ -43,9 +45,10 @@ class CustomElevatedButton extends StatelessWidget {
                             ? textColor
                             : Theme.of(context).primaryColor)),
             style: ElevatedButton.styleFrom(
+                elevation: elevation ?? 10,
                 primary: color,
                 textStyle: TextStyle(
-                    fontSize: fontSize,
+                    fontSize: fontSize ?? 16,
                     fontWeight: fontWeight,
                     fontFamily: 'Share'))));
   }

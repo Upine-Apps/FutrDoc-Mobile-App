@@ -213,6 +213,7 @@ class UserService {
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         //why are we doing all of this? Didn't we just read it from the provider?
+        // Setting the attributes to the user model so that we can access it anywhere - Sham
         user.first_name = firstName;
         user.last_name = lastName;
         user.schoolYear = schoolYear;
