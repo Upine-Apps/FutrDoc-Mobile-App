@@ -37,7 +37,8 @@ class EmailWithDropdown extends StatelessWidget {
                 '@utrgv.edu',
                 '@tamu.edu',
                 '@baylor.edu',
-                '@upineapps.com'
+                '@upineapps.com',
+                '@futrdoc.com'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

@@ -128,7 +128,9 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
-                          onEditingComplete: () {},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           labelText: 'CONFIRM PASSWORD',
                           controller: _passwordConfirmController,
                           onChanged: (val) {

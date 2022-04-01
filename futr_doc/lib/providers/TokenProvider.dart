@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/Tokens.dart';
 
 final Token initialData = Token(
-  accessToken: 'pp',
-  idToken: 'pp',
-  refreshToken: 'pp',
+  accessToken: '',
+  idToken: '',
+  refreshToken: '',
 );
 
 class TokenProvider with ChangeNotifier {

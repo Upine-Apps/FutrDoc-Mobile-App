@@ -24,10 +24,10 @@ class UserService {
   }
 
   //Uncomment for prod testing
-  static final _hostUrl = 'http://54.91.210.147:3000/user';
+  // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/user';
+  static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/user';
@@ -53,6 +53,27 @@ class UserService {
     }
   }
 
+  Future getUserByPhone(String phone_number, BuildContext context) async {
+    final url = '$_hostUrl/phonenumber/+1' + '${phone_number}';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      print(url);
+      print(phone_number);
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+        print(data);
+        return {'status': true, 'body': data};
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
   //POST
   Future registerUser(String email, String phone_number, String legal,
       String password, String dropDownValue, BuildContext context) async {
@@ -69,9 +90,15 @@ class UserService {
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       data['user']['id'] = '${data['user']['id']}';
-
-      print(data['user']['id'].runtimeType);
+      Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+      prefs.then((value) {
+        value.setString('user_id', '${data['user']['id']}');
+        value.setString('phone_number', phone_number);
+        value.setString('email', email);
+      });
       context.read<UserProvider>().setUser(User.jsonToUser(data['user']));
+      User user = context.read<UserProvider>().user;
+
       return {'status': true};
     } catch (err) {
       print(err);
@@ -80,31 +107,53 @@ class UserService {
     }
   }
 
-  Future authenticateUser(String phone_number, String password,
-      [String? code]) async {
+  Future authenticateUser(
+      String phone_number, String password, BuildContext context) async {
     final url = '$_hostUrl/login';
     var headers = await getHeaders(null);
-    Object body = code != null
-        ? {'username': '+1' + phone_number, 'password': password, 'code': code}
-        : {
-            'username': '+1' + phone_number,
-            'password': password
-          }; //not sure if this is going to go through correctly
-    print(body);
+    print(phone_number);
+    Object body = {
+      'username': '+1' + phone_number,
+      'password': password
+    }; //not sure if this is going to go through correctly
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
-        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-        Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-        prefs.then((value) {
-          value.setString('accessToken', data['accessToken']);
-          value.setString('idToken', data['idToken']);
-          value.setString('refreshToken', data['refreshToken']);
-        });
+        //passed authentication
+        context.read<TokenProvider>().setToken(Token.jsonToToken(data));
+        var getUserResponse =
+            await UserService.instance.getUserByPhone(phone_number, context);
+        if (getUserResponse['status'] == false) {
+          return {'status': false, 'message': 'Failed to get user'};
+        } else {
+          User convertedUser = User.jsonToUser(getUserResponse['body']);
+          var prefs = await SharedPreferences.getInstance();
+          prefs.setString('user_id', convertedUser.id);
+          prefs.setString('phone_number', convertedUser.phone_number);
+          prefs.setString('email', convertedUser.email);
+          context.read<UserProvider>().setUser(convertedUser);
+        }
+      } else if (data['message'] == 'MFA_NEEDED') {
+        var getUserResponse =
+            await UserService.instance.getUserByPhone(phone_number, context);
+        if (getUserResponse['status'] == false) {
+          return {'status': false, 'message': 'Failed to get user'};
+        } else {
+          User convertedUser = User.jsonToUser(getUserResponse['body']);
+          var prefs = await SharedPreferences.getInstance();
+          prefs.setString('user_id', convertedUser.id);
+          prefs.setString('phone_number', convertedUser.phone_number);
+          prefs.setString('email', convertedUser.email);
+          context.read<UserProvider>().setUser(convertedUser);
+        }
+        this.resendSms(phone_number);
+        return {'status': false, 'message': 'MFA_NEEDED'};
       } else {
+        print(data);
         print('Request failed with status: ${response.statusCode}.');
-        return {'status': false};
+        return {'status': false, 'message': data['message']};
       }
       return {'status': true};
     } catch (err) {
@@ -211,31 +260,29 @@ class UserService {
     final url = '$_hostUrl';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
+    print('TOKENS');
+    print(tokens);
     var headers = await getHeaders(jsonEncode(tokens));
-    print('here');
-    print(schoolYear);
-    print(schoolYear.runtimeType);
     final User user = context.read<UserProvider>().user;
     var institution = getInstitution(user.email, context);
+
     Object body = {
-      'id': user.id.toString(),
+      'id': user.id,
       'first_name': firstName,
       'last_name': lastName,
       'institution': institution,
       'school_year': schoolYear,
       'degree': degree,
     };
-    print(body);
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
-        //why are we doing all of this? Didn't we just read it from the provider?
         // Setting the attributes to the user model so that we can access it anywhere - Sham
         user.first_name = firstName;
         user.last_name = lastName;
-        user.schoolYear = schoolYear;
+        user.school_year = schoolYear;
         user.degree = degree;
         context.read<UserProvider>().setUser(user);
         return {'status': true};
@@ -305,6 +352,8 @@ class UserService {
         return 'Baylor University';
       case 'upineapps.com':
         return 'Upine Apps University';
+      case 'futrdoc.com':
+        return 'FutrDoc University';
       default:
         return 'Upine Apps University';
     }

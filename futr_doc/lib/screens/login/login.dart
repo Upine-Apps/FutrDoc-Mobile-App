@@ -7,12 +7,16 @@ import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart'
 import 'package:futr_doc/custom-widgets/text-field/customPhoneField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
 import 'package:futr_doc/screens/login/mfaNeeded.dart';
+import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:futr_doc/theme/appColor.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/customToast.dart';
+import '../../models/User.dart';
+import '../../providers/UserProvider.dart';
 import '../home/homeScreen.dart';
 
 class Login extends StatefulWidget {
@@ -31,6 +35,8 @@ class _LoginState extends State<Login> {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
       theme = prefs.getString('Theme') ?? 'Light';
+      _phoneController.text = prefs.getString('phone_number') ?? '';
+      phone_number = prefs.getString('phone_number') ?? '';
     });
   }
 
@@ -40,7 +46,7 @@ class _LoginState extends State<Login> {
   String domain = '';
   final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   bool isSpinner = false;
 
   @override
@@ -108,7 +114,7 @@ class _LoginState extends State<Login> {
                             onEditingComplete: () {
                               node.nextFocus();
                             },
-                            labelText: 'PHONE',
+                            labelText: 'PHONE NUMBER',
                             controller: _phoneController,
                             onChanged: (val) {
                               setState(() {
@@ -120,7 +126,9 @@ class _LoginState extends State<Login> {
                               height:
                                   MediaQuery.of(context).size.height * .025),
                           CustomPasswordFormField(
-                            onEditingComplete: () {},
+                            onEditingComplete: () {
+                              node.nextFocus();
+                            },
                             labelText: 'PASSWORD',
                             controller: _passwordController,
                             onChanged: (val) {
@@ -138,24 +146,27 @@ class _LoginState extends State<Login> {
                                     isSpinner = true;
                                   });
                                   var response = await UserService.instance
-                                      .authenticateUser(phone_number, password);
+                                      .authenticateUser(
+                                          phone_number, password, context);
                                   if (response['status'] == false) {
                                     setState(() => isSpinner = false);
-                                    CustomToast.showDialog(
-                                        'Failed to login', context);
+
                                     if (response['message'] == 'MFA_NEEDED') {
+                                      CustomToast.showDialog(
+                                          'Need to finish register process',
+                                          context);
                                       _clearControllers();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MfaNeeded(
+                                          builder: (context) => PhoneOTP(
                                               phone_number: phone_number,
-                                              password: password),
+                                              password:
+                                                  password), //TAKE TO EMAIL AFTER THIS
                                         ),
                                       );
                                     } //make "MFA_NEEDED" a global constant
                                     else {
-                                      setState(() => isSpinner = false);
                                       CustomToast.showDialog(
                                           'Failed to login, try again',
                                           context);

@@ -34,6 +34,7 @@ class _EmailOTPState extends State<EmailOTP> {
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return WillPopScope(
         onWillPop: () async => true,
         child: GestureDetector(
@@ -81,7 +82,9 @@ class _EmailOTPState extends State<EmailOTP> {
                             height: MediaQuery.of(context).size.width * .5,
                           ),
                           CustomCodeField(
-                            onEditingComplete: () {},
+                            onEditingComplete: () {
+                              node.nextFocus();
+                            },
                             labelText: 'CODE',
                             controller: _emailCodeController,
                             onChanged: (val) {

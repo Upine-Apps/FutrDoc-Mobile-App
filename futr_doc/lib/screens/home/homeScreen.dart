@@ -12,6 +12,7 @@ import '../../custom-widgets/customImage.dart';
 import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../theme/appColor.dart';
+import '../settings/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     onPressed: () {},
                                     text: 'Add',
                                     width:
-                                        MediaQuery.of(context).size.width * .15,
+                                        MediaQuery.of(context).size.width * .2,
                                     height: MediaQuery.of(context).size.height *
                                         .025,
                                   )
@@ -352,6 +353,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               CustomElevatedButton(
                                   onPressed: () {},
                                   text: 'Blog Posts',
+                                  width:
+                                      MediaQuery.of(context).size.width * .75,
+                                  height:
+                                      MediaQuery.of(context).size.height * .05,
+                                  color: AppColors.grey),
+                              SizedBox(
+                                  height: MediaQuery.of(context).size.height *
+                                      .025),
+                              CustomElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Settings()));
+                                  },
+                                  text: 'Settings',
                                   width:
                                       MediaQuery.of(context).size.width * .75,
                                   height:

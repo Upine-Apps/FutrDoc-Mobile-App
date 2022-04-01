@@ -5,6 +5,9 @@ import 'package:futr_doc/theme/themeNotifier.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../login/loginHero.dart';
+
 class Settings extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SettingsState();
@@ -24,7 +27,7 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  int selectedPosition =-1;
+  int selectedPosition = -1;
   List themes = ["Light", "Dark"];
 
   @override
@@ -32,15 +35,49 @@ class _SettingsState extends State<Settings> {
     ThemeNotifier themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
         body: Container(
-                height: 500,
-                child: ListView.builder(
-                  itemBuilder: (context, position) {
-                    return _createList(
-                        context, themes[position], position, themeNotifier);
+      width: MediaQuery.of(context).size.width * .75,
+      child: Align(
+          alignment: Alignment.topCenter,
+          child: SingleChildScrollView(
+              child: Column(children: [
+            SizedBox(height: MediaQuery.of(context).size.height * .075),
+            Container(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * .05),
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
-                  itemCount: themes.length,
-                ),
-              ));
+                )),
+            SizedBox(height: MediaQuery.of(context).size.height * .125),
+            Text(
+              'Here\'s a button and a theme ;)',
+              style: Theme.of(context).textTheme.headline2,
+              textAlign: TextAlign.center,
+            ),
+            Container(
+              height: 200,
+              child: ListView.builder(
+                itemBuilder: (context, position) {
+                  return _createList(
+                      context, themes[position], position, themeNotifier);
+                },
+                itemCount: themes.length,
+              ),
+            ),
+            CustomElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginHero()));
+              },
+              text: 'Sign out',
+              width: MediaQuery.of(context).size.width * .75,
+              height: MediaQuery.of(context).size.height * .05,
+            ),
+          ]))),
+    ));
   }
 
   _createList(context, item, position, themeNotifier) {

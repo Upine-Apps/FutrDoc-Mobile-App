@@ -25,7 +25,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
   String last_name = '';
   String school_year = 'Freshman';
   String degree = '';
-  bool isSpinnger = false;
+  bool isSpinner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,9 @@ class _ProfileSetupState extends State<ProfileSetup> {
                           height: MediaQuery.of(context).size.height * .025),
                       CustomTextFormField(
                         controller: _degreeController,
-                        onEditingComplete: () {},
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
                         onChanged: (val) {
                           setState(() {
                             degree = val!;
@@ -124,14 +126,14 @@ class _ProfileSetupState extends State<ProfileSetup> {
                         onPressed: () async {
                           if (_profileSetupFormKey.currentState!.validate()) {
                             setState(() {
-                              isSpinnger = true;
+                              isSpinner = true;
                             });
                             var response = await UserService.instance
                                 .updateUser(first_name, last_name, school_year,
                                     degree, context);
                             if (response['status'] == true) {
                               setState(() {
-                                isSpinnger = false;
+                                isSpinner = false;
                               });
                               clearControllers();
                               Navigator.push(
@@ -140,7 +142,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
                                       builder: (context) => Walkthrough()));
                             } else {
                               setState(() {
-                                isSpinnger = false;
+                                isSpinner = false;
                               });
                               CustomToast.showDialog(
                                   'Failed to create profile, try again',

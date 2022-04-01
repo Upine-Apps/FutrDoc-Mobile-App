@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import '../models/User.dart';
 
 final User initialData = User(
-    id: '1',
-    first_name: 'Tate',
-    last_name: 'Walker',
-    email: 'admin@upineapps.com',
-    phone_number: '+12816308212',
-    institution: 'TAMU',
-    student_id: '824003029',
-    degree: 'Aerospace Engineering',
-    schoolYear: '4',
+    id: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    institution: '',
+    student_id: '',
+    degree: '',
+    school_year: '',
     legal: true);
 
 class UserProvider with ChangeNotifier {

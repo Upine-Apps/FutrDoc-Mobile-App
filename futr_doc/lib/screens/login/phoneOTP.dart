@@ -23,6 +23,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
   bool isSpinner = false;
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     return WillPopScope(
       onWillPop: () async => true,
       child: GestureDetector(
@@ -56,7 +57,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           height: MediaQuery.of(context).size.width * .1,
                         ),
                         Text(
-                          'Lets verify your phone number',
+                          'Let\'s verify your phone number',
                           style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
                         ),
@@ -68,7 +69,9 @@ class _PhoneOTPState extends State<PhoneOTP> {
                           height: MediaQuery.of(context).size.width * .5,
                         ),
                         CustomCodeField(
-                          onEditingComplete: () {},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           labelText: 'CODE',
                           controller: _phoneCodeController,
                           onChanged: (val) {
