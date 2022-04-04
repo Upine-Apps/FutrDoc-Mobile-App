@@ -2,6 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:futr_doc/models/Tokens.dart';
+import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
+import 'package:futr_doc/models/types/LoginBody.dart';
+import 'package:futr_doc/models/types/UnauthenticatedUserBody.dart';
+import 'package:futr_doc/models/types/UserSignUpBody.dart';
+import 'package:futr_doc/models/types/UserUpdateBody.dart';
+import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,10 +18,6 @@ import '../providers/UserProvider.dart';
 
 class UserService {
   Future<Map<String, String>> getHeaders(String? tokens) async {
-    final prefs = await SharedPreferences.getInstance();
-    String accessToken = prefs.getString('accessToken') ?? '';
-    String idToken = prefs.getString('idToken') ?? '';
-    String refreshToken = prefs.getString('refreshToken') ?? '';
     final _headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       "Cognito": tokens ?? ''
@@ -24,10 +26,10 @@ class UserService {
   }
 
   //Uncomment for prod testing
-  static final _hostUrl = 'http://54.91.210.147:3000/user';
+  // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/user';
+  static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/user';
@@ -59,8 +61,6 @@ class UserService {
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
     try {
-      print(url);
-      print(phone_number);
       http.Response response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -75,29 +75,25 @@ class UserService {
   }
 
   //POST
-  Future registerUser(String email, String phone_number, String legal,
-      String password, String dropDownValue, BuildContext context) async {
+  Future registerUser(
+      UserSignUpBody userSignUpBody, BuildContext context) async {
     final url = _hostUrl;
     var headers = await getHeaders(null);
-    Object body = {
-      "email": email + dropDownValue,
-      "phone_number": '+1' + phone_number,
-      "legal": legal,
-      "password": password
-    };
+
+    Object body = userSignUpBody.toJson();
+
     try {
       var response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      data['user']['id'] = '${data['user']['id']}';
+      String user_id = data['user']['id'];
       Future<SharedPreferences> prefs = SharedPreferences.getInstance();
       prefs.then((value) {
-        value.setString('user_id', '${data['user']['id']}');
-        value.setString('phone_number', phone_number);
-        value.setString('email', email);
+        value.setString('user_id', user_id);
+        value.setString('phone_number', userSignUpBody.phone_number);
+        value.setString('email', userSignUpBody.email);
       });
       context.read<UserProvider>().setUser(User.jsonToUser(data['user']));
-      User user = context.read<UserProvider>().user;
 
       return {'status': true};
     } catch (err) {
@@ -107,15 +103,14 @@ class UserService {
     }
   }
 
-  Future authenticateUser(
-      String phone_number, String password, BuildContext context) async {
+  //Functions should do one thing. Clean up authenticate user and handle getUserByPhone in widget. Abstract the response handling and have functions throw errors w messages if failing. Catch in widget
+  Future authenticateUser(LoginBody loginBody, BuildContext context) async {
     final url = '$_hostUrl/login';
     var headers = await getHeaders(null);
-    print(phone_number);
-    Object body = {
-      'username': '+1' + phone_number,
-      'password': password
-    }; //not sure if this is going to go through correctly
+
+    print(loginBody);
+    Object body = loginBody.toJson();
+    print(body);
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
@@ -123,8 +118,8 @@ class UserService {
       if (response.statusCode == 200) {
         //passed authentication
         context.read<TokenProvider>().setToken(Token.jsonToToken(data));
-        var getUserResponse =
-            await UserService.instance.getUserByPhone(phone_number, context);
+        var getUserResponse = await UserService.instance
+            .getUserByPhone(loginBody.username, context);
         if (getUserResponse['status'] == false) {
           return {'status': false, 'message': 'Failed to get user'};
         } else {
@@ -136,8 +131,8 @@ class UserService {
           context.read<UserProvider>().setUser(convertedUser);
         }
       } else if (data['message'] == 'MFA_NEEDED') {
-        var getUserResponse =
-            await UserService.instance.getUserByPhone(phone_number, context);
+        var getUserResponse = await UserService.instance
+            .getUserByPhone(loginBody.username, context);
         if (getUserResponse['status'] == false) {
           return {'status': false, 'message': 'Failed to get user'};
         } else {
@@ -148,7 +143,7 @@ class UserService {
           prefs.setString('email', convertedUser.email);
           context.read<UserProvider>().setUser(convertedUser);
         }
-        this.resendSms(phone_number);
+        this.resendSms(UnauthenticatedUserBody(username: loginBody.username));
         return {'status': false, 'message': 'MFA_NEEDED'};
       } else {
         print(data);
@@ -162,17 +157,12 @@ class UserService {
     }
   }
 
-  Future validateSms(String phone_number, String code) async {
+  Future validateSms(VerifyAttributeBody verifyAttributeBody) async {
     print('inside call');
     final url = '$_hostUrl/validate-sms';
     var headers = await getHeaders(null);
-    Object body = {
-      'username': '+1' + phone_number,
-      'code': code,
-    };
+    Object body = verifyAttributeBody.toJson();
     try {
-      print(body);
-      print(url);
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -189,12 +179,10 @@ class UserService {
     }
   }
 
-  Future resendSms(String phone_number) async {
+  Future resendSms(UnauthenticatedUserBody unauthenticatedUserBody) async {
     final url = '$_hostUrl/resend-sms';
     var headers = await getHeaders(null);
-    Object body = {
-      'username': '+1' + phone_number,
-    };
+    Object body = unauthenticatedUserBody.toJson();
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
@@ -211,15 +199,12 @@ class UserService {
   }
 
   Future validateEmail(
-      String phone_number, String code, BuildContext context) async {
+      VerifyAttributeBody verifyAttributeBody, BuildContext context) async {
     final url = '$_hostUrl/validate-email';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
     var headers = await getHeaders(jsonEncode(tokens));
-    Object body = {
-      'username': '+1' + phone_number,
-      'code': code,
-    };
+    Object body = verifyAttributeBody.toJson();
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
@@ -235,11 +220,10 @@ class UserService {
     }
   }
 
-  Future getEmailCode(
-      String phone_number, String password, BuildContext context) async {
+  Future getEmailCode(LoginBody loginBody, BuildContext context) async {
     final url = '$_hostUrl/get-email-code';
     var headers = await getHeaders(null);
-    Object body = {'username': '+1' + phone_number, 'password': password};
+    Object body = loginBody.toJson();
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
@@ -255,8 +239,7 @@ class UserService {
     }
   }
 
-  Future updateUser(String firstName, String lastName, String schoolYear,
-      String degree, BuildContext context) async {
+  Future updateUser(UserUpdateBody userUpdateBody, BuildContext context) async {
     final url = '$_hostUrl';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
@@ -264,27 +247,20 @@ class UserService {
     print(tokens);
     var headers = await getHeaders(jsonEncode(tokens));
     final User user = context.read<UserProvider>().user;
-    var institution = getInstitution(user.email, context);
+    userUpdateBody.institution = getInstitution(user.email, context);
 
-    Object body = {
-      'id': user.id,
-      'first_name': firstName,
-      'last_name': lastName,
-      'institution': institution,
-      'school_year': schoolYear,
-      'degree': degree,
-    };
+    Object body = userUpdateBody.toJson();
     try {
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
         // Setting the attributes to the user model so that we can access it anywhere - Sham
-        user.first_name = firstName;
-        user.last_name = lastName;
-        user.school_year = schoolYear;
-        user.degree = degree;
-        context.read<UserProvider>().setUser(user);
+        user.first_name = userUpdateBody.first_name;
+        user.last_name = userUpdateBody.last_name;
+        user.school_year = userUpdateBody.school_year;
+        user.degree = userUpdateBody.degree;
+        user.institution = context.read<UserProvider>().setUser(user);
         return {'status': true};
       } else {
         print(response.statusCode);
@@ -298,10 +274,11 @@ class UserService {
   }
 
   //Account Recovery
-  Future startForgotPassword(String phone_number) async {
+  Future startForgotPassword(
+      UnauthenticatedUserBody unauthenticatedUserBody) async {
     final url = '$_hostUrl/start-forgot-password';
     var headers = await getHeaders(null);
-    Object body = {'username': '+1' + phone_number};
+    Object body = unauthenticatedUserBody.toJson();
     print(body);
     print(url);
     try {
@@ -318,15 +295,10 @@ class UserService {
     }
   }
 
-  Future completeForgotPassword(
-      String phone_number, String code, String password) async {
+  Future completeForgotPassword(ForgotPasswordBody forgotPasswordBody) async {
     final url = '$_hostUrl/complete-forgot-password';
     var headers = await getHeaders(null);
-    Object body = {
-      'username': '+1' + phone_number,
-      'code': code,
-      'password': password
-    };
+    Object body = forgotPasswordBody.toJson();
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);

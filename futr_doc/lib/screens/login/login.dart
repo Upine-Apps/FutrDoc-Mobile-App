@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/customToast.dart';
 import '../../models/User.dart';
+import '../../models/types/LoginBody.dart';
 import '../../providers/UserProvider.dart';
 import '../home/homeScreen.dart';
 
@@ -147,7 +148,10 @@ class _LoginState extends State<Login> {
                                   });
                                   var response = await UserService.instance
                                       .authenticateUser(
-                                          phone_number, password, context);
+                                          LoginBody(
+                                              username: phone_number,
+                                              password: password),
+                                          context);
                                   if (response['status'] == false) {
                                     setState(() => isSpinner = false);
 

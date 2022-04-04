@@ -4,9 +4,13 @@ import 'package:futr_doc/custom-widgets/customDropDown.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
 import 'package:futr_doc/custom-widgets/text-field/customYearField.dart';
+import 'package:futr_doc/models/types/UserUpdateBody.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/screens/login/walkthrough.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/User.dart';
+import '../../providers/UserProvider.dart';
 import '../../service/userService.dart';
 
 class ProfileSetup extends StatefulWidget {
@@ -128,9 +132,16 @@ class _ProfileSetupState extends State<ProfileSetup> {
                             setState(() {
                               isSpinner = true;
                             });
+                            final User user = context.read<UserProvider>().user;
                             var response = await UserService.instance
-                                .updateUser(first_name, last_name, school_year,
-                                    degree, context);
+                                .updateUser(
+                                    UserUpdateBody(
+                                        id: user.id,
+                                        first_name: first_name,
+                                        last_name: last_name,
+                                        school_year: school_year,
+                                        degree: degree),
+                                    context);
                             if (response['status'] == true) {
                               setState(() {
                                 isSpinner = false;

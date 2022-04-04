@@ -3,6 +3,7 @@ import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
+import 'package:futr_doc/models/types/UnauthenticatedUserBody.dart';
 import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/service/userService.dart';
@@ -111,7 +112,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 isSpinner = true;
                               });
                               var response = await UserService.instance
-                                  .startForgotPassword(phone_number);
+                                  .startForgotPassword(UnauthenticatedUserBody(
+                                      username: phone_number));
                               if (response['status'] == true) {
                                 setState(() {
                                   isSpinner = false;

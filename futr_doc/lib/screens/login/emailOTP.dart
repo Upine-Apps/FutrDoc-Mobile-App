@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
+import 'package:futr_doc/models/types/LoginBody.dart';
+import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/profileSetup.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
@@ -27,8 +29,9 @@ class _EmailOTPState extends State<EmailOTP> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      await UserService.instance
-          .getEmailCode(widget.phone_number, widget.password, context);
+      await UserService.instance.getEmailCode(
+          LoginBody(username: widget.phone_number, password: widget.password),
+          context);
     });
   }
 
@@ -104,7 +107,10 @@ class _EmailOTPState extends State<EmailOTP> {
                                   });
                                   var response = await UserService.instance
                                       .validateEmail(
-                                          widget.phone_number, code, context);
+                                          VerifyAttributeBody(
+                                              username: widget.phone_number,
+                                              code: code),
+                                          context);
                                   if (response['status'] == false) {
                                     setState(() {
                                       isSpinner = false;
@@ -134,8 +140,9 @@ class _EmailOTPState extends State<EmailOTP> {
                           CustomTextButton(
                               onPressed: () async {
                                 await UserService.instance.getEmailCode(
-                                    widget.phone_number,
-                                    widget.password,
+                                    LoginBody(
+                                        username: widget.phone_number,
+                                        password: widget.password),
                                     context);
                                 CustomToast.showDialog(
                                     'Just sent you an email!', context);

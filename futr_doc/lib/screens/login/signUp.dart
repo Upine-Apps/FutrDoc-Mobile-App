@@ -4,6 +4,7 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/loadingOverlay.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/models/types/UserSignUpBody.dart';
 import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/service/userService.dart';
@@ -180,11 +181,12 @@ class _SignUpState extends State<SignUp> {
                               });
                               var result = await UserService.instance
                                   .registerUser(
-                                      email,
-                                      phone_number,
-                                      terms.toString(),
-                                      password,
-                                      dropdownValue,
+                                      UserSignUpBody(
+                                          email: email,
+                                          dropdown_value: dropdownValue,
+                                          phone_number: phone_number,
+                                          legal: terms,
+                                          password: password),
                                       context);
                               if (result['status'] == false) {
                                 setState(() {

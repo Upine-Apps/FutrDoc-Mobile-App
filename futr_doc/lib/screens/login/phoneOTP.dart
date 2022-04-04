@@ -6,6 +6,8 @@ import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
+import '../../models/types/UnauthenticatedUserBody.dart';
+import '../../models/types/VerifyAttributeBody.dart';
 
 class PhoneOTP extends StatefulWidget {
   final String phone_number;
@@ -90,7 +92,9 @@ class _PhoneOTPState extends State<PhoneOTP> {
                                   isSpinner = true;
                                 });
                                 var response = await UserService.instance
-                                    .validateSms(widget.phone_number, code);
+                                    .validateSms(VerifyAttributeBody(
+                                        username: widget.phone_number,
+                                        code: code));
                                 if (response['status'] == false) {
                                   setState(() {
                                     isSpinner = false;
@@ -121,7 +125,8 @@ class _PhoneOTPState extends State<PhoneOTP> {
                         CustomTextButton(
                             onPressed: () async {
                               var response = await UserService.instance
-                                  .resendSms(widget.phone_number);
+                                  .resendSms(UnauthenticatedUserBody(
+                                      username: widget.phone_number));
                               if (response['status'] == false) {
                                 CustomToast.showDialog(
                                     'Error sending SMS code', context);

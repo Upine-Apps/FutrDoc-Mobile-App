@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ import '../../custom-widgets/customImage.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customCodeField.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
+import '../../models/types/UnauthenticatedUserBody.dart';
 
 class ResetPassword extends StatefulWidget {
   final String phone_number;
@@ -134,7 +136,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   });
                                   var response = await UserService.instance
                                       .completeForgotPassword(
-                                          widget.phone_number, code, password);
+                                          ForgotPasswordBody(
+                                              username: widget.phone_number,
+                                              code: code,
+                                              password: password));
                                   if (response['status'] == false) {
                                     setState(() {
                                       isSpinner = false;
@@ -161,7 +166,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                         CustomTextButton(
                             onPressed: () async {
                               var response = await UserService.instance
-                                  .resendSms(widget.phone_number);
+                                  .resendSms(UnauthenticatedUserBody(
+                                      username: widget.phone_number));
                               if (response['status'] == true) {
                                 CustomToast.showDialog('Code resent!', context);
                               } else {
