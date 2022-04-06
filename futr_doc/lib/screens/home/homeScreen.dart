@@ -13,6 +13,7 @@ import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../theme/appColor.dart';
 import '../settings/settings.dart';
+import '../shadowing/shadowing.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -70,7 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .bodyText1),
                                   Spacer(),
                                   CustomElevatedButton(
-                                    onPressed: () {},
+                                    elevation: 0,
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Shadowing()));
+                                    },
                                     text: 'Add',
                                     width:
                                         MediaQuery.of(context).size.width * .2,
@@ -132,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Spacer(),
                                   CustomElevatedButton(
                                     onPressed: () {},
+                                    elevation: 0,
                                     text: 'View',
                                     width:
                                         MediaQuery.of(context).size.width * .2,
@@ -318,6 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height:
                                       MediaQuery.of(context).size.height * .05),
                               CustomElevatedButton(
+                                  elevation: 0,
                                   onPressed: () {},
                                   text: 'FutrDoc Report (PDF)',
                                   width:
@@ -329,6 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: MediaQuery.of(context).size.height *
                                       .025),
                               CustomElevatedButton(
+                                  elevation: 0,
                                   onPressed: () {},
                                   text: 'Find Opportunities',
                                   width:
@@ -340,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: MediaQuery.of(context).size.height *
                                       .025),
                               CustomElevatedButton(
+                                  elevation: 0,
                                   onPressed: () {},
                                   text: 'Resources',
                                   width:
@@ -352,6 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .025),
                               CustomElevatedButton(
                                   onPressed: () {},
+                                  elevation: 0,
                                   text: 'Blog Posts',
                                   width:
                                       MediaQuery.of(context).size.width * .75,
@@ -368,6 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         MaterialPageRoute(
                                             builder: (context) => Settings()));
                                   },
+                                  elevation: 0,
                                   text: 'Settings',
                                   width:
                                       MediaQuery.of(context).size.width * .75,

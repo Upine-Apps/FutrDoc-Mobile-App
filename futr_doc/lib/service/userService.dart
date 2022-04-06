@@ -26,10 +26,10 @@ class UserService {
   }
 
   //Uncomment for prod testing
-  // static final _hostUrl = 'http://54.91.210.147:3000/user';
+  static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
-  static final _hostUrl = 'http://10.0.2.2:3000/user';
+  // static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/user';
@@ -103,7 +103,11 @@ class UserService {
     }
   }
 
-  //Functions should do one thing. Clean up authenticate user and handle getUserByPhone in widget. Abstract the response handling and have functions throw errors w messages if failing. Catch in widget
+  /*
+  Functions should do one thing. Clean up authenticate user and handle getUserByPhone in widget. 
+  Abstract the response handling and have functions throw errors w messages if failing.
+   Catch in widget
+   */
   Future authenticateUser(LoginBody loginBody, BuildContext context) async {
     final url = '$_hostUrl/login';
     var headers = await getHeaders(null);

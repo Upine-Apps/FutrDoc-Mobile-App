@@ -8,6 +8,8 @@ import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/screens/login/profileSetup.dart';
 import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:futr_doc/screens/settings/settings.dart';
+import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
+import 'package:futr_doc/screens/shadowing/shadowing.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
 import 'package:oktoast/oktoast.dart';
