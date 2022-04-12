@@ -9,7 +9,9 @@ import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/Shadowing.dart';
 import '../../models/User.dart';
+import '../../providers/ShadowingProvider.dart';
 import '../../providers/UserProvider.dart';
 import '../../service/userService.dart';
 import '../../theme/appColor.dart';
@@ -36,6 +38,8 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
 
   @override
   Widget build(BuildContext context) {
+    final Shadowing lastShadowing =
+        context.read<ShadowingProvider>().lastShadowing;
     return WillPopScope(
       onWillPop: () async => true,
       child: GestureDetector(
@@ -60,7 +64,7 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                     enabled: false,
                     onEditingComplete: () {},
                     onChanged: (val) {},
-                    labelText: 'LOCATION',
+                    labelText: lastShadowing.clinic_name!,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
@@ -70,7 +74,7 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                       enabled: false,
                       onEditingComplete: () {},
                       onChanged: (val) {},
-                      labelText: 'SHADOWING HOURS'),
+                      labelText: '${lastShadowing.duration} mins'),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
                   ),
@@ -79,14 +83,14 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                       controller: _activityController,
                       onEditingComplete: () {},
                       onChanged: (val) {},
-                      labelText: 'ACTIVITY'),
+                      labelText: lastShadowing.activity!),
                   SizedBox(height: MediaQuery.of(context).size.height * .025),
                   CustomTextFormField(
                     enabled: false,
                     controller: _patientTypeController,
                     onEditingComplete: () {},
                     onChanged: (val) {},
-                    labelText: 'PATIENT TYPE',
+                    labelText: lastShadowing.patient_type!,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .025),
                   Align(

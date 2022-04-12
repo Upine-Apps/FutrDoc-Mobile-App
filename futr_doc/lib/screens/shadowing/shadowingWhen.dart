@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../models/Shadowing.dart';
+import '../../providers/ShadowingProvider.dart';
 import '../../theme/appColor.dart';
 import './calendar-utils.dart';
 
@@ -51,13 +54,21 @@ class _ShadowingWhenState extends State<ShadowingWhen> {
                   // the time-part of compared DateTime objects.
                   return isSameDay(_selectedDay, day);
                 },
-                onDaySelected: (selectedDay, focusedDay) {
+                onDaySelected: (selectedDay, focusedDay) async {
                   if (!isSameDay(_selectedDay, selectedDay)) {
                     // Call `setState()` when updating the selected day
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
                     });
+                    Shadowing lastShadowing =
+                        context.read<ShadowingProvider>().lastShadowing;
+                    final isoDate = selectedDay.toIso8601String();
+                    final date = isoDate.split('T')[0];
+                    lastShadowing.date = date;
+                    context
+                        .read<ShadowingProvider>()
+                        .setLastShadowing(lastShadowing);
                   }
                 },
                 onPageChanged: (focusedDay) {

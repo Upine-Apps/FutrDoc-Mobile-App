@@ -18,7 +18,7 @@ final List<Shadowing> initialData = [
 
 class ShadowingProvider with ChangeNotifier {
   // All shadowings (that will be displayed on the Home screen)
-  final List<Shadowing> _shadowings = initialData;
+  final List<Shadowing> _shadowings = [];
 
   // Retrieve all shadowings
   List<Shadowing> get shadowings => _shadowings;
@@ -42,6 +42,11 @@ class ShadowingProvider with ChangeNotifier {
   // Removing a Shadowing from the list
   void removeFromList(Shadowing shadowing) {
     _shadowings.remove(shadowing);
+    notifyListeners();
+  }
+
+  void removeLastShadowing() {
+    _shadowings.removeLast();
     notifyListeners();
   }
 

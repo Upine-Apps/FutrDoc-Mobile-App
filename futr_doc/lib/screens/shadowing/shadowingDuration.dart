@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/customDropDown.dart';
 import 'package:futr_doc/theme/appColor.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/Shadowing.dart';
+import '../../providers/ShadowingProvider.dart';
 
 class ShadowingDuration extends StatefulWidget {
   @override
@@ -8,6 +12,15 @@ class ShadowingDuration extends StatefulWidget {
 }
 
 class _ShadowingDurationState extends State<ShadowingDuration> {
+  int hours = 0;
+  int minutes = 0;
+  calculateDuration() {
+    Shadowing lastShadowing = context.read<ShadowingProvider>().lastShadowing;
+
+    lastShadowing.duration = (hours * 60 + minutes).toString();
+    context.read<ShadowingProvider>().setLastShadowing(lastShadowing);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(DateTime.now());
@@ -61,9 +74,22 @@ class _ShadowingDurationState extends State<ShadowingDuration> {
                               '02',
                               '03',
                               '04',
+                              '05',
+                              '06',
+                              '07',
+                              '08',
+                              '09',
+                              '10',
+                              '11',
+                              '12',
                             ],
                             labelText: '',
-                            onChanged: (val) => {print(val)},
+                            onChanged: (val) async => {
+                              setState(() {
+                                hours = int.parse(val!);
+                              }),
+                              calculateDuration(),
+                            },
                           ),
                         )),
                   ],
@@ -123,7 +149,12 @@ class _ShadowingDurationState extends State<ShadowingDuration> {
                               '45',
                             ],
                             labelText: '',
-                            onChanged: (val) => {print(val)},
+                            onChanged: (val) async => {
+                              setState(() {
+                                minutes = int.parse(val!);
+                              }),
+                              calculateDuration(),
+                            },
                           ),
                         ),
                       )

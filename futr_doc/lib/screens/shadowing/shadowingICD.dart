@@ -19,7 +19,6 @@ class _ShadowingICDState extends State<ShadowingICD> {
   List<dynamic>? selectedResults = [];
   @override
   Widget build(BuildContext context) {
-    final Shadowing shadowing = context.read<ShadowingProvider>().lastShadowing;
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -72,15 +71,15 @@ class _ShadowingICDState extends State<ShadowingICD> {
                             style: Theme.of(context).textTheme.headline6),
                         dense: true,
                         onTap: () {
+                          Shadowing lastShadowing =
+                              context.read<ShadowingProvider>().lastShadowing;
+                          lastShadowing.icd10?.add(searchResults![index]);
+                          print(lastShadowing.icd10);
+                          context
+                              .read<ShadowingProvider>()
+                              .setLastShadowing(lastShadowing);
                           setState(() {
                             selectedResults?.add(searchResults![index]);
-                            shadowing.icd10?.add(searchResults![index]);
-                            print('printing shadowing');
-                            print(shadowing.icd10);
-                            context
-                                .read<ShadowingProvider>()
-                                .setLastShadowing(shadowing);
-                            // TODO: add to shadowing provider - above does not work
                             searchResults = [];
                           });
                         },
@@ -113,8 +112,15 @@ class _ShadowingICDState extends State<ShadowingICD> {
                             style: Theme.of(context).textTheme.headline6),
                         dense: true,
                         onTap: () {
+                          Shadowing lastShadowing =
+                              context.read<ShadowingProvider>().lastShadowing;
+                          lastShadowing.icd10?.remove(selectedResults![index]);
+                          context
+                              .read<ShadowingProvider>()
+                              .setLastShadowing(lastShadowing);
                           setState(() {
                             selectedResults?.remove(selectedResults![index]);
+
                             //TODO Remove value from provider
                           });
                         },

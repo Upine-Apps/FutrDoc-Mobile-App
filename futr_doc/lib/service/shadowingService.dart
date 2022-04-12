@@ -30,10 +30,10 @@ class ShadowingService {
   // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/user';
+  static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
-  static final _hostUrl = 'http://localhost:3000/shadowing';
+  // static final _hostUrl = 'http://localhost:3000/shadowing';
 
   ShadowingService._privateConstructor();
   static final ShadowingService instance =
@@ -47,8 +47,6 @@ class ShadowingService {
     try {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
-        // var data =
-        //     convert.jsonDecode(response.body) as List<Map<String, dynamic>>;
         final List dataList = json.decode(response.body);
         return {'status': true, 'body': dataList};
       } else {

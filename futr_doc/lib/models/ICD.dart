@@ -1,6 +1,4 @@
 class ICD {
-  String? name;
-  String? icd;
-
-  ICD({this.name, this.icd});
+  Map<String, String> searchResult;
+  ICD(this.searchResult);
 }

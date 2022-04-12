@@ -15,6 +15,32 @@ class ShadowingPatientType extends StatefulWidget {
 
 class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
   @override
+  void initState() {
+    setState(() {
+      bool isSelected1 = false;
+      bool isSelected2 = false;
+      bool isSelected3 = false;
+      bool isSelected4 = false;
+    });
+  }
+
+  savePatientType(String patientType) {
+    Shadowing lastShadowing = context.read<ShadowingProvider>().lastShadowing;
+    lastShadowing.patient_type = patientType;
+    context.read<ShadowingProvider>().setLastShadowing(lastShadowing);
+  }
+
+  bool isSelected1 = false;
+  bool isSelected2 = false;
+  bool isSelected3 = false;
+  bool isSelected4 = false;
+
+  String button1Text = 'Pediatric';
+  String button2Text = 'Adolescent';
+  String button3Text = 'Adult';
+  String button4Text = 'Geriatric';
+
+  @override
   Widget build(BuildContext context) {
     print(DateTime.now());
     return Align(
@@ -33,30 +59,69 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
               onPressed: () {
-                 final Shadowing shadowing = context.read<ShadowingProvider>().lastShadowing;
+                setState(() {
+                  isSelected1 = true;
+                  isSelected2 = false;
+                  isSelected3 = false;
+                  isSelected4 = false;
+                });
+                final Shadowing shadowing =
+                    context.read<ShadowingProvider>().lastShadowing;
+                final List<Shadowing> shadowings =
+                    context.read<ShadowingProvider>().shadowings;
+                print(shadowing.clinic_name);
+                print(shadowing.date);
+                print(shadowing.duration);
+                print(shadowing.activity);
+                print(shadowing.patient_type);
                 print(shadowing.icd10);
+                savePatientType(button1Text);
               },
-              text: 'Pediatric',
+              text: button1Text,
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * .025),
+            CustomElevatedButton(
+              width: MediaQuery.of(context).size.width * .75,
+              height: MediaQuery.of(context).size.height * .05,
+              onPressed: () {
+                setState(() {
+                  isSelected2 = true;
+                  isSelected1 = false;
+                  isSelected3 = false;
+                  isSelected4 = false;
+                });
+                savePatientType(button2Text);
+              },
+              text: button2Text,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * .025),
             CustomElevatedButton(
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.height * .05,
-                onPressed: () {},
-                text: 'Adolescence',
-                color: AppColors.lighterBlue),
+                onPressed: () {
+                  setState(() {
+                    isSelected3 = true;
+                    isSelected1 = false;
+                    isSelected2 = false;
+                    isSelected4 = false;
+                  });
+                  savePatientType(button3Text);
+                },
+                text: button3Text),
             SizedBox(height: MediaQuery.of(context).size.height * .025),
             CustomElevatedButton(
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.height * .05,
-                onPressed: () {},
-                text: 'Adult'),
-            SizedBox(height: MediaQuery.of(context).size.height * .025),
-            CustomElevatedButton(
-                width: MediaQuery.of(context).size.width * .75,
-                height: MediaQuery.of(context).size.height * .05,
-                onPressed: () {},
-                text: 'Geriatric'),
+                onPressed: () {
+                  setState(() {
+                    isSelected4 = true;
+                    isSelected1 = false;
+                    isSelected2 = false;
+                    isSelected3 = false;
+                  });
+                  savePatientType(button4Text);
+                },
+                text: button4Text),
           ],
         ),
       ),

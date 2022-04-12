@@ -57,12 +57,13 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         onTap: () async {
-                          // TODO add values to provider
                           Shadowing lastShadowing =
                               context.read<ShadowingProvider>().lastShadowing;
-                          // lastShadowing.clinic_name = widget.title;
-                          // context.read<ShadowingProvider>().lastShadowing != Shadowing.emptyShadowingObject ? : ;
-                          // context.read<ShadowingProvider>().setLastShadowing(updatedShadowing)
+                          lastShadowing.clinic_name =
+                              searchResults[index].description!;
+                          context
+                              .read<ShadowingProvider>()
+                              .setLastShadowing(lastShadowing);
                           setState(() {
                             _textController.text =
                                 searchResults[index].description!;
@@ -96,11 +97,16 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       dense: true,
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
-                          //TODO Remove value from provider
                           selectedResult = null;
                         });
+                        Shadowing lastShadowing =
+                            context.read<ShadowingProvider>().lastShadowing;
+                        lastShadowing.clinic_name = '';
+                        context
+                            .read<ShadowingProvider>()
+                            .setLastShadowing(lastShadowing);
                       },
                       title: Text(
                         selectedResult!.description!,

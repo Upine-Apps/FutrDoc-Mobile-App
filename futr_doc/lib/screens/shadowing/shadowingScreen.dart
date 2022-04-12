@@ -9,7 +9,10 @@ import 'package:futr_doc/screens/shadowing/shadowingWhat.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhere.dart';
 import 'package:futr_doc/theme/appColor.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../providers/ShadowingProvider.dart';
 
 class ShadowingScreen extends StatefulWidget {
   @override
@@ -81,6 +84,9 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
                         child: IconButton(
                           icon: const Icon(Icons.home),
                           onPressed: () {
+                            context
+                                .read<ShadowingProvider>()
+                                .removeLastShadowing();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -206,8 +212,9 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
                           child: Text(
                             'Submit',
                             style: TextStyle(
-                              color: AppColors.white, fontSize: 30, fontFamily: 'Share'
-                            ),
+                                color: AppColors.white,
+                                fontSize: 30,
+                                fontFamily: 'Share'),
                           ),
                         ),
                       ),

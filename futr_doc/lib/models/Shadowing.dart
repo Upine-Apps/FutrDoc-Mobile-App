@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'ICD.dart';
 
 class Shadowing {
   String? id;
@@ -7,7 +8,7 @@ class Shadowing {
   String? duration;
   String? activity;
   String? patient_type;
-  List? icd10;
+  List<Map<String, dynamic>>? icd10;
   bool? validated;
   String? user_id;
 

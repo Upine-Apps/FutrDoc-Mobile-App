@@ -25,9 +25,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String code = '';
 
+//add user context read to a post-frame callback
+
   @override
   Widget build(BuildContext context) {
-    final shadowing = new Shadowing();
     final User user = context.read<UserProvider>().user;
     return WillPopScope(
       onWillPop: () async => false,
@@ -65,6 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         CustomElevatedButton(
                           elevation: 0,
                           onPressed: () {
+                            final Shadowing shadowing =
+                                Shadowing.emptyShadowingObject;
                             context
                                 .read<ShadowingProvider>()
                                 .addToShadowings(shadowing);
