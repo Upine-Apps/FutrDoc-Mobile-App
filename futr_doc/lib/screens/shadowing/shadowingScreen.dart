@@ -11,12 +11,12 @@ import 'package:futr_doc/screens/shadowing/shadowingWhere.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Shadowing extends StatefulWidget {
+class ShadowingScreen extends StatefulWidget {
   @override
-  _ShadowingState createState() => _ShadowingState();
+  _ShadowingScreenState createState() => _ShadowingScreenState();
 }
 
-class _ShadowingState extends State<Shadowing> {
+class _ShadowingScreenState extends State<ShadowingScreen> {
   final int _numPages = 7;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;

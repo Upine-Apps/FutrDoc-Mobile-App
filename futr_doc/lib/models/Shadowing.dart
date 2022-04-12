@@ -7,7 +7,7 @@ class Shadowing {
   String? duration;
   String? activity;
   String? patient_type;
-  List<String>? icd10;
+  List? icd10;
   bool? validated;
   String? user_id;
 

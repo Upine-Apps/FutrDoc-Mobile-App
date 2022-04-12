@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/models/ICD.dart';
+import 'package:futr_doc/models/Shadowing.dart';
+import 'package:futr_doc/providers/ShadowingProvider.dart';
+import 'package:provider/provider.dart';
 
 import '../../custom-widgets/text-field/customTextFormField.dart';
 import '../../service/shadowingService.dart';
@@ -11,55 +15,121 @@ class ShadowingICD extends StatefulWidget {
 
 class _ShadowingICDState extends State<ShadowingICD> {
   final TextEditingController _textController = TextEditingController();
-  var searchResults = [];
+  List<dynamic>? searchResults = [];
+  List<dynamic>? selectedResults = [];
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height * .05),
-            Text(
-              'What experience did you gain?',
-              style: Theme.of(context).textTheme.headline2,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * .05),
-            CustomTextFormField(
-              prefixIcon: Icon(Icons.search, color: AppColors.lighterBlue),
-              labelText: 'Search',
-              controller: _textController,
-              onChanged: (val) async {
-                var response = await ShadowingService.getICD(val!, context);
-              },
-              onEditingComplete: () {},
-            ),
-            if (searchResults != null && searchResults.length != 0) ...[
-              Container(
-                decoration: BoxDecoration(
+    final Shadowing shadowing = context.read<ShadowingProvider>().lastShadowing;
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10))),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height * .05),
+              Text(
+                'What experience did you gain?',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * .05),
+              CustomTextFormField(
+                prefixIcon: Icon(Icons.search, color: AppColors.lighterBlue),
+                labelText: 'Search',
+                controller: _textController,
+                onChanged: (val) async {
+                  var response =
+                      await ShadowingService.instance.getICD(val!, context);
+                  setState(() {
+                    searchResults = response['body'];
+                    print(searchResults);
+                  });
+                },
+                onEditingComplete: () {},
+              ),
+              if (searchResults != null && searchResults?.length != 0) ...[
+                Container(
+                  height: MediaQuery.of(context).size.height * .4,
+                  padding: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
                     color: AppColors.lightGrey,
                     borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10))),
-                child: ListView.builder(
-                  padding: EdgeInsets.all(0),
-                  itemCount: searchResults.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      dense: true,
-                      title: Text(
-                        searchResults[index],
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      leading: Icon(Icons.search, color: AppColors.darkGrey),
-                    );
-                  },
+                        bottomLeft: Radius.circular(10)),
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    itemCount: searchResults?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        trailing: Text(searchResults![index]['icd'],
+                            style: Theme.of(context).textTheme.headline6),
+                        dense: true,
+                        onTap: () {
+                          setState(() {
+                            selectedResults?.add(searchResults![index]);
+                            shadowing.icd10?.add(searchResults![index]);
+                            print('printing shadowing');
+                            print(shadowing.icd10);
+                            context
+                                .read<ShadowingProvider>()
+                                .setLastShadowing(shadowing);
+                            // TODO: add to shadowing provider - above does not work
+                            searchResults = [];
+                          });
+                        },
+                        title: Text(
+                          searchResults![index]['name']!,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        leading: Icon(Icons.search, color: AppColors.darkGrey),
+                      );
+                    },
+                  ),
+                )
+              ],
+              if (selectedResults != null && selectedResults?.length != 0) ...[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .025,
                 ),
-              )
-            ]
-          ],
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGrey,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    itemCount: selectedResults?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        trailing: Text(selectedResults![index]['icd'],
+                            style: Theme.of(context).textTheme.headline6),
+                        dense: true,
+                        onTap: () {
+                          setState(() {
+                            selectedResults?.remove(selectedResults![index]);
+                            //TODO Remove value from provider
+                          });
+                        },
+                        title: Text(
+                          selectedResults![index]['name']!,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        leading: Icon(Icons.delete, color: AppColors.darkGrey),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ],
+          ),
         ),
       ),
     );

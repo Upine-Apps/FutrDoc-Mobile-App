@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
@@ -9,7 +10,7 @@ import 'package:futr_doc/screens/login/profileSetup.dart';
 import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:futr_doc/screens/settings/settings.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
-import 'package:futr_doc/screens/shadowing/shadowing.dart';
+import 'package:futr_doc/screens/shadowing/shadowingScreen.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
 import 'package:oktoast/oktoast.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ShadowingProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => TokenProvider())
       ],

@@ -3,6 +3,10 @@ import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customDropDown.dart';
 import 'package:futr_doc/theme/appColor.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/Shadowing.dart';
+import '../../providers/ShadowingProvider.dart';
 
 class ShadowingPatientType extends StatefulWidget {
   @override
@@ -28,7 +32,10 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
             CustomElevatedButton(
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
-              onPressed: () {},
+              onPressed: () {
+                 final Shadowing shadowing = context.read<ShadowingProvider>().lastShadowing;
+                print(shadowing.icd10);
+              },
               text: 'Pediatric',
             ),
             SizedBox(height: MediaQuery.of(context).size.height * .025),

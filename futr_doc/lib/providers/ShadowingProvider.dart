@@ -26,7 +26,10 @@ class ShadowingProvider with ChangeNotifier {
   Shadowing get lastShadowing => _shadowings.last;
 
   setLastShadowing(Shadowing updatedShadowing) {
+    print('inside setLastShadowing');
+    print(updatedShadowing.icd10);
     _shadowings.last = updatedShadowing;
+    print(_shadowings.last.icd10);
     notifyListeners();
   }
 

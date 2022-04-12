@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/service/places.dart';
 import 'package:provider/provider.dart';
 
 import '../../custom-widgets/text-field/customTextFormField.dart';
+import '../../models/PlaceSearch.dart';
 import '../../models/Shadowing.dart';
 import '../../providers/ShadowingProvider.dart';
 import '../../theme/appColor.dart';
@@ -13,11 +15,8 @@ class ShadowingWhere extends StatefulWidget {
 
 class _ShadowingWhereState extends State<ShadowingWhere> {
   final TextEditingController _textController = TextEditingController();
-  var searchResults = [
-    'Hope Famly Health Center',
-    'Memorial Herrmann',
-    'St. Joseph Health Regional'
-  ];
+  List<PlaceSearch> searchResults = [];
+  PlaceSearch? selectedResult;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -36,7 +35,12 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
               prefixIcon: Icon(Icons.search, color: AppColors.lighterBlue),
               labelText: 'Search by location',
               controller: _textController,
-              onChanged: (val) async {/*shows google maps*/},
+              onChanged: (val) async {
+                var response = await PlacesService().getAutocomplete(val!);
+                setState(() {
+                  searchResults = response;
+                });
+              },
               onEditingComplete: () {},
             ),
             if (searchResults != null && searchResults.length != 0) ...[
@@ -58,16 +62,54 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
                           // lastShadowing.clinic_name = widget.title;
                           // context.read<ShadowingProvider>().lastShadowing != Shadowing.emptyShadowingObject ? : ;
                           // context.read<ShadowingProvider>().setLastShadowing(updatedShadowing)
+                          setState(() {
+                            _textController.text =
+                                searchResults[index].description!;
+                            selectedResult = searchResults[index];
+                            searchResults = [];
+                          });
                         },
                         dense: true,
                         title: Text(
-                          searchResults[index],
+                          searchResults[index].description!,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         leading: Icon(Icons.search, color: AppColors.darkGrey),
                       );
                     },
                   ))
+            ],
+            if (selectedResult != null) ...[
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .025,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.lightGrey,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  itemCount: 1,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      dense: true,
+                      onTap: () {
+                        setState(() {
+                          //TODO Remove value from provider
+                          selectedResult = null;
+                        });
+                      },
+                      title: Text(
+                        selectedResult!.description!,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      leading: Icon(Icons.delete, color: AppColors.darkGrey),
+                    );
+                  },
+                ),
+              )
             ]
           ],
         )));

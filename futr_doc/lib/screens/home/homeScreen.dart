@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
+import 'package:futr_doc/models/Shadowing.dart';
+import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
@@ -13,7 +15,7 @@ import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../theme/appColor.dart';
 import '../settings/settings.dart';
-import '../shadowing/shadowing.dart';
+import '../shadowing/shadowingScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final shadowing = new Shadowing();
     final User user = context.read<UserProvider>().user;
     return WillPopScope(
       onWillPop: () async => false,
@@ -62,10 +65,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         CustomElevatedButton(
                           elevation: 0,
                           onPressed: () {
+                            context
+                                .read<ShadowingProvider>()
+                                .addToShadowings(shadowing);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Shadowing()));
+                                    builder: (context) => ShadowingScreen()));
                           },
                           text: 'Add',
                           width: MediaQuery.of(context).size.width * .2,
