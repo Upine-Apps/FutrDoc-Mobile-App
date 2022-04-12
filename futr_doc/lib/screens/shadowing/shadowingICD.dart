@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../custom-widgets/text-field/customTextFormField.dart';
+import '../../service/shadowingService.dart';
 import '../../theme/appColor.dart';
 
 class ShadowingICD extends StatefulWidget {
@@ -10,17 +11,13 @@ class ShadowingICD extends StatefulWidget {
 
 class _ShadowingICDState extends State<ShadowingICD> {
   final TextEditingController _textController = TextEditingController();
-  var searchResults = [
-    'Cavity Assessment',
-    'Tooth Extraction',
-    'Teeth Cleaning'
-  ];
+  var searchResults = [];
   @override
   Widget build(BuildContext context) {
     return Align(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-            child: Column(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        child: Column(
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height * .05),
             Text(
@@ -33,7 +30,9 @@ class _ShadowingICDState extends State<ShadowingICD> {
               prefixIcon: Icon(Icons.search, color: AppColors.lighterBlue),
               labelText: 'Search',
               controller: _textController,
-              onChanged: (val) {},
+              onChanged: (val) async {
+                var response = await ShadowingService.getICD(val!, context);
+              },
               onEditingComplete: () {},
             ),
             if (searchResults != null && searchResults.length != 0) ...[
@@ -61,6 +60,8 @@ class _ShadowingICDState extends State<ShadowingICD> {
               )
             ]
           ],
-        )));
+        ),
+      ),
+    );
   }
 }

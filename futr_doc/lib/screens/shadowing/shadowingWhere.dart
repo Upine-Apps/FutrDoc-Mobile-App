@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../custom-widgets/text-field/customTextFormField.dart';
+import '../../models/Shadowing.dart';
+import '../../providers/ShadowingProvider.dart';
 import '../../theme/appColor.dart';
 
 class ShadowingWhere extends StatefulWidget {
@@ -33,7 +36,7 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
               prefixIcon: Icon(Icons.search, color: AppColors.lighterBlue),
               labelText: 'Search by location',
               controller: _textController,
-              onChanged: (val) {},
+              onChanged: (val) async {/*shows google maps*/},
               onEditingComplete: () {},
             ),
             if (searchResults != null && searchResults.length != 0) ...[
@@ -49,6 +52,13 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return ListTile(
+                        onTap: () async {
+                          Shadowing lastShadowing =
+                              context.read<ShadowingProvider>().lastShadowing;
+                          // lastShadowing.clinic_name = widget.title;
+                          // context.read<ShadowingProvider>().lastShadowing != Shadowing.emptyShadowingObject ? : ;
+                          // context.read<ShadowingProvider>().setLastShadowing(updatedShadowing)
+                        },
                         dense: true,
                         title: Text(
                           searchResults[index],
