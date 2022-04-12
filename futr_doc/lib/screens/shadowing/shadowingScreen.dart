@@ -205,7 +205,9 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
                         child: Center(
                           child: Text(
                             'Submit',
-                            style: Theme.of(context).textTheme.headline4,
+                            style: TextStyle(
+                              color: AppColors.white, fontSize: 30, fontFamily: 'Share'
+                            ),
                           ),
                         ),
                       ),
