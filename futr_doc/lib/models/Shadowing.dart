@@ -49,15 +49,15 @@ class Shadowing {
         'user_id': user_id!
       };
 
-  static Shadowing emptyShadowingObject = new Shadowing(
-    id: '',
-    clinic_name: '',
-    date: '',
-    duration: '',
-    activity: '',
-    patient_type: '',
-    icd10: [],
-    validated: false,
-    user_id: '',
-  );
+  static Shadowing emptyShadowingObject() => new Shadowing(
+        id: '',
+        clinic_name: '',
+        date: '',
+        duration: '',
+        activity: '',
+        patient_type: '',
+        icd10: [],
+        validated: false,
+        user_id: '',
+      );
 }

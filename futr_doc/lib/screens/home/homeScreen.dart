@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           elevation: 0,
                           onPressed: () {
                             final Shadowing shadowing =
-                                Shadowing.emptyShadowingObject;
+                                Shadowing.emptyShadowingObject();
                             context
                                 .read<ShadowingProvider>()
                                 .addToShadowings(shadowing);

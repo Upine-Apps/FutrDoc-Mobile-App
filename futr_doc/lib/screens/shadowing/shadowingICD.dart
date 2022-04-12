@@ -17,6 +17,15 @@ class _ShadowingICDState extends State<ShadowingICD> {
   final TextEditingController _textController = TextEditingController();
   List<dynamic>? searchResults = [];
   List<dynamic>? selectedResults = [];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
+  //     selectedResults = context.read<ShadowingProvider>().lastShadowing.icd10;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Container(
