@@ -21,7 +21,8 @@ class ShadowingRecap extends StatefulWidget {
   _ShadowingRecapState createState() => _ShadowingRecapState();
 }
 
-class _ShadowingRecapState extends State<ShadowingRecap> {
+class _ShadowingRecapState extends State<ShadowingRecap>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool isSpinner = false;
 
@@ -42,6 +43,7 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
         TextEditingController(text: lastShadowing.activity);
     final TextEditingController _patientTypeController =
         TextEditingController(text: lastShadowing.patient_type);
+    super.build(context);
     return WillPopScope(
       onWillPop: () async => true,
       child: GestureDetector(
@@ -124,7 +126,7 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                       itemBuilder: (context, index) {
                         return ListTile(
                           trailing: Text(lastShadowing.icd10![index]['icd'],
-                            style: Theme.of(context).textTheme.headline6),
+                              style: Theme.of(context).textTheme.headline6),
                           dense: true,
                           title: Text(
                             lastShadowing.icd10![index]['name'],
@@ -143,4 +145,8 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

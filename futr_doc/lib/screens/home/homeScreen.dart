@@ -7,6 +7,7 @@ import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
@@ -121,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: Theme.of(context).textTheme.bodyText1),
                         Spacer(),
                         CustomElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            print(context.read<ShadowingProvider>().shadowings);
+                          },
                           elevation: 0,
                           text: 'View',
                           width: MediaQuery.of(context).size.width * .2,

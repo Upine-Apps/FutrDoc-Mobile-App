@@ -54,9 +54,6 @@ class EmailWithDropdown extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       controller: controller,
       onChanged: onChanged,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\-\ ]"))
-      ],
       validator: (String? val) {
         if (val!.isEmpty) {
           return 'Field cannot be empty';

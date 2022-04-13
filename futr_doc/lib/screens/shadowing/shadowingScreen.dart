@@ -68,8 +68,6 @@ class _ShadowingScreenState extends State<ShadowingScreen>
   String theme = '';
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController();
-    final node = FocusScope.of(context);
     super.build(context);
     return WillPopScope(
         onWillPop: () async => false,
@@ -90,14 +88,12 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           icon: const Icon(Icons.home),
-                          onPressed: () {
-                            context
-                                .read<ShadowingProvider>()
-                                .removeLastShadowing();
-                            Navigator.push(
+                          onPressed: ()  {
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => HomeScreen()));
+                                    context.read<ShadowingProvider>().removeLastShadowing();
                           },
                         )),
                     Container(
