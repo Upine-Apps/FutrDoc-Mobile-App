@@ -22,16 +22,7 @@ class ShadowingRecap extends StatefulWidget {
 }
 
 class _ShadowingRecapState extends State<ShadowingRecap> {
-  final _profileSetupFormKey = GlobalKey<FormState>();
-  final TextEditingController _locationController =
-      TextEditingController(text: 'Hope Family Health Center');
-  final TextEditingController _durationController =
-      TextEditingController(text: '1:25');
-  final TextEditingController _activityController =
-      TextEditingController(text: 'Reviewed');
-  final TextEditingController _patientTypeController =
-      TextEditingController(text: 'Adolescence');
-
+  @override
   bool isSpinner = false;
 
   var experience = ['Cavity Assessment', 'Tooth Extraction', 'Tooth Cleaning'];
@@ -39,7 +30,18 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
   @override
   Widget build(BuildContext context) {
     final Shadowing lastShadowing =
-        context.read<ShadowingProvider>().lastShadowing;
+        context.watch<ShadowingProvider>().lastShadowing;
+    final _profileSetupFormKey = GlobalKey<FormState>();
+    final TextEditingController _locationController =
+        TextEditingController(text: lastShadowing.clinic_name);
+    final TextEditingController _durationController =
+        TextEditingController(text: '${lastShadowing.duration} minutes');
+    final TextEditingController _dateController =
+        TextEditingController(text: lastShadowing.date);
+    final TextEditingController _activityController =
+        TextEditingController(text: lastShadowing.activity);
+    final TextEditingController _patientTypeController =
+        TextEditingController(text: lastShadowing.patient_type);
     return WillPopScope(
       onWillPop: () async => true,
       child: GestureDetector(
@@ -64,8 +66,17 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                     enabled: false,
                     onEditingComplete: () {},
                     onChanged: (val) {},
-                    labelText: lastShadowing.clinic_name!,
+                    labelText: 'Clinic Name',
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .025,
+                  ),
+                  CustomTextFormField(
+                      controller: _dateController,
+                      enabled: false,
+                      onEditingComplete: () {},
+                      onChanged: (val) {},
+                      labelText: 'Date'),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
                   ),
@@ -74,7 +85,7 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                       enabled: false,
                       onEditingComplete: () {},
                       onChanged: (val) {},
-                      labelText: '${lastShadowing.duration} mins'),
+                      labelText: 'Duration'),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
                   ),
@@ -83,14 +94,14 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                       controller: _activityController,
                       onEditingComplete: () {},
                       onChanged: (val) {},
-                      labelText: lastShadowing.activity!),
+                      labelText: 'Activity'),
                   SizedBox(height: MediaQuery.of(context).size.height * .025),
                   CustomTextFormField(
                     enabled: false,
                     controller: _patientTypeController,
                     onEditingComplete: () {},
                     onChanged: (val) {},
-                    labelText: lastShadowing.patient_type!,
+                    labelText: 'Patient Type',
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .025),
                   Align(
@@ -108,14 +119,16 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
                     ),
                     child: ListView.builder(
                       padding: EdgeInsets.all(0),
-                      itemCount: experience.length,
+                      itemCount: lastShadowing.icd10!.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ListTile(
+                          trailing: Text(lastShadowing.icd10![index]['icd'],
+                            style: Theme.of(context).textTheme.headline6),
                           dense: true,
                           title: Text(
-                            experience[index],
-                            style: Theme.of(context).textTheme.bodyText1,
+                            lastShadowing.icd10![index]['name'],
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         );
                       },
@@ -129,12 +142,5 @@ class _ShadowingRecapState extends State<ShadowingRecap> {
         ),
       ),
     );
-  }
-
-  void clearControllers() {
-    _locationController.clear();
-    _durationController.clear();
-    _activityController.clear();
-    _patientTypeController.clear();
   }
 }

@@ -13,12 +13,14 @@ class ShadowingWhere extends StatefulWidget {
   _ShadowingWhereState createState() => _ShadowingWhereState();
 }
 
-class _ShadowingWhereState extends State<ShadowingWhere> {
+class _ShadowingWhereState extends State<ShadowingWhere>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _textController = TextEditingController();
   List<PlaceSearch> searchResults = [];
   PlaceSearch? selectedResult;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
@@ -121,4 +123,8 @@ class _ShadowingWhereState extends State<ShadowingWhere> {
           ],
         )));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

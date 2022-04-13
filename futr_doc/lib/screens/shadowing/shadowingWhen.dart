@@ -12,13 +12,15 @@ class ShadowingWhen extends StatefulWidget {
   _ShadowingWhenState createState() => _ShadowingWhenState();
 }
 
-class _ShadowingWhenState extends State<ShadowingWhen> {
+class _ShadowingWhenState extends State<ShadowingWhen>
+    with AutomaticKeepAliveClientMixin {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -121,4 +123,8 @@ class _ShadowingWhenState extends State<ShadowingWhen> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

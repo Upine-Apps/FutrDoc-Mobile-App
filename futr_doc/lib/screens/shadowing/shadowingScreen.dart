@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/shadowing/shadowingDuration.dart';
 import 'package:futr_doc/screens/shadowing/shadowingICD.dart';
@@ -8,10 +9,13 @@ import 'package:futr_doc/screens/shadowing/shadowingRecap.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhat.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhere.dart';
+import 'package:futr_doc/service/shadowingService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../custom-widgets/customToast.dart';
+import '../../models/Shadowing.dart';
 import '../../providers/ShadowingProvider.dart';
 
 class ShadowingScreen extends StatefulWidget {
@@ -19,7 +23,8 @@ class ShadowingScreen extends StatefulWidget {
   _ShadowingScreenState createState() => _ShadowingScreenState();
 }
 
-class _ShadowingScreenState extends State<ShadowingScreen> {
+class _ShadowingScreenState extends State<ShadowingScreen>
+    with AutomaticKeepAliveClientMixin {
   final int _numPages = 7;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
@@ -59,11 +64,13 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
     });
   }
 
+  bool isSpinner = false;
   String theme = '';
   @override
   Widget build(BuildContext context) {
     final PageController controller = PageController();
     final node = FocusScope.of(context);
+    super.build(context);
     return WillPopScope(
         onWillPop: () async => false,
         child: GestureDetector(
@@ -100,6 +107,7 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
                           controller: _pageController,
                           onPageChanged: (int page) {
                             setState(() => _currentPage = page);
+                            _pageController.keepPage;
                           },
                           children: <Widget>[
                             Container(
@@ -201,25 +209,94 @@ class _ShadowingScreenState extends State<ShadowingScreen> {
                       width: double.infinity,
                       color: AppColors.lighterBlue,
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                          );
+                        onTap: () async {
+                          setState(() {
+                            isSpinner = true;
+                          });
+                          Shadowing lastShadowing =
+                              context.read<ShadowingProvider>().lastShadowing;
+                          if (fieldValidation(lastShadowing) == true) {
+                            var response = await ShadowingService.instance
+                                .saveShadowing(lastShadowing, context);
+                            if (response['status'] = true) {
+                              setState(() {
+                                isSpinner = false;
+                              });
+                              CustomToast.showDialog(
+                                  'Added shadowing!', context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                              );
+                            } else {
+                              CustomToast.showDialog(
+                                  'Failed to add shadowing, try again',
+                                  context);
+                              setState(() {
+                                isSpinner = false;
+                              });
+                            }
+                          } else {
+                            setState(() {
+                              isSpinner = false;
+                            });
+                          }
                         },
                         child: Center(
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 30,
-                                fontFamily: 'Share'),
-                          ),
+                          child: isSpinner == false
+                              ? Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 30,
+                                      fontFamily: 'Share'),
+                                )
+                              : SpinKitWave(
+                                  color: Theme.of(context).primaryColor,
+                                  size: 20.0,
+                                  type: SpinKitWaveType.start),
                         ),
                       ),
                     )
                   : Text(''),
             )));
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+  fieldValidation(Shadowing lastShadowing) {
+    if (lastShadowing.clinic_name!.isEmpty ||
+        lastShadowing.clinic_name == null) {
+      CustomToast.showDialog('What\'s the clinic\'s name?', context);
+      _pageController.jumpToPage(0);
+      return false;
+    } else if (lastShadowing.date!.isEmpty || lastShadowing.date == null) {
+      CustomToast.showDialog('Provide the day you shadowed', context);
+      _pageController.jumpToPage(1);
+      return false;
+    } else if (lastShadowing.duration!.isEmpty ||
+        lastShadowing.duration == null) {
+      CustomToast.showDialog('How long did you shadow?', context);
+      _pageController.jumpToPage(2);
+      return false;
+    } else if (lastShadowing.activity!.isEmpty ||
+        lastShadowing.activity == null) {
+      CustomToast.showDialog('Choose an activity that you did', context);
+      _pageController.jumpToPage(3);
+      return false;
+    } else if (lastShadowing.patient_type!.isEmpty ||
+        lastShadowing.patient_type == null) {
+      CustomToast.showDialog('Choose the patient type', context);
+      _pageController.jumpToPage(4);
+      return false;
+    } else if (lastShadowing.icd10!.isEmpty || lastShadowing.icd10 == null) {
+      CustomToast.showDialog('Provide atleast one ICD10', context);
+      _pageController.jumpToPage(5);
+      return false;
+    }
+    return true;
   }
 }

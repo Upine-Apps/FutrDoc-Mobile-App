@@ -13,7 +13,7 @@ class ShadowingICD extends StatefulWidget {
   _ShadowingICDState createState() => _ShadowingICDState();
 }
 
-class _ShadowingICDState extends State<ShadowingICD> {
+class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClientMixin{
   final TextEditingController _textController = TextEditingController();
   List<dynamic>? searchResults = [];
   List<dynamic>? selectedResults = [];
@@ -28,6 +28,7 @@ class _ShadowingICDState extends State<ShadowingICD> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -149,4 +150,8 @@ class _ShadowingICDState extends State<ShadowingICD> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

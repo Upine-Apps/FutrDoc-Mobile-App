@@ -11,7 +11,8 @@ class ShadowingDuration extends StatefulWidget {
   _ShadowingDurationState createState() => _ShadowingDurationState();
 }
 
-class _ShadowingDurationState extends State<ShadowingDuration> {
+class _ShadowingDurationState extends State<ShadowingDuration>
+    with AutomaticKeepAliveClientMixin {
   int hours = 0;
   int minutes = 0;
   calculateDuration() {
@@ -24,6 +25,7 @@ class _ShadowingDurationState extends State<ShadowingDuration> {
   @override
   Widget build(BuildContext context) {
     print(DateTime.now());
+    super.build(context);
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -166,4 +168,8 @@ class _ShadowingDurationState extends State<ShadowingDuration> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -13,7 +13,7 @@ class ShadowingPatientType extends StatefulWidget {
   _ShadowingPatientTypeState createState() => _ShadowingPatientTypeState();
 }
 
-class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
+class _ShadowingPatientTypeState extends State<ShadowingPatientType> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     setState(() {
@@ -43,6 +43,7 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
   @override
   Widget build(BuildContext context) {
     print(DateTime.now());
+    super.build(context);
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -58,6 +59,7 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
             CustomElevatedButton(
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
+              color: isSelected1 == true ? AppColors.lighterBlue : null,
               onPressed: () {
                 setState(() {
                   isSelected1 = true;
@@ -83,6 +85,7 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
             CustomElevatedButton(
               width: MediaQuery.of(context).size.width * .75,
               height: MediaQuery.of(context).size.height * .05,
+              color: isSelected2 == true ? AppColors.lighterBlue : null,
               onPressed: () {
                 setState(() {
                   isSelected2 = true;
@@ -98,6 +101,8 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
             CustomElevatedButton(
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.height * .05,
+                color: isSelected3 == true ? AppColors.lighterBlue : null,
+
                 onPressed: () {
                   setState(() {
                     isSelected3 = true;
@@ -112,6 +117,7 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
             CustomElevatedButton(
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.height * .05,
+                color: isSelected4 == true ? AppColors.lighterBlue : null,
                 onPressed: () {
                   setState(() {
                     isSelected4 = true;
@@ -127,4 +133,8 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

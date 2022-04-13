@@ -11,7 +11,8 @@ class ShadowingWhat extends StatefulWidget {
   _ShadowingWhatState createState() => _ShadowingWhatState();
 }
 
-class _ShadowingWhatState extends State<ShadowingWhat> {
+class _ShadowingWhatState extends State<ShadowingWhat>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     setState(() {
@@ -43,6 +44,7 @@ class _ShadowingWhatState extends State<ShadowingWhat> {
   @override
   Widget build(BuildContext context) {
     print(DateTime.now());
+    super.build(context);
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -121,4 +123,8 @@ class _ShadowingWhatState extends State<ShadowingWhat> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
