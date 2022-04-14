@@ -3,6 +3,7 @@ import 'appColor.dart';
 
 class AppTheme {
   get darkTheme => ThemeData(
+      canvasColor: AppColors.darkGrey,
       primaryColor: AppColors.primaryDARK,
       secondaryHeaderColor: AppColors.offWhite,
       dividerColor: AppColors.grey,
@@ -42,7 +43,9 @@ class AppTheme {
           button:
               TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Share'),
           bodyText2: TextStyle(
-              color: AppColors.white, fontSize: 16, fontFamily: 'Share')),
+              color: AppColors.white, fontSize: 16, fontFamily: 'Share'),
+          caption: TextStyle(
+              color: AppColors.offWhite, fontSize: 40, fontFamily: 'Share')),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
             color: AppColors.offWhite, fontFamily: 'Share', fontSize: 16),
@@ -65,9 +68,10 @@ class AppTheme {
       ));
 
   get lightTheme => ThemeData(
+        canvasColor: AppColors.lightGrey,
         primaryColor: AppColors.offWhite,
         secondaryHeaderColor: AppColors.primaryDARK,
-        dividerColor: AppColors.black,
+        dividerColor: AppColors.lightGrey,
         scaffoldBackgroundColor: AppColors.offWhite,
         brightness: Brightness.light,
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -118,7 +122,9 @@ class AppTheme {
             headline6: TextStyle(
                 color: AppColors.darkGrey, fontSize: 16, fontFamily: 'Share'),
             headline4: TextStyle(
-                color: AppColors.offWhite, fontSize: 30, fontFamily: 'Share')),
+                color: AppColors.offWhite, fontSize: 30, fontFamily: 'Share'),
+            caption: TextStyle(
+                color: AppColors.darkGrey, fontSize: 40, fontFamily: 'Share')),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(
               color: AppColors.primaryDARK, fontFamily: 'Share', fontSize: 16),

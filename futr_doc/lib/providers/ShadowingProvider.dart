@@ -23,13 +23,16 @@ class ShadowingProvider with ChangeNotifier {
   // Retrieve all shadowings
   List<Shadowing> get shadowings => _shadowings;
 
-  Shadowing get lastShadowing => _shadowings.last;
+  Shadowing get lastShadowing {
+    if (_shadowings.length > 0) {
+      return _shadowings.last;
+    } else
+      return Shadowing.emptyShadowingObject();
+  }
 
   setLastShadowing(Shadowing updatedShadowing) {
     print('inside setLastShadowing');
-    print(updatedShadowing.icd10);
     _shadowings.last = updatedShadowing;
-    print(_shadowings.last.icd10);
     notifyListeners();
   }
 
@@ -50,7 +53,7 @@ class ShadowingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearList() {
+  void clearShadowings() {
     _shadowings.clear();
     notifyListeners();
   }

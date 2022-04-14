@@ -23,20 +23,19 @@ class ShadowingRecap extends StatefulWidget {
 
 class _ShadowingRecapState extends State<ShadowingRecap>
     with AutomaticKeepAliveClientMixin {
-  @override
   bool isSpinner = false;
-
   var experience = ['Cavity Assessment', 'Tooth Extraction', 'Tooth Cleaning'];
 
   @override
   Widget build(BuildContext context) {
     final Shadowing lastShadowing =
         context.watch<ShadowingProvider>().lastShadowing;
-    final _profileSetupFormKey = GlobalKey<FormState>();
     final TextEditingController _locationController =
         TextEditingController(text: lastShadowing.clinic_name);
-    final TextEditingController _durationController =
-        TextEditingController(text: '${lastShadowing.duration} minutes');
+    final TextEditingController _durationController = TextEditingController(
+        text: (lastShadowing.duration != ''
+            ? '${lastShadowing.duration} minutes'
+            : ''));
     final TextEditingController _dateController =
         TextEditingController(text: lastShadowing.date);
     final TextEditingController _activityController =

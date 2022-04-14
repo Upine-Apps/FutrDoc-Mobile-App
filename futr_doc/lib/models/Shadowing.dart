@@ -8,7 +8,7 @@ class Shadowing {
   String? duration;
   String? activity;
   String? patient_type;
-  List<Map<String, dynamic>>? icd10;
+  List<dynamic>? icd10;
   bool? validated;
   String? user_id;
 
@@ -25,16 +25,26 @@ class Shadowing {
 
   static Shadowing jsonToShadowing(data) {
     print(data);
+    for (var prop in data.keys) {
+      // print(prop);
+      // print(data[prop].runtimeType);
+      if (prop == 'icd10' && data[prop] != null) {
+        print(data[prop].runtimeType);
+        print(data[prop]);
+        // print(jsonDecode(data[prop]));
+        // print(jsonDecode(data[prop]).runtimeType);
+      }
+    }
     return Shadowing(
         id: data['id'].toString(),
         clinic_name: data['clinic_name'],
         date: data['date'],
-        duration: data['duration'],
+        duration: data['duration'].toString(),
         activity: data['activity'],
         patient_type: data['patient_type'],
-        icd10: data['icd10'],
+        icd10: data['icd10'] ?? [],
         validated: data['validated'],
-        user_id: data['user_id']);
+        user_id: data['user_id'].toString());
   }
 
   Map<String, String> toJson() => {

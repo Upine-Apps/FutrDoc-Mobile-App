@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:futr_doc/custom-widgets/customAlert.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/shadowing/shadowingDuration.dart';
 import 'package:futr_doc/screens/shadowing/shadowingICD.dart';
@@ -82,20 +83,36 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                       child: Column(children: [
                     SizedBox(height: MediaQuery.of(context).size.height * .075),
                     Container(
-                        padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * .05,
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          icon: const Icon(Icons.home),
-                          onPressed: ()  {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen()));
-                                    context.read<ShadowingProvider>().removeLastShadowing();
-                          },
-                        )),
+                      padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * .05,
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: const Icon(Icons.home),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomAlertDialog(
+                                title: 'Discard Shadowing',
+                                description:
+                                    'Are you sure you want to return to the home screen?',
+                                confirmText: "Discard",
+                                onContinue: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomeScreen()));
+                                  context
+                                      .read<ShadowingProvider>()
+                                      .removeLastShadowing();
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                     Container(
                         height: MediaQuery.of(context).size.height * .7,
                         child: PageView(

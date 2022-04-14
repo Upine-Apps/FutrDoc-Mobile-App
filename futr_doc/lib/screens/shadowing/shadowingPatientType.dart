@@ -13,7 +13,8 @@ class ShadowingPatientType extends StatefulWidget {
   _ShadowingPatientTypeState createState() => _ShadowingPatientTypeState();
 }
 
-class _ShadowingPatientTypeState extends State<ShadowingPatientType> with AutomaticKeepAliveClientMixin{
+class _ShadowingPatientTypeState extends State<ShadowingPatientType>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     setState(() {
@@ -67,11 +68,11 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> with Automa
                   isSelected3 = false;
                   isSelected4 = false;
                 });
-                final Shadowing shadowing =
+                final Shadowing? shadowing =
                     context.read<ShadowingProvider>().lastShadowing;
                 final List<Shadowing> shadowings =
                     context.read<ShadowingProvider>().shadowings;
-                print(shadowing.clinic_name);
+                print(shadowing!.clinic_name);
                 print(shadowing.date);
                 print(shadowing.duration);
                 print(shadowing.activity);
@@ -102,7 +103,6 @@ class _ShadowingPatientTypeState extends State<ShadowingPatientType> with Automa
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.height * .05,
                 color: isSelected3 == true ? AppColors.lighterBlue : null,
-
                 onPressed: () {
                   setState(() {
                     isSelected3 = true;

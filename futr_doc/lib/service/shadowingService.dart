@@ -31,10 +31,10 @@ class ShadowingService {
   // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
+  static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
-  static final _hostUrl = 'http://localhost:3000/shadowing';
+  // static final _hostUrl = 'http://localhost:3000/shadowing';
 
   ShadowingService._privateConstructor();
   static final ShadowingService instance =
@@ -70,6 +70,46 @@ class ShadowingService {
       if (response.statusCode == 200) {
         final List dataList = json.decode(response.body);
         return {'status': true, 'body': dataList};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future getAllShadowing(BuildContext context) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/user-id/${user.id}';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        final List dataList = bodyData['data'];
+        return {'status': true, 'body': dataList};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future getRecentShadowing(BuildContext context) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/last-shadowing/${user.id}';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        final data = bodyData['data'];
+        return {'status': true, 'body': data};
       } else {
         return {'status': false};
       }

@@ -37,4 +37,16 @@ class User {
         school_year: data['school_year'],
         legal: data['legal']);
   }
+
+  static User emptyUserObject() => new User(
+      id: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+      institution: '',
+      student_id: '',
+      degree: '',
+      school_year: '',
+      legal: true);
 }

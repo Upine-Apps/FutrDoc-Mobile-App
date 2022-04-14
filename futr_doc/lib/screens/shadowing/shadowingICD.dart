@@ -4,6 +4,7 @@ import 'package:futr_doc/models/Shadowing.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customTextFormField.dart';
 import '../../service/shadowingService.dart';
 import '../../theme/appColor.dart';
@@ -13,27 +14,22 @@ class ShadowingICD extends StatefulWidget {
   _ShadowingICDState createState() => _ShadowingICDState();
 }
 
-class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClientMixin{
+class _ShadowingICDState extends State<ShadowingICD>
+    with AutomaticKeepAliveClientMixin {
   final TextEditingController _textController = TextEditingController();
   List<dynamic>? searchResults = [];
   List<dynamic>? selectedResults = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
-  //     selectedResults = context.read<ShadowingProvider>().lastShadowing.icd10;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10))),
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+        ),
+      ),
       child: Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
@@ -68,8 +64,9 @@ class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClie
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey,
                     borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10)),
+                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
                   ),
                   child: ListView.builder(
                     padding: EdgeInsets.all(0),
@@ -83,15 +80,21 @@ class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClie
                         onTap: () {
                           Shadowing lastShadowing =
                               context.read<ShadowingProvider>().lastShadowing;
-                          lastShadowing.icd10?.add(searchResults![index]);
-                          print(lastShadowing.icd10);
-                          context
-                              .read<ShadowingProvider>()
-                              .setLastShadowing(lastShadowing);
-                          setState(() {
-                            selectedResults?.add(searchResults![index]);
-                            searchResults = [];
-                          });
+                          if (lastShadowing.icd10!.length == 3) {
+                            CustomToast.showDialog(
+                                'You can only add 3 experiences', context);
+                          } else {
+                            lastShadowing.icd10?.add(searchResults![index]);
+                            print(lastShadowing.icd10);
+                            context
+                                .read<ShadowingProvider>()
+                                .setLastShadowing(lastShadowing);
+                            setState(() {
+                              selectedResults?.add(searchResults![index]);
+                              searchResults = [];
+                              _textController.text = '';
+                            });
+                          }
                         },
                         title: Text(
                           searchResults![index]['name']!,
@@ -110,10 +113,12 @@ class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClie
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.lightGrey,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
                   child: ListView.builder(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.all(10),
                     itemCount: selectedResults?.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
@@ -130,8 +135,6 @@ class _ShadowingICDState extends State<ShadowingICD> with AutomaticKeepAliveClie
                               .setLastShadowing(lastShadowing);
                           setState(() {
                             selectedResults?.remove(selectedResults![index]);
-
-                            //TODO Remove value from provider
                           });
                         },
                         title: Text(

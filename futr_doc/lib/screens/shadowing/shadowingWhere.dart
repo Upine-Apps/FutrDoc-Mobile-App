@@ -47,6 +47,7 @@ class _ShadowingWhereState extends State<ShadowingWhere>
             ),
             if (searchResults != null && searchResults.length != 0) ...[
               Container(
+                  height: MediaQuery.of(context).size.height * .4,
                   decoration: BoxDecoration(
                       color: AppColors.lightGrey,
                       borderRadius: BorderRadius.only(

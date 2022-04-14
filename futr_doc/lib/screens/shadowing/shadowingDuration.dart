@@ -41,7 +41,7 @@ class _ShadowingDurationState extends State<ShadowingDuration>
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                 decoration: BoxDecoration(
-                    color: AppColors.lightGrey,
+                    color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 width: MediaQuery.of(context).size.width * .3,
                 height: MediaQuery.of(context).size.height * .17,
@@ -115,7 +115,7 @@ class _ShadowingDurationState extends State<ShadowingDuration>
               ),
               Container(
                   decoration: BoxDecoration(
-                      color: AppColors.lightGrey,
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   width: MediaQuery.of(context).size.width * .3,
                   height: MediaQuery.of(context).size.height * .17,

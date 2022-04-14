@@ -9,11 +9,14 @@ import 'package:futr_doc/models/types/UserSignUpBody.dart';
 import 'package:futr_doc/models/types/UserUpdateBody.dart';
 import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
+import 'package:futr_doc/service/shadowingService.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../models/Shadowing.dart';
 import '../models/User.dart';
+import '../providers/ShadowingProvider.dart';
 import '../providers/UserProvider.dart';
 
 class UserService {
@@ -29,10 +32,10 @@ class UserService {
   // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/user';
+  static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
-  static final _hostUrl = 'http://localhost:3000/user';
+  // static final _hostUrl = 'http://localhost:3000/user';
 
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
@@ -133,6 +136,17 @@ class UserService {
           prefs.setString('phone_number', convertedUser.phone_number);
           prefs.setString('email', convertedUser.email);
           context.read<UserProvider>().setUser(convertedUser);
+          var shadowingResponse =
+              await ShadowingService.instance.getAllShadowing(context);
+          if (shadowingResponse['status'] == true) {
+            for (var shadowing in shadowingResponse['body']) {
+              context
+                  .read<ShadowingProvider>()
+                  .addToShadowings(Shadowing.jsonToShadowing(shadowing));
+            }
+          } else {
+            return {'status': false, 'message': 'Failed to retrieve shadowing'};
+          }
         }
       } else if (data['message'] == 'MFA_NEEDED') {
         var getUserResponse = await UserService.instance
@@ -146,6 +160,15 @@ class UserService {
           prefs.setString('phone_number', convertedUser.phone_number);
           prefs.setString('email', convertedUser.email);
           context.read<UserProvider>().setUser(convertedUser);
+          var shadowingResponse =
+              await ShadowingService.instance.getAllShadowing(context);
+          if (shadowingResponse['status'] == true) {
+            for (final shadowing in shadowingResponse['body']) {
+              context.read<ShadowingProvider>().addToShadowings(shadowing);
+            }
+          } else {
+            return {'status': false, 'message': 'Failed to retrieve shadowing'};
+          }
         }
         this.resendSms(UnauthenticatedUserBody(username: loginBody.username));
         return {'status': false, 'message': 'MFA_NEEDED'};
@@ -311,6 +334,25 @@ class UserService {
       } else {
         return {'status': false};
       }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future signOutUser(UnauthenticatedUserBody unauthenticatedUserBody,
+      BuildContext context) async {
+    final url = '$_hostUrl/sign-out';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    Object body = unauthenticatedUserBody.toJson();
+    try {
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+      if (response.statusCode == 200) {
+        return {'status': true};
+      } else
+        throw Error();
     } catch (err) {
       return {'status': false};
     }

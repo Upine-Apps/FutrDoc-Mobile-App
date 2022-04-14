@@ -6,6 +6,7 @@ import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
+import 'package:futr_doc/screens/home/shadowingListScreen.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customImage.dart';
 import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
+import '../../service/shadowingService.dart';
 import '../../theme/appColor.dart';
 import '../settings/settings.dart';
 import '../shadowing/shadowingScreen.dart';
@@ -25,12 +27,37 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String code = '';
+  Shadowing recentShadowing = Shadowing.emptyShadowingObject();
+  String hours = '';
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      var shadowingJson =
+          await ShadowingService.instance.getRecentShadowing(context);
+      print(shadowingJson);
+      setState(() {
+        recentShadowing = Shadowing.jsonToShadowing(shadowingJson['body']);
+      });
+      print('running');
+      durationToString();
+    });
+  }
 
+  durationToString() {
+    final minutes = int.parse(recentShadowing.duration!);
+    var d = Duration(minutes: minutes);
+    List<String> parts = d.toString().split(':');
+    hours = '${parts[0]}:${parts[1].padLeft(2, '0')}';
+  }
+
+  durationToHours() {
+    hours = (int.parse(recentShadowing.duration!) / 60).toString();
+  }
 //add user context read to a post-frame callback
 
   @override
   Widget build(BuildContext context) {
-    final User user = context.read<UserProvider>().user;
+    final user = context.read<UserProvider>().user;
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
@@ -84,34 +111,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 1.5,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                '3 Hours',
-                                style: Theme.of(context).textTheme.headline4,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShadowingListScreen()));
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 1.5,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  hours + ' Hours',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * .01,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  'Completed yesterday at \nHope Family Center',
-                                  style: Theme.of(context).textTheme.headline5),
-                            )
-                          ],
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .01,
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    'Completed on ${recentShadowing.date} at \n${recentShadowing.clinic_name?.split(',')[0]}',
+                                    style:
+                                        Theme.of(context).textTheme.headline5),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -290,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'FutrDoc Report (PDF)',
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.grey),
+                        color: AppColors.lighterBlue),
                     SizedBox(height: MediaQuery.of(context).size.height * .025),
                     CustomElevatedButton(
                         elevation: 0,
@@ -298,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'Find Opportunities',
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.grey),
+                        color: AppColors.lighterBlue),
                     SizedBox(height: MediaQuery.of(context).size.height * .025),
                     CustomElevatedButton(
                         elevation: 0,
@@ -306,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'Resources',
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.grey),
+                        color: AppColors.lighterBlue),
                     SizedBox(height: MediaQuery.of(context).size.height * .025),
                     CustomElevatedButton(
                         onPressed: () {},
@@ -314,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'Blog Posts',
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.grey),
+                        color: AppColors.lighterBlue),
                     SizedBox(height: MediaQuery.of(context).size.height * .025),
                     CustomElevatedButton(
                         onPressed: () {
@@ -327,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         text: 'Settings',
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.grey),
+                        color: AppColors.lighterBlue),
                     SizedBox(height: MediaQuery.of(context).size.height * .05),
                   ],
                 ),
