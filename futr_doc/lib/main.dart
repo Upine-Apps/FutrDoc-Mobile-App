@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
@@ -18,9 +19,10 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/UserProvider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  await dotenv.load(fileName: ".env");
   prefs.then((value) {
     runApp(
       ChangeNotifierProvider<ThemeNotifier>(
