@@ -3,10 +3,13 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
+import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../models/types/UnauthenticatedUserBody.dart';
+import '../../models/types/VerifyAttributeBody.dart';
 
 class MfaNeeded extends StatefulWidget {
   final String phone_number;
@@ -84,17 +87,21 @@ class _MfaNeededState extends State<MfaNeeded> {
                                     isSpinner = true;
                                   });
                                   var response = await UserService.instance
-                                      .authenticateUser(widget.phone_number,
-                                          widget.password, code);
+                                      .validateSms(VerifyAttributeBody(
+                                          username: widget.phone_number,
+                                          code: code));
                                   if (response['status'] == true) {
                                     setState(() {
                                       isSpinner = false;
                                     });
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                HomeScreen()));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EmailOTP(
+                                            phone_number: widget.phone_number,
+                                            password: widget.password),
+                                      ),
+                                    );
                                   } else {
                                     setState(() {
                                       isSpinner = false;
@@ -114,7 +121,8 @@ class _MfaNeededState extends State<MfaNeeded> {
                           CustomTextButton(
                               onPressed: () async {
                                 var response = await UserService.instance
-                                    .resendSms(widget.phone_number);
+                                    .resendSms(UnauthenticatedUserBody(
+                                        username: widget.phone_number));
                                 if (response['status'] == true) {
                                   CustomToast.showDialog(
                                       'Code resent!', context);

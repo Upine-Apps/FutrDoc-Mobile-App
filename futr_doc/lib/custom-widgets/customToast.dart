@@ -8,7 +8,7 @@ class CustomToast {
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Theme.of(context).secondaryHeaderColor,
-            border: Border.all(),
+            border: Border.all(color: Theme.of(context).primaryColor),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: DefaultTextStyle(
             style: TextStyle(

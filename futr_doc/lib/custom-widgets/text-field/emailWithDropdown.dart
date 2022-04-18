@@ -37,7 +37,8 @@ class EmailWithDropdown extends StatelessWidget {
                 '@utrgv.edu',
                 '@tamu.edu',
                 '@baylor.edu',
-                '@upineapps.com'
+                '@upineapps.com',
+                '@futrdoc.com'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -53,9 +54,6 @@ class EmailWithDropdown extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       controller: controller,
       onChanged: onChanged,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\-\ ]"))
-      ],
       validator: (String? val) {
         if (val!.isEmpty) {
           return 'Field cannot be empty';
