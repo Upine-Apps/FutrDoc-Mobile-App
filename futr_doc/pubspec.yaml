@@ -39,6 +39,7 @@ dependencies:
   oktoast: ^3.1.5
   table_calendar: ^3.0.5
   flutter_dotenv: ^5.0.2
+  fl_chart: ^0.50.1
 
 flutter_icons:
   android: true

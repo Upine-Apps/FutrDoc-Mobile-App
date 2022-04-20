@@ -64,16 +64,27 @@ class _SettingsState extends State<Settings> {
                         style: Theme.of(context).textTheme.headline2,
                         textAlign: TextAlign.center,
                       ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
                       Container(
-                        height: 200,
-                        child: ListView.builder(
-                          itemBuilder: (context, position) {
-                            return _createList(context, themes[position],
-                                position, themeNotifier);
-                          },
-                          itemCount: themes.length,
+                        height: 150,
+                        child: Card(
+                          elevation: 10,
+                          color: AppColors.lightGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListView.builder(
+                            itemBuilder: (context, position) {
+                              return _createList(context, themes[position],
+                                  position, themeNotifier);
+                            },
+                            itemCount: themes.length,
+                          ),
                         ),
                       ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .055),
                       CustomElevatedButton(
                         onPressed: () async {
                           final User user = context.read<UserProvider>().user;
@@ -118,12 +129,16 @@ class _SettingsState extends State<Settings> {
           Radio(
             value: selectedPosition,
             groupValue: position,
-            activeColor: Theme.of(context).secondaryHeaderColor,
+            activeColor: AppColors.primaryDARK,
             onChanged: (_) {
               _updateState(position, themeNotifier);
             },
           ),
-          Text(item),
+          Text(item,
+              style: TextStyle(
+                  color: AppColors.primaryDARK,
+                  fontSize: 16,
+                  fontFamily: 'Share')),
         ],
       ),
     );

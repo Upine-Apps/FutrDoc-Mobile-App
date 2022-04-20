@@ -3,6 +3,7 @@ import 'appColor.dart';
 
 class AppTheme {
   get darkTheme => ThemeData(
+      unselectedWidgetColor: AppColors.primaryDARK,
       canvasColor: AppColors.darkGrey,
       primaryColor: AppColors.primaryDARK,
       secondaryHeaderColor: AppColors.offWhite,
@@ -68,6 +69,7 @@ class AppTheme {
       ));
 
   get lightTheme => ThemeData(
+        unselectedWidgetColor: AppColors.primaryDARK,
         canvasColor: AppColors.lightGrey,
         primaryColor: AppColors.offWhite,
         secondaryHeaderColor: AppColors.primaryDARK,

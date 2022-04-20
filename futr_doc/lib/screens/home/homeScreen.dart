@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/models/Shadowing.dart';
+import 'package:futr_doc/models/types/Shadowing/OverviewBody.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
@@ -16,7 +17,9 @@ import '../../custom-widgets/customImage.dart';
 import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../service/shadowingService.dart';
+import '../../service/utils.dart';
 import '../../theme/appColor.dart';
+import '../dashboard/dashboard.dart';
 import '../settings/settings.dart';
 import '../shadowing/shadowingScreen.dart';
 
@@ -29,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String code = '';
   Shadowing recentShadowing = Shadowing.emptyShadowingObject();
   String hours = '';
+  OverviewBody overview = OverviewBody.emptyOverviewBody();
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
@@ -38,21 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         recentShadowing = Shadowing.jsonToShadowing(shadowingJson['body']);
       });
-      print('running');
-      durationToString();
+      var overviewResult = await ShadowingService.instance.getOverview(context);
+      setState(() {
+        overview = OverviewBody.jsonToOverview(overviewResult['body']);
+      });
+
+      hours = durationToString(int.parse(recentShadowing.duration!));
     });
   }
 
-  durationToString() {
-    final minutes = int.parse(recentShadowing.duration!);
-    var d = Duration(minutes: minutes);
-    List<String> parts = d.toString().split(':');
-    hours = '${parts[0]}:${parts[1].padLeft(2, '0')}';
-  }
-
-  durationToHours() {
-    hours = (int.parse(recentShadowing.duration!) / 60).toString();
-  }
 //add user context read to a post-frame callback
 
   @override
@@ -161,6 +159,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         CustomElevatedButton(
                           onPressed: () {
                             print(context.read<ShadowingProvider>().shadowings);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Dashboard()));
                           },
                           elevation: 0,
                           text: 'View',
@@ -188,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text('296',
+                                        child: Text(
+                                            durationToString(
+                                                overview.totalDuration),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline4)),
@@ -223,7 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text('17',
+                                        child: Text(
+                                            durationToString(
+                                                overview.monthlyDuration),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline4)),
@@ -262,7 +268,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text('2',
+                                        child: Text(
+                                            overview.totalSpecialties
+                                                .toString(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline4)),
@@ -296,7 +304,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text('5',
+                                        child: Text(
+                                            overview.totalShadowingCount
+                                                .toString(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline4)),
@@ -307,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text('Differrent shadowing',
+                                      child: Text('Total Shadowing Sessions',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline5),
