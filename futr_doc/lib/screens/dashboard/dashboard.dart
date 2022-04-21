@@ -99,7 +99,8 @@ class _DashboardState extends State<Dashboard> {
                         left: MediaQuery.of(context).size.width * .05),
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: Theme.of(context).secondaryHeaderColor),
                       onPressed: () {
                         Navigator.pop(context);
                       },
