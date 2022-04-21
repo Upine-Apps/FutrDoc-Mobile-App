@@ -1,13 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
+import '../../custom-widgets/customToast.dart';
 import '../../models/types/Shadowing/DataDashboardBody.dart';
 import '../../service/shadowingService.dart';
 import '../../service/utils.dart';
 import '../../theme/appColor.dart';
+import '../../theme/colors.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -25,6 +28,10 @@ class _DashboardState extends State<Dashboard> {
         textData =
             DataDashboardBody.jsonToDataDashboard(textDataResult['body']);
         totalDuration = durationToString(textData.totalDuration);
+        var dateString =
+            '${textData.firstShadowingMonth} 1, ${textData.firstShadowingYear}';
+        DateFormat format = new DateFormat('MMMM dd, yyyy');
+        earliestDate = format.parse(dateString);
       });
     });
     print(textData);
@@ -47,8 +54,11 @@ class _DashboardState extends State<Dashboard> {
 
   String? selectedClinicName = '';
   String? selectedPatientType = '';
+  String selectedStartDate = '';
+  String selectedEndDate = '';
 
   var icd;
+  DateTime earliestDate = DateTime.now();
 
   List<dynamic> icd10s = [
     {"name": "Tuberculosis of heart", "code": "A18.84", "isSelected": false},
@@ -134,6 +144,151 @@ class _DashboardState extends State<Dashboard> {
                                     child: SingleChildScrollView(
                                       child: Column(
                                         children: <Widget>[
+                                          Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                'Date Range',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              )),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                1,
+                                            child: Card(
+                                              elevation: 10,
+                                              color: AppColors.lightGrey,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Container(
+                                                padding: EdgeInsets.all(20),
+                                                child: Column(children: [
+                                                  Row(children: [
+                                                    Text('Start Date',
+                                                        style: TextStyle(
+                                                            color: AppColors
+                                                                .primaryDARK,
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Share')),
+                                                    Spacer(),
+                                                    Text('End Date',
+                                                        style: TextStyle(
+                                                            color: AppColors
+                                                                .primaryDARK,
+                                                            fontSize: 16,
+                                                            fontFamily:
+                                                                'Share')),
+                                                  ]),
+                                                  Row(children: [
+                                                    CustomElevatedButton(
+                                                      color:
+                                                          AppColors.lighterBlue,
+                                                      textColor:
+                                                          AppColors.offWhite,
+                                                      elevation: 0,
+                                                      onPressed: () async {
+                                                        DateTime? date =
+                                                            await showDatePicker(
+                                                                context:
+                                                                    context,
+                                                                initialDate:
+                                                                    DateTime
+                                                                        .now(),
+                                                                firstDate:
+                                                                    earliestDate,
+                                                                lastDate:
+                                                                    DateTime
+                                                                        .now());
+                                                        if (selectedEndDate !=
+                                                                '' &&
+                                                            DateTime.parse(
+                                                                    selectedEndDate)
+                                                                .isBefore(
+                                                                    date!)) {
+                                                          CustomToast
+                                                              .showDialog(
+                                                            "Your start date must be before your end date",
+                                                            context,
+                                                          );
+                                                        } else {
+                                                          setState(() {
+                                                            selectedStartDate =
+                                                                DateFormat(
+                                                                        'yyyy-MM-dd')
+                                                                    .format(
+                                                                        date!);
+                                                          });
+                                                        }
+                                                      },
+                                                      text: selectedStartDate ==
+                                                              ''
+                                                          ? 'Select Start Date'
+                                                          : selectedStartDate
+                                                              .split(' ')[0],
+                                                    ),
+                                                    Spacer(),
+                                                    CustomElevatedButton(
+                                                      color:
+                                                          AppColors.lighterBlue,
+                                                      textColor:
+                                                          AppColors.offWhite,
+                                                      elevation: 0,
+                                                      onPressed: () async {
+                                                        DateTime? date =
+                                                            await showDatePicker(
+                                                                context:
+                                                                    context,
+                                                                initialDate:
+                                                                    DateTime
+                                                                        .now(),
+                                                                firstDate:
+                                                                    earliestDate,
+                                                                lastDate:
+                                                                    DateTime
+                                                                        .now());
+                                                        if (selectedStartDate !=
+                                                                '' &&
+                                                            DateTime.parse(
+                                                                    selectedStartDate)
+                                                                .isAfter(
+                                                                    date!)) {
+                                                          CustomToast
+                                                              .showDialog(
+                                                            "Your end date must be after your start date",
+                                                            context,
+                                                          );
+                                                        } else {
+                                                          setState(() {
+                                                            selectedEndDate =
+                                                                DateFormat(
+                                                                        'yyyy-MM-dd')
+                                                                    .format(
+                                                                        date!);
+                                                          });
+                                                        }
+                                                      },
+                                                      text: selectedEndDate ==
+                                                              ''
+                                                          ? 'Select End Date'
+                                                          : selectedEndDate
+                                                              .split(' ')[0],
+                                                    ),
+                                                  ]),
+                                                ]),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                           Align(
                                             alignment: Alignment.centerLeft,
                                             child: Text(

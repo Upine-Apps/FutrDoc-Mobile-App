@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:futr_doc/theme/colors.dart';
 import 'appColor.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class AppTheme {
   get darkTheme => ThemeData(
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: materialLighterBlue,
+        brightness: Brightness.light,
+      ),
       unselectedWidgetColor: AppColors.primaryDARK,
       canvasColor: AppColors.darkGrey,
       primaryColor: AppColors.primaryDARK,
       secondaryHeaderColor: AppColors.offWhite,
       dividerColor: AppColors.grey,
       scaffoldBackgroundColor: AppColors.primaryDARK,
-      brightness: Brightness.dark,
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         elevation: 10,
@@ -46,7 +51,7 @@ class AppTheme {
           bodyText2: TextStyle(
               color: AppColors.white, fontSize: 16, fontFamily: 'Share'),
           caption: TextStyle(
-              color: AppColors.offWhite, fontSize: 40, fontFamily: 'Share')),
+              color: AppColors.offWhite, fontSize: 20, fontFamily: 'Share')),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
             color: AppColors.offWhite, fontFamily: 'Share', fontSize: 16),
@@ -69,6 +74,7 @@ class AppTheme {
       ));
 
   get lightTheme => ThemeData(
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: materialLighterBlue),
         unselectedWidgetColor: AppColors.primaryDARK,
         canvasColor: AppColors.lightGrey,
         primaryColor: AppColors.offWhite,
@@ -126,7 +132,7 @@ class AppTheme {
             headline4: TextStyle(
                 color: AppColors.offWhite, fontSize: 30, fontFamily: 'Share'),
             caption: TextStyle(
-                color: AppColors.darkGrey, fontSize: 40, fontFamily: 'Share')),
+                color: AppColors.darkGrey, fontSize: 20, fontFamily: 'Share')),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(
               color: AppColors.primaryDARK, fontFamily: 'Share', fontSize: 16),
