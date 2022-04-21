@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text('Specialities',
+                                      child: Text('Top Clinic',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline5),
@@ -331,38 +331,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * .05),
-                    CustomElevatedButton(
-                        elevation: 0,
-                        onPressed: () {},
-                        text: 'FutrDoc Report (PDF)',
-                        width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.lighterBlue),
-                    SizedBox(height: MediaQuery.of(context).size.height * .025),
-                    CustomElevatedButton(
-                        elevation: 0,
-                        onPressed: () {},
-                        text: 'Find Opportunities',
-                        width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.lighterBlue),
-                    SizedBox(height: MediaQuery.of(context).size.height * .025),
-                    CustomElevatedButton(
-                        elevation: 0,
-                        onPressed: () {},
-                        text: 'Resources',
-                        width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.lighterBlue),
-                    SizedBox(height: MediaQuery.of(context).size.height * .025),
-                    CustomElevatedButton(
-                        onPressed: () {},
-                        elevation: 0,
-                        text: 'Blog Posts',
-                        width: MediaQuery.of(context).size.width * .75,
-                        height: MediaQuery.of(context).size.height * .05,
-                        color: AppColors.lighterBlue),
-                    SizedBox(height: MediaQuery.of(context).size.height * .025),
                     CustomElevatedButton(
                         onPressed: () {
                           Navigator.push(

@@ -14,6 +14,7 @@ import '../../models/User.dart';
 import '../../providers/ShadowingProvider.dart';
 import '../../providers/UserProvider.dart';
 import '../../service/userService.dart';
+import '../../service/utils.dart';
 import '../../theme/appColor.dart';
 
 class ShadowingListScreen extends StatefulWidget {
@@ -28,7 +29,11 @@ class _ShadowingListScreenState extends State<ShadowingListScreen>
   @override
   initState() {
     shadowings = context.read<ShadowingProvider>().shadowings;
+    print(shadowings[0]);
+    print(shadowings[0].icd10);
   }
+
+  String icdList = '';
 
   @override
   Widget build(BuildContext context) {
@@ -264,13 +269,12 @@ class _ShadowingListScreenState extends State<ShadowingListScreen>
                                                   .width *
                                               .075),
                                       Expanded(
-                                        child: Text(
-                                          shadowings[index].date!,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline5,
-                                        ),
-                                      ),
+                                          child: Text(
+                                        icd10sToString(shadowings[index].icd10),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5,
+                                      )),
                                     ],
                                   ),
                                   SizedBox(

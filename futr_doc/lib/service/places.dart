@@ -6,7 +6,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class PlacesService {
   final key = dotenv.env['GOOGLE_MAPS_KEY'];
   Future<List<PlaceSearch>> getAutocomplete(String search) async {
-    print(key);
     print(search);
     var url =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&types=establishment&key=$key';
