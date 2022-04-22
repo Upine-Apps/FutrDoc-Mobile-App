@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
-import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/models/Shadowing.dart';
 import 'package:futr_doc/models/types/Shadowing/OverviewBody.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
@@ -14,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customImage.dart';
+import '../../custom-widgets/customToast.dart';
 import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../service/shadowingService.dart';
@@ -29,25 +29,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String code = '';
   Shadowing recentShadowing = Shadowing.emptyShadowingObject();
-  String hours = '';
+  String hours = '0';
   OverviewBody overview = OverviewBody.emptyOverviewBody();
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       var shadowingJson =
           await ShadowingService.instance.getRecentShadowing(context);
-      print(shadowingJson);
-      setState(() {
-        recentShadowing = Shadowing.jsonToShadowing(shadowingJson['body']);
-      });
+      if (shadowingJson['status'] == true) {
+        setState(() {
+          recentShadowing = Shadowing.jsonToShadowing(shadowingJson['body']);
+          hours = durationToString(int.parse(recentShadowing.duration!));
+        });
+      }
       var overviewResult = await ShadowingService.instance.getOverview(context);
-      setState(() {
-        overview = OverviewBody.jsonToOverview(overviewResult['body']);
-      });
-
-      hours = durationToString(int.parse(recentShadowing.duration!));
+      if (overviewResult['body'] != null) {
+        setState(() {
+          overview = OverviewBody.jsonToOverview(overviewResult['body']);
+        });
+      }
     });
   }
 
@@ -77,13 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: Theme.of(context).textTheme.headline2,
                           textAlign: TextAlign.left),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * .01),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('You have 5 shadowing hours today',
-                          style: Theme.of(context).textTheme.bodyText2),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * .05),
+                    SizedBox(height: MediaQuery.of(context).size.height * .025),
                     Row(
                       children: [
                         Text('Shadowing',
@@ -111,10 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: MediaQuery.of(context).size.height * .01),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ShadowingListScreen()));
+                        if (hours != '0') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShadowingListScreen()));
+                        } else {
+                          CustomToast.showDialog(
+                              'Add a shadowing first', context);
+                        }
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -141,7 +141,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                    'Completed on ${recentShadowing.date} at \n${recentShadowing.clinic_name?.split(',')[0]}',
+                                    hours != '0'
+                                        ? 'Completed on ${recentShadowing.date} at \n${recentShadowing.clinic_name?.split(',')[0]}'
+                                        : 'No shadowing sessions completed',
                                     style:
                                         Theme.of(context).textTheme.headline5),
                               )
@@ -158,11 +160,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Spacer(),
                         CustomElevatedButton(
                           onPressed: () {
-                            print(context.read<ShadowingProvider>().shadowings);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Dashboard()));
+                            if (hours != '0') {
+                              print(
+                                  context.read<ShadowingProvider>().shadowings);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Dashboard()));
+                            } else {
+                              CustomToast.showDialog(
+                                  'Add a shadowing first', context);
+                            }
                           },
                           elevation: 0,
                           text: 'View',
@@ -203,8 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          'Total shadowing \nhours completed',
+                                      child: Text('Total Hours Completed',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline5),
@@ -240,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text('Monthly hours',
+                                      child: Text('Monthly Hours',
                                           style: Theme.of(context)
                                               .textTheme
                                               .headline5),

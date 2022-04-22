@@ -86,8 +86,11 @@ class ShadowingService {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         var bodyData = json.decode(response.body);
-        final List dataList = bodyData['data'];
-        return {'status': true, 'body': dataList};
+        if (bodyData['message'] == null) {
+          final List dataList = bodyData['data'];
+          return {'status': true, 'body': dataList};
+        }
+        return {'status': true};
       } else {
         return {'status': false};
       }
