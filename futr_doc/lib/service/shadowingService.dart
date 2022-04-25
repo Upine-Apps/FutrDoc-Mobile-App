@@ -1,17 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:futr_doc/models/ICD.dart';
-import 'package:futr_doc/models/Tokens.dart';
-import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
-import 'package:futr_doc/models/types/LoginBody.dart';
-import 'package:futr_doc/models/types/UnauthenticatedUserBody.dart';
-import 'package:futr_doc/models/types/UserSignUpBody.dart';
-import 'package:futr_doc/models/types/UserUpdateBody.dart';
-import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../models/Shadowing.dart';
@@ -28,10 +19,10 @@ class ShadowingService {
   }
 
   //Uncomment for prod testing
-  static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
+  // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
+  static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/shadowing';

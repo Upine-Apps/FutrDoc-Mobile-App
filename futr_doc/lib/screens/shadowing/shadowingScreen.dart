@@ -10,6 +10,7 @@ import 'package:futr_doc/screens/shadowing/shadowingRecap.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhat.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
 import 'package:futr_doc/screens/shadowing/shadowingWhere.dart';
+import 'package:futr_doc/screens/shadowing/shadowingWho.dart';
 import 'package:futr_doc/service/shadowingService.dart';
 import 'package:futr_doc/theme/appColor.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class ShadowingScreen extends StatefulWidget {
 
 class _ShadowingScreenState extends State<ShadowingScreen>
     with AutomaticKeepAliveClientMixin {
-  final int _numPages = 7;
+  final int _numPages = 8;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
 
@@ -165,6 +166,13 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                                     right: MediaQuery.of(context).size.width *
                                         .125),
                                 child: ShadowingICD()),
+                            Container(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        .125,
+                                    right: MediaQuery.of(context).size.width *
+                                        .125),
+                                child: ShadowingWho()),
                             Container(
                                 padding: EdgeInsets.only(
                                     left: MediaQuery.of(context).size.width *

@@ -24,7 +24,6 @@ class ShadowingRecap extends StatefulWidget {
 class _ShadowingRecapState extends State<ShadowingRecap>
     with AutomaticKeepAliveClientMixin {
   bool isSpinner = false;
-  var experience = ['Cavity Assessment', 'Tooth Extraction', 'Tooth Cleaning'];
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +35,8 @@ class _ShadowingRecapState extends State<ShadowingRecap>
         text: (lastShadowing.duration != ''
             ? '${lastShadowing.duration} minutes'
             : ''));
+    final TextEditingController _providerController =
+        TextEditingController(text: lastShadowing.phone_number);
     final TextEditingController _dateController =
         TextEditingController(text: lastShadowing.date);
     final TextEditingController _activityController =
@@ -69,6 +70,15 @@ class _ShadowingRecapState extends State<ShadowingRecap>
                     onChanged: (val) {},
                     labelText: 'Clinic Name',
                   ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .025,
+                  ),
+                  CustomTextFormField(
+                      controller: _providerController,
+                      enabled: false,
+                      onEditingComplete: () {},
+                      onChanged: (val) {},
+                      labelText: 'Provider'),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
                   ),
