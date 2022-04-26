@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
+import 'package:futr_doc/screens/dashboard/pdfScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -553,6 +554,21 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PdfScreen()));
+                          },
+                          elevation: 0,
+                          text: 'View PDF',
+                          width: MediaQuery.of(context).size.width * .75,
+                          height: MediaQuery.of(context).size.height * .05,
+                          color: AppColors.lighterBlue),
                     ],
                   ),
                 ),
