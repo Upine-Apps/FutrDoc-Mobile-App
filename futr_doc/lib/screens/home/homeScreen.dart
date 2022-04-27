@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  hours + ' Hours',
+                                  hours,
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                               ),
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 overview.totalDuration),
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline4)),
+                                                .headline5)),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *

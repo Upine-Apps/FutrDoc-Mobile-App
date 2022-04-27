@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
@@ -6,11 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
+import '../../models/ICD.dart';
 import '../../models/types/Shadowing/DataDashboardBody.dart';
 import '../../service/shadowingService.dart';
 import '../../service/utils.dart';
 import '../../theme/appColor.dart';
 import '../../theme/colors.dart';
+import 'legend_widget.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -23,7 +27,16 @@ class _DashboardState extends State<Dashboard> {
     getTheme();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       var textDataResult =
-          await ShadowingService.instance.getDataDashboard(context, {});
+          await ShadowingService.instance.getDataDashboard(context, {
+        "start_date": '',
+        "end_date": '',
+        "clinic_name": '',
+        "patient_type": '',
+        "icd10": json.encode([]),
+      });
+      var filterDataResult =
+          await ShadowingService.instance.getFilterData(context);
+      // print(filterDataResult);
       setState(() {
         textData =
             DataDashboardBody.jsonToDataDashboard(textDataResult['body']);
@@ -32,9 +45,21 @@ class _DashboardState extends State<Dashboard> {
             '${textData.firstShadowingMonth} 1, ${textData.firstShadowingYear}';
         DateFormat format = new DateFormat('MMMM dd, yyyy');
         earliestDate = format.parse(dateString);
+        // set filter data
+        clinicNames = filterDataResult['body']['clinicName'];
+        patientTypes = filterDataResult['body']['patientType'];
+        addIcdToList(filterDataResult['body']['icd']);
       });
     });
-    print(textData);
+  }
+
+  addIcdToList(var icdList) {
+    for (var x = 0; x < icdList.length; x++) {
+      setState(() {
+        icd10s.add(icdList[x]);
+        icd10s[x]['isSelected'] = false;
+      });
+    }
   }
 
   getTheme() async {
@@ -56,29 +81,25 @@ class _DashboardState extends State<Dashboard> {
   String? selectedPatientType = '';
   String selectedStartDate = '';
   String selectedEndDate = '';
+  List<dynamic> selectedIcd10s = [];
+  Map<String, dynamic> dashboardData = {};
+  double maxYrange = 1000;
+  String displayClinicname = '';
+
+  // graph shit
+  static const pilateColor = Color(0xff632af2);
+  static const cyclingColor = Color(0xffffb3ba);
+  static const quickWorkoutColor = Color(0xff578eff);
+  static const betweenSpace = 0.2;
 
   var icd;
   DateTime earliestDate = DateTime.now();
 
-  List<dynamic> icd10s = [
-    {"name": "Tuberculosis of heart", "code": "A18.84", "isSelected": false},
-    {"name": "Precordial pain", "code": "R07.2", "isSelected": false},
-    {"name": "Bone graft failure", "code": "M62.81", "isSelected": false},
-  ];
+  List<dynamic> icd10s = [];
 
-  List<String> clinicNames = [
-    'CareNow Urgent Care',
-    'Baylor Scott & White',
-    'Harris Methodist Hospital',
-    'Houston Methodist Hospital',
-  ];
+  List<dynamic> clinicNames = [];
 
-  List<String> patientTypes = [
-    'Pediatric',
-    'Adolescent',
-    'Adult',
-    'Geriatric',
-  ];
+  List<dynamic> patientTypes = [];
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +107,7 @@ class _DashboardState extends State<Dashboard> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
+       
         body: Align(
           alignment: Alignment.topCenter,
           child: SingleChildScrollView(
@@ -113,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
                           height: MediaQuery.of(context).size.height * .01,
                         ),
                         Text(
-                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} Shadowing Hours, nice!',
+                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} of Shadowing Hours, nice!',
                           style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
                         )
@@ -162,7 +184,7 @@ class _DashboardState extends State<Dashboard> {
                                                     .width *
                                                 1,
                                             child: Card(
-                                              elevation: 10,
+                                              elevation: 0,
                                               color: AppColors.lightGrey,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -227,6 +249,10 @@ class _DashboardState extends State<Dashboard> {
                                                                     .format(
                                                                         date!);
                                                           });
+                                                          if (selectedStartDate !=
+                                                                  '' &&
+                                                              selectedEndDate !=
+                                                                  '') {}
                                                         }
                                                       },
                                                       text: selectedStartDate ==
@@ -308,7 +334,7 @@ class _DashboardState extends State<Dashboard> {
                                                     .width *
                                                 1,
                                             child: Card(
-                                              elevation: 10,
+                                              elevation: 0,
                                               color: AppColors.lightGrey,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -368,7 +394,7 @@ class _DashboardState extends State<Dashboard> {
                                                     .width *
                                                 1,
                                             child: Card(
-                                              elevation: 10,
+                                              elevation: 0,
                                               color: AppColors.lightGrey,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -434,7 +460,7 @@ class _DashboardState extends State<Dashboard> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                 ),
-                                                elevation: 10,
+                                                elevation: 0,
                                                 child: ListView.builder(
                                                   physics:
                                                       NeverScrollableScrollPhysics(),
@@ -467,20 +493,24 @@ class _DashboardState extends State<Dashboard> {
                                                       },
                                                       title: Row(
                                                         children: [
-                                                          Text(
-                                                            icd10s[index]
-                                                                ['name'],
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .primaryDARK,
-                                                                fontSize: 16,
-                                                                fontFamily:
-                                                                    'Share'),
+                                                          Expanded(
+                                                            child: Text(
+                                                              icd10s[index]
+                                                                  ['name'],
+                                                              style: TextStyle(
+                                                                  color: AppColors
+                                                                      .primaryDARK,
+                                                                  fontSize: 16,
+                                                                  fontFamily:
+                                                                      'Share'),
+                                                            ),
                                                           ),
-                                                          Spacer(),
+                                                          SizedBox(
+                                                            width: 30,
+                                                          ),
                                                           Text(
                                                               icd10s[index]
-                                                                  ['code'],
+                                                                  ['icd'],
                                                               style: TextStyle(
                                                                   color: AppColors
                                                                       .primaryDARK,
@@ -519,7 +549,45 @@ class _DashboardState extends State<Dashboard> {
                                   );
                                 });
                               },
-                            );
+                            ).whenComplete(() async {
+                              List<Map<String, String>> jsonIcds = [];
+                              List<dynamic> dynamicIcds = icd10s
+                                  .where((icd10) => icd10['isSelected'] == true)
+                                  .toList();
+                              for (var x = 0; x < dynamicIcds.length; x++) {
+                                dynamicIcds[x].removeWhere(
+                                    (key, value) => key == 'isSelected');
+                              }
+                              ;
+                              var result = await ShadowingService.instance
+                                  .getDataDashboard(context, {
+                                "start_date": selectedStartDate,
+                                "end_date": selectedEndDate,
+                                "clinic_name": selectedClinicName,
+                                "patient_type": selectedPatientType,
+                                "icd10": json.encode(dynamicIcds),
+                              });
+                              for (var i = 0; i < icd10s.length; i++) {
+                                setState(() {
+                                  icd10s[i]['isSelected'] = false;
+                                });
+                              }
+                              setState(() {
+                                if (selectedClinicName == '') {
+                                  displayClinicname = selectedClinicName!;
+                                } else {
+                                  displayClinicname = selectedClinicName!;
+                                }
+
+                                selectedClinicName = '';
+                                selectedPatientType = '';
+                                selectedStartDate = '';
+                                selectedEndDate = '';
+                                dashboardData =
+                                    result['body']['filteredDashboardData'];
+                                maxYrange = result['body']['totalDuration'] + 500;
+                              });
+                            });
                           },
                           elevation: 0,
                           text: 'Filter',
@@ -528,31 +596,94 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * .015,
+                        height: MediaQuery.of(context).size.height * .025,
                       ),
-                      Container(
-                        height: MediaQuery.of(context).size.height * .5,
-                        width: MediaQuery.of(context).size.width * 1,
-                        child: Card(
-                          color: theme == 'Dark'
-                              ? AppColors.transparentGray
-                              : AppColors.lightGrey,
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: BarChart(
-                            BarChartData(
-                                barTouchData: createGraph.getBarTouchData(),
-                                titlesData: createGraph.getTitlesData(),
-                                borderData: createGraph.borderData,
-                                barGroups: createGraph.getBarGroups(),
-                                gridData: FlGridData(show: false),
-                                alignment: BarChartAlignment.spaceAround,
-                                maxY: 20),
-                          ),
-                        ),
-                      ),
+                      dashboardData.isEmpty
+                          ? Text('Select a filter to generate a chart')
+                          : Container(
+                              // height: MediaQuery.of(context).size.height * .5,
+                              // width: MediaQuery.of(context).size.width * 1,
+                              child: Card(
+                                 color: 
+                                    AppColors.lightGrey,
+                                    
+                               
+                                elevation: 4,
+                                 shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                      'Shadowing Data in Minutes',
+                                      style: Theme.of(context).textTheme.headline5,
+                                      ),
+                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      Row(
+                                      children: [
+                                        Text(
+                                      'Clinic: ',
+                                      style: Theme.of(context).textTheme.headline5,
+                                        ),
+                                        Expanded(child: Text(
+                                      displayClinicname == ''
+                                          ? 'All'
+                                          : displayClinicname.split(',')[0],
+                                      style: Theme.of(context).textTheme.headline5,
+                                        ))
+                                      ],
+                                      ),
+                                      
+                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      LegendsListWidget(
+                                        legends: createGraph
+                                            .getLegendList(dashboardData),
+                                        //Legend(String, color)
+                                        // {status: true, body: {filteredDashboardData: {April: {Adult: 180}, March: {Adolescent: 420, Adult: 120}}, firstShadowingMonth: March, firstShadowingYear: 2022, totalDuration: 1830}}
+                                      ),
+                                      SizedBox(height: MediaQuery.of(context).size.height * .075),
+                                      AspectRatio(
+                                        aspectRatio:1.5,
+                                        child: BarChart(
+                                          BarChartData(
+                                              alignment: BarChartAlignment
+                                                  .spaceEvenly,
+                                              titlesData: FlTitlesData(
+                                                leftTitles: AxisTitles(),
+                                                rightTitles: AxisTitles(),
+                                                topTitles: AxisTitles(),
+                                                bottomTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                    showTitles: true,
+                                                    getTitlesWidget:
+                                                        createGraph
+                                                            .bottomTitles,
+                                                    reservedSize: 22,
+                                                  ),
+                                                ),
+                                              ),
+                                              barTouchData: BarTouchData(
+                                                  enabled: false),
+                                              borderData:
+                                                  FlBorderData(show: false),
+                                              gridData:
+                                                  FlGridData(show: false),
+                                              barGroups:
+                                                  createGraph.generateBarData(
+                                                      dashboardData),
+                                              maxY: maxYrange),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                 ),

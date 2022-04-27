@@ -63,6 +63,11 @@ class Shadowing {
         'user_id': user_id!
       };
 
+// 'icd10': '/[{name: owefi}/]'
+// 'icd10': [{name: asdfasd}, {name: oaiwjefoa}]
+//
+//
+
   static Shadowing emptyShadowingObject() => new Shadowing(
         id: '',
         clinic_name: '',

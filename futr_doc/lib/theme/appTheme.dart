@@ -5,6 +5,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class AppTheme {
   get darkTheme => ThemeData(
+    
       colorScheme: ColorScheme.fromSwatch(
         primarySwatch: materialLighterBlue,
         brightness: Brightness.light,
@@ -45,7 +46,7 @@ class AppTheme {
           headline6: TextStyle(
               color: AppColors.darkGrey, fontSize: 16, fontFamily: 'Share'),
           headline4: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 30, fontFamily: 'Share'),
+              color: AppColors.primaryDARK, fontSize: 20, fontFamily: 'Share'),
           button:
               TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Share'),
           bodyText2: TextStyle(
@@ -130,7 +131,7 @@ class AppTheme {
             headline6: TextStyle(
                 color: AppColors.darkGrey, fontSize: 16, fontFamily: 'Share'),
             headline4: TextStyle(
-                color: AppColors.offWhite, fontSize: 30, fontFamily: 'Share'),
+                color: AppColors.offWhite, fontSize: 20, fontFamily: 'Share'),
             caption: TextStyle(
                 color: AppColors.darkGrey, fontSize: 20, fontFamily: 'Share')),
         inputDecorationTheme: InputDecorationTheme(
