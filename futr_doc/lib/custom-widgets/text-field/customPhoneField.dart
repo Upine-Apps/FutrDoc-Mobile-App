@@ -21,6 +21,7 @@ class CustomPhoneField extends StatelessWidget {
       decoration: InputDecoration(labelText: labelText),
       onEditingComplete: onEditingComplete,
       controller: controller,
+      style: Theme.of(context).textTheme.bodyText2,
       keyboardType: TextInputType.number,
       onChanged: onChanged,
       inputFormatters: [

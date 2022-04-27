@@ -585,7 +585,7 @@ class _DashboardState extends State<Dashboard> {
                                 selectedEndDate = '';
                                 dashboardData =
                                     result['body']['filteredDashboardData'];
-                                maxYrange = result['body']['totalDuration'] + 500;
+                                maxYrange = result['body']['totalDuration'].toDouble() + 500.0;
                               });
                             });
                           },
@@ -621,20 +621,23 @@ class _DashboardState extends State<Dashboard> {
                                     children: [
                                       Text(
                                       'Shadowing Data in Minutes',
-                                      style: Theme.of(context).textTheme.headline5,
+                                      style: TextStyle(
+              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
                                       ),
                                       SizedBox(height: MediaQuery.of(context).size.height * .025),
                                       Row(
                                       children: [
                                         Text(
                                       'Clinic: ',
-                                      style: Theme.of(context).textTheme.headline5,
+                                      style: TextStyle(
+              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
                                         ),
                                         Expanded(child: Text(
                                       displayClinicname == ''
                                           ? 'All'
                                           : displayClinicname.split(',')[0],
-                                      style: Theme.of(context).textTheme.headline5,
+                                      style: TextStyle(
+              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
                                         ))
                                       ],
                                       ),

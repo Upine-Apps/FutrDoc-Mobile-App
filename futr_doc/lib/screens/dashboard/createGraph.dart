@@ -157,7 +157,7 @@ class CreateGraph {
     }
     patientList = patientTypes.toList();
     patientList.sort();
-    if(isPediatric) {var sortedPatientList = ["Pediatric", ...patientList.sublist(0,patientList.length-1)];
+    if (isPediatric) {var sortedPatientList = ["Pediatric", ...patientList.sublist(0,patientList.length-1)];
     patientList = sortedPatientList;
     }
     
