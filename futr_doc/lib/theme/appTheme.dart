@@ -5,7 +5,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 class AppTheme {
   get darkTheme => ThemeData(
-    
       colorScheme: ColorScheme.fromSwatch(
         primarySwatch: materialLighterBlue,
         brightness: Brightness.light,

@@ -5,6 +5,7 @@ import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:futr_doc/screens/dashboard/pdfScreen.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
@@ -107,7 +108,6 @@ class _DashboardState extends State<Dashboard> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
-       
         body: Align(
           alignment: Alignment.topCenter,
           child: SingleChildScrollView(
@@ -135,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
                           height: MediaQuery.of(context).size.height * .01,
                         ),
                         Text(
-                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} of Shadowing Hours, nice!',
+                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} Shadowing Hours, nice!',
                           style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
                         )
@@ -249,6 +249,7 @@ class _DashboardState extends State<Dashboard> {
                                                                     .format(
                                                                         date!);
                                                           });
+                                                          //TODO What does this do? vvvvvv
                                                           if (selectedStartDate !=
                                                                   '' &&
                                                               selectedEndDate !=
@@ -585,7 +586,9 @@ class _DashboardState extends State<Dashboard> {
                                 selectedEndDate = '';
                                 dashboardData =
                                     result['body']['filteredDashboardData'];
-                                maxYrange = result['body']['totalDuration'].toDouble() + 500.0;
+                                maxYrange =
+                                    result['body']['totalDuration'].toDouble() +
+                                        500.0;
                               });
                             });
                           },
@@ -604,14 +607,11 @@ class _DashboardState extends State<Dashboard> {
                               // height: MediaQuery.of(context).size.height * .5,
                               // width: MediaQuery.of(context).size.width * 1,
                               child: Card(
-                                 color: 
-                                    AppColors.lightGrey,
-                                    
-                               
+                                color: AppColors.lightGrey,
                                 elevation: 4,
-                                 shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(24),
                                   child: Column(
@@ -620,42 +620,61 @@ class _DashboardState extends State<Dashboard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                      'Shadowing Data in Minutes',
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
+                                        'Shadowing Data in Minutes',
+                                        style: TextStyle(
+                                            color: AppColors.primaryDARK,
+                                            fontSize: 16,
+                                            fontFamily: 'Share'),
                                       ),
-                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .025),
                                       Row(
-                                      children: [
-                                        Text(
-                                      'Clinic: ',
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
-                                        ),
-                                        Expanded(child: Text(
-                                      displayClinicname == ''
-                                          ? 'All'
-                                          : displayClinicname.split(',')[0],
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
-                                        ))
-                                      ],
+                                        children: [
+                                          Text(
+                                            'Clinic: ',
+                                            style: TextStyle(
+                                                color: AppColors.primaryDARK,
+                                                fontSize: 16,
+                                                fontFamily: 'Share'),
+                                          ),
+                                          Expanded(
+                                              child: Text(
+                                            displayClinicname == ''
+                                                ? 'All'
+                                                : displayClinicname
+                                                    .split(',')[0],
+                                            style: TextStyle(
+                                                color: AppColors.primaryDARK,
+                                                fontSize: 16,
+                                                fontFamily: 'Share'),
+                                          ))
+                                        ],
                                       ),
-                                      
-                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .025),
                                       LegendsListWidget(
                                         legends: createGraph
                                             .getLegendList(dashboardData),
                                         //Legend(String, color)
                                         // {status: true, body: {filteredDashboardData: {April: {Adult: 180}, March: {Adolescent: 420, Adult: 120}}, firstShadowingMonth: March, firstShadowingYear: 2022, totalDuration: 1830}}
                                       ),
-                                      SizedBox(height: MediaQuery.of(context).size.height * .075),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .075),
                                       AspectRatio(
-                                        aspectRatio:1.5,
+                                        aspectRatio: 1.5,
                                         child: BarChart(
                                           BarChartData(
-                                              alignment: BarChartAlignment
-                                                  .spaceEvenly,
+                                              alignment:
+                                                  BarChartAlignment.spaceEvenly,
                                               titlesData: FlTitlesData(
                                                 leftTitles: AxisTitles(),
                                                 rightTitles: AxisTitles(),
@@ -663,19 +682,17 @@ class _DashboardState extends State<Dashboard> {
                                                 bottomTitles: AxisTitles(
                                                   sideTitles: SideTitles(
                                                     showTitles: true,
-                                                    getTitlesWidget:
-                                                        createGraph
-                                                            .bottomTitles,
+                                                    getTitlesWidget: createGraph
+                                                        .bottomTitles,
                                                     reservedSize: 22,
                                                   ),
                                                 ),
                                               ),
-                                              barTouchData: BarTouchData(
-                                                  enabled: false),
+                                              barTouchData:
+                                                  BarTouchData(enabled: false),
                                               borderData:
                                                   FlBorderData(show: false),
-                                              gridData:
-                                                  FlGridData(show: false),
+                                              gridData: FlGridData(show: false),
                                               barGroups:
                                                   createGraph.generateBarData(
                                                       dashboardData),
@@ -687,6 +704,21 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PdfScreen()));
+                          },
+                          elevation: 0,
+                          text: 'View PDF',
+                          width: MediaQuery.of(context).size.width * .75,
+                          height: MediaQuery.of(context).size.height * .05,
+                          color: AppColors.lighterBlue),
                     ],
                   ),
                 ),
