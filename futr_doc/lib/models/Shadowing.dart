@@ -4,6 +4,7 @@ import 'ICD.dart';
 class Shadowing {
   String? id;
   String? clinic_name;
+  String? phone_number;
   String? date;
   String? duration;
   String? activity;
@@ -15,6 +16,7 @@ class Shadowing {
   Shadowing(
       {this.id,
       this.clinic_name,
+      this.phone_number,
       this.date,
       this.duration,
       this.activity,
@@ -38,6 +40,7 @@ class Shadowing {
     return Shadowing(
         id: data['id'].toString(),
         clinic_name: data['clinic_name'],
+        phone_number: data['phone_number'],
         date: data['date'],
         duration: data['duration'].toString(),
         activity: data['activity'],
@@ -50,6 +53,7 @@ class Shadowing {
   Map<String, String> toJson() => {
         'id': id!,
         'clinic_name': clinic_name!,
+        'phone_number': phone_number!,
         'date': date!,
         'duration': duration!,
         'activity': activity!,
@@ -59,9 +63,15 @@ class Shadowing {
         'user_id': user_id!
       };
 
+// 'icd10': '/[{name: owefi}/]'
+// 'icd10': [{name: asdfasd}, {name: oaiwjefoa}]
+//
+//
+
   static Shadowing emptyShadowingObject() => new Shadowing(
         id: '',
         clinic_name: '',
+        phone_number: '',
         date: '',
         duration: '',
         activity: '',

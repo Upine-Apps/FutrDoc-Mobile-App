@@ -12,4 +12,7 @@ class AppColors {
   static const lighterBlue = Color(0xFF5D4EFF);
   static const darkButtonColor = Color(0xFFE2DFFF);
   static const transparentGray = Color(0x77000000);
+  static const futrdocGreen = Color(0xFF3FA67B);
+  static const futrdocPurple = Color(0xFF783FA6);
+  static const futrdocRed = Color(0xFFA63F3F);
 }

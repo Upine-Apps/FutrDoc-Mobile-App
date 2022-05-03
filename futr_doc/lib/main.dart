@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:futr_doc/models/Shadowing.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
+import 'package:futr_doc/screens/dashboard/dashboard.dart';
 import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/screens/login/login.dart';

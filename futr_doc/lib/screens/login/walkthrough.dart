@@ -31,7 +31,7 @@ class _WalkthroughState extends State<Walkthrough> {
           PageViewModel(
             title: 'TRACKING',
             body:
-                'FutrDoc gives you the best tracking tools to track your shadowing & volunteer experiences!',
+                'FutrDoc gives you the best tools to track every clinical shadowing experience',
             image: Center(
                 child: CustomImage(
               imagePath: theme == 'Dark'
@@ -42,7 +42,8 @@ class _WalkthroughState extends State<Walkthrough> {
           ),
           PageViewModel(
             title: 'REPORTING',
-            body: 'Use FutrDoc to report your progress!',
+            body:
+                'Use the FutrDoc dashboard and report feature to showcase your experiences',
             image: Center(
                 child: CustomImage(
               imagePath: theme == 'Dark'
@@ -54,7 +55,7 @@ class _WalkthroughState extends State<Walkthrough> {
           PageViewModel(
             title: 'RESOURCES',
             body:
-                'FutrDoc gives you the best tracking tools to track your shadowing & volunteer experiences!',
+                'Help us help you! Give us feedback on how FutrDoc helps you and how we can improve.',
             image: Center(
                 child: CustomImage(
               imagePath: theme == 'Dark'
@@ -64,15 +65,13 @@ class _WalkthroughState extends State<Walkthrough> {
             decoration: getPageDecoration(),
           )
         ],
-        next: Icon(Icons.arrow_forward_ios, color: Theme.of(context).secondaryHeaderColor),
+        next: Icon(Icons.arrow_forward_ios,
+            color: Theme.of(context).secondaryHeaderColor),
         showSkipButton: true,
         skip: Text('Skip', style: Theme.of(context).textTheme.bodyText2),
         onSkip: () {
-           Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
-
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
         },
         dotsDecorator: getDotDecoration(),
         done: Text(
@@ -80,29 +79,26 @@ class _WalkthroughState extends State<Walkthrough> {
           style: Theme.of(context).textTheme.bodyText2,
         ),
         onDone: () {
-           Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
         },
-
       );
 
   PageDecoration getPageDecoration() => PageDecoration(
       titleTextStyle: Theme.of(context).textTheme.headline2!,
       bodyTextStyle: Theme.of(context).textTheme.bodyText2!,
-      imagePadding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .15),
-      bodyPadding: EdgeInsets.only(left: MediaQuery.of(context).size.width * .025, right: MediaQuery.of(context).size.width * .025)
-      
-      );
+      imagePadding:
+          EdgeInsets.only(top: MediaQuery.of(context).size.height * .15),
+      bodyPadding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * .025,
+          right: MediaQuery.of(context).size.width * .025));
 
   DotsDecorator getDotDecoration() => DotsDecorator(
-      color: AppColors.grey,
-      size: Size(10, 8),
-      activeSize: Size(22, 8),
-      activeColor: Theme.of(context).secondaryHeaderColor,
-      activeShape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-  );
-  
+        color: AppColors.grey,
+        size: Size(10, 8),
+        activeSize: Size(22, 8),
+        activeColor: Theme.of(context).secondaryHeaderColor,
+        activeShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      );
 }

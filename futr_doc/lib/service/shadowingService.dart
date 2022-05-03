@@ -1,17 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:futr_doc/models/ICD.dart';
-import 'package:futr_doc/models/Tokens.dart';
-import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
-import 'package:futr_doc/models/types/LoginBody.dart';
-import 'package:futr_doc/models/types/UnauthenticatedUserBody.dart';
-import 'package:futr_doc/models/types/UserSignUpBody.dart';
-import 'package:futr_doc/models/types/UserUpdateBody.dart';
-import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../models/Shadowing.dart';
@@ -28,13 +19,13 @@ class ShadowingService {
   }
 
   //Uncomment for prod testing
-  static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
+  // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
   // static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
-  // static final _hostUrl = 'http://localhost:3000/shadowing';
+  static final _hostUrl = 'http://localhost:3000/shadowing';
 
   ShadowingService._privateConstructor();
   static final ShadowingService instance =
@@ -48,11 +39,9 @@ class ShadowingService {
     User user = context.read<UserProvider>().user;
     shadowing.user_id = user.id;
     Object body = shadowing.toJson();
-    print(body);
     try {
       http.Response response =
           await http.post(Uri.parse(url), headers: headers, body: body);
-      print(response.body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
       return {'status': true, 'body': data};
     } catch (err) {
@@ -88,8 +77,11 @@ class ShadowingService {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         var bodyData = json.decode(response.body);
-        final List dataList = bodyData['data'];
-        return {'status': true, 'body': dataList};
+        if (bodyData['message'] == null) {
+          final List dataList = bodyData['data'];
+          return {'status': true, 'body': dataList};
+        }
+        return {'status': true};
       } else {
         return {'status': false};
       }
@@ -106,6 +98,70 @@ class ShadowingService {
     var headers = await getHeaders(jsonEncode(tokens));
     try {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        final data = bodyData['data'];
+        return {'status': true, 'body': data};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future getOverview(BuildContext context) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/overview/${user.id}';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        final data = bodyData['data'];
+        return {'status': true, 'body': data};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
+
+  Future getFilterData(BuildContext context) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/filter/${user.id}';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        final data = bodyData['data'];
+        return {'status': true, 'body': data};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      print(err);
+      return {'status': false};
+    }
+  }
+
+  Future getDataDashboard(BuildContext context, var body) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/data-dashboard';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    body['user_id'] = user.id;
+    print('body: $body');
+    try {
+      http.Response response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
       if (response.statusCode == 200) {
         var bodyData = json.decode(response.body);
         final data = bodyData['data'];

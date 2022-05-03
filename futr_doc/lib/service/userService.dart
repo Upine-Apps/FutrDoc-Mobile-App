@@ -29,13 +29,13 @@ class UserService {
   }
 
   //Uncomment for prod testing
-  static final _hostUrl = 'http://54.91.210.147:3000/user';
+  // static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
   // static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
-  // static final _hostUrl = 'http://localhost:3000/user';
+  static final _hostUrl = 'http://localhost:3000/user';
 
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
@@ -89,7 +89,10 @@ class UserService {
       var response =
           await http.post(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-      String user_id = data['user']['id'];
+      print('SIGN UP RETURN DATA');
+      print(data);
+      print(data['user']['id'].runtimeType);
+      String user_id = data['user']['id'].toString();
       Future<SharedPreferences> prefs = SharedPreferences.getInstance();
       prefs.then((value) {
         value.setString('user_id', user_id);
@@ -138,11 +141,14 @@ class UserService {
           context.read<UserProvider>().setUser(convertedUser);
           var shadowingResponse =
               await ShadowingService.instance.getAllShadowing(context);
+
           if (shadowingResponse['status'] == true) {
-            for (var shadowing in shadowingResponse['body']) {
-              context
-                  .read<ShadowingProvider>()
-                  .addToShadowings(Shadowing.jsonToShadowing(shadowing));
+            if (shadowingResponse['body'] != null) {
+              for (var shadowing in shadowingResponse['body']) {
+                context
+                    .read<ShadowingProvider>()
+                    .addToShadowings(Shadowing.jsonToShadowing(shadowing));
+              }
             }
           } else {
             return {'status': false, 'message': 'Failed to retrieve shadowing'};
@@ -163,8 +169,10 @@ class UserService {
           var shadowingResponse =
               await ShadowingService.instance.getAllShadowing(context);
           if (shadowingResponse['status'] == true) {
-            for (final shadowing in shadowingResponse['body']) {
-              context.read<ShadowingProvider>().addToShadowings(shadowing);
+            if (shadowingResponse['body'] != null) {
+              for (final shadowing in shadowingResponse['body']) {
+                context.read<ShadowingProvider>().addToShadowings(shadowing);
+              }
             }
           } else {
             return {'status': false, 'message': 'Failed to retrieve shadowing'};
@@ -274,10 +282,17 @@ class UserService {
     print(tokens);
     var headers = await getHeaders(jsonEncode(tokens));
     final User user = context.read<UserProvider>().user;
+    userUpdateBody.phone_number = user.phone_number;
+    userUpdateBody.email = user.email;
+    print(user);
     userUpdateBody.institution = getInstitution(user.email, context);
 
     Object body = userUpdateBody.toJson();
+
     try {
+      print(headers);
+      print(body);
+      print(url);
       http.Response response =
           await http.put(Uri.parse(url), headers: headers, body: body);
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
