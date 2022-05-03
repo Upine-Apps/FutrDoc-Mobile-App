@@ -36,41 +36,10 @@ class _PdfScreenState extends State<PdfScreen> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
-          // body: Align(
-          //   alignment: Alignment.topCenter,
-          //   child: SingleChildScrollView(
-          //     child: Column(
-          //       children: [
-          //         SizedBox(
-          //           height: MediaQuery.of(context).size.height * .075,
-          //         ),
-          //         Container(
-          //           padding: EdgeInsets.only(
-          //               left: MediaQuery.of(context).size.width * .05),
-          //           alignment: Alignment.centerLeft,
-          //           child: IconButton(
-          //             icon: Icon(Icons.arrow_back_ios,
-          //                 color: Theme.of(context).secondaryHeaderColor),
-          //             onPressed: () {
-          //               Navigator.pop(context);
-          //             },
-          //           ),
-          //         ),
-          //         Text(
-          //           'PDF',
-          //           style: Theme.of(context).textTheme.headline2,
-          //           textAlign: TextAlign.center,
-          //         ),
-          //         SizedBox(height: MediaQuery.of(context).size.height * .025),
           body: PdfPreview(
         build: (format) => pdf.builder(format, _data),
         allowPrinting: false,
-      )
-          // ],
-          // ),
-          // ),
-          // ),
-          ),
+      )),
     );
   }
 }
