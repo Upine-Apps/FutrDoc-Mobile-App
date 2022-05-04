@@ -347,6 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         elevation: 0,
                         text: 'Settings',
+                        textColor: AppColors.offWhite,
                         width: MediaQuery.of(context).size.width * .75,
                         height: MediaQuery.of(context).size.height * .05,
                         color: AppColors.lighterBlue),
