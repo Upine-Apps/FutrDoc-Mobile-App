@@ -7,7 +7,7 @@ PdfColor primaryDARK = new PdfColor.fromHex('#191256');
 PdfColor offWhite = new PdfColor.fromHex('#f5f5f5');
 PdfColor darkGrey = new PdfColor.fromHex('#525151');
 PdfColor lightGrey = new PdfColor.fromHex('#dcdcdc');
-PdfColor futrdocBlue = PdfColor.fromInt(0xff191256);
+PdfColor futrdocBlue = new PdfColor.fromHex('#191256');
 
 Future<ThemeData> getPdfTheme() async {
   return ThemeData.withFont(

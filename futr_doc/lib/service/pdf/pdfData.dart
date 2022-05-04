@@ -11,7 +11,7 @@ class PdfData {
       this.top_icd_1,
       this.top_icd_2,
       this.top_icd_3,
-      this.shadowings);
+      );
 
   final String first_name;
   final String last_name;
@@ -22,5 +22,4 @@ class PdfData {
   final String top_icd_1;
   final String top_icd_2;
   final String top_icd_3;
-  final List<Shadowing> shadowings;
 }

@@ -173,4 +173,30 @@ class ShadowingService {
       return {'status': false};
     }
   }
+
+  Future getPdfData(BuildContext context) async {
+    User user = context.read<UserProvider>().user;
+    final url = '$_hostUrl/pdf/109';
+    final Map<String, String> tokens =
+        context.read<TokenProvider>().tokens.toJson();
+    var headers = await getHeaders(jsonEncode(tokens));
+    try {
+      http.Response response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        var bodyData = json.decode(response.body);
+        // final List<Shadowing> shadowingList =
+        //     bodyData['data'].map((shadowing) => new Shadowing(duration: shadowing['duration'], clinic_name: shadowing['clinic_name'], date: shadowing['date'], icd10: shadowing['icd10'] ));
+        List<Shadowing> shadowingList = [];
+        for (var x in bodyData['data']) {
+          shadowingList.add(Shadowing.jsonToShadowing(x));
+        }
+
+        return {'status': true, 'body': shadowingList};
+      } else {
+        return {'status': false};
+      }
+    } catch (err) {
+      return {'status': false};
+    }
+  }
 }

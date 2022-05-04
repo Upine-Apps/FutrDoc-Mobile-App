@@ -4,13 +4,17 @@ import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:futr_doc/screens/dashboard/pdfScreen.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../models/ICD.dart';
+import '../../models/User.dart';
 import '../../models/types/Shadowing/DataDashboardBody.dart';
+import '../../providers/UserProvider.dart';
+import '../../service/pdf/pdfData.dart';
 import '../../service/shadowingService.dart';
 import '../../service/utils.dart';
 import '../../theme/appColor.dart';
@@ -250,11 +254,7 @@ class _DashboardState extends State<Dashboard> {
                                                                     .format(
                                                                         date!);
                                                           });
-                                                          //TODO What does this do? vvvvvv
-                                                          if (selectedStartDate !=
-                                                                  '' &&
-                                                              selectedEndDate !=
-                                                                  '') {}
+                                                          
                                                         }
                                                       },
                                                       text: selectedStartDate ==
@@ -709,17 +709,31 @@ class _DashboardState extends State<Dashboard> {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       CustomElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            var result = await ShadowingService.instance.getPdfData(context);
+                            User user = context.read<UserProvider>().user;
+      //                       var userData = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
+      // 20, DateTime.now(), 'first icd', 'second icd', 'third icd', []);
+      print(user.degree!);
+                            var userData = PdfData(user.first_name!, user.last_name!, user.institution!, user.degree!,
+      20, earliestDate, 'first icd', 'second icd', 'third icd');
+
+                            if( result['status'] == true){
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PdfScreen()));
+                                    builder: (context) => PdfScreen(userData: userData, shadowingData: result['body'])));
+                                    }
                           },
                           elevation: 0,
                           text: 'View PDF',
+                          textColor: AppColors.offWhite,
                           width: MediaQuery.of(context).size.width * .75,
                           height: MediaQuery.of(context).size.height * .05,
                           color: AppColors.lighterBlue),
+                          SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                      ),
                     ],
                   ),
                 ),
