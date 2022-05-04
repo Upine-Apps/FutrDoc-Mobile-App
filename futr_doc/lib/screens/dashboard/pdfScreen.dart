@@ -13,7 +13,7 @@ class PdfScreen extends StatefulWidget {
   final dynamic shadowingData;
   final dynamic userData;
   PdfScreen({required this.userData, required this.shadowingData});
-  
+
   @override
   _PdfScreenState createState() => _PdfScreenState();
 }
@@ -23,6 +23,9 @@ class _PdfScreenState extends State<PdfScreen> {
     super.initState();
     getTheme();
   }
+
+  var _data = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
+      20, DateTime.now(), 'first icd', 'second icd', 'third icd');
 
   getTheme() async {
     var prefs = await SharedPreferences.getInstance();
@@ -37,30 +40,32 @@ class _PdfScreenState extends State<PdfScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.userData);
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('FutrDoc Report', style: Theme.of(context).textTheme.headline3),
-          backgroundColor: AppColors.primaryDARK,
-          leading: Container(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * .05),
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )),
-        ),
+          appBar: AppBar(
+            title: Text('FutrDoc Report',
+                style: Theme.of(context).textTheme.headline3),
+            backgroundColor: AppColors.primaryDARK,
+            leading: Container(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * .05),
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )),
+          ),
           body: PdfPreview(
-        build: (format) => pdf.builder(format, widget.userData, widget.shadowingData),
-        allowPrinting: false,
-        canChangeOrientation: false,
-        canChangePageFormat: false,
-        canDebug: false
-      )),
+              build: (format) =>
+                  pdf.builder(format, widget.userData, widget.shadowingData),
+              allowPrinting: false,
+              canChangeOrientation: false,
+              canChangePageFormat: false,
+              canDebug: false)),
     );
   }
 }

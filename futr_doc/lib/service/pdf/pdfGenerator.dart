@@ -23,12 +23,14 @@ PdfGraphics? canvas;
 
 var pdfHeader;
 var futrdocLogo;
-var data;
-var shadowings;
+var _data;
+var _shadowings;
 Future<Uint8List> generatePdf(
     PdfPageFormat format, PdfData data, dynamic shadowings) async {
-  print(data);
-
+  _data = data;
+  _shadowings = shadowings;
+  print('PENSI');
+  print(data.first_name);
   final doc = pw.Document(title: 'FutrDoc Report');
   final pageTheme = await _myPageTheme(format);
   pdfHeader = pw.MemoryImage(
@@ -71,7 +73,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
             pw.Container(
                 alignment: pw.Alignment.centerLeft,
                 padding: pw.EdgeInsets.only(left: 10),
-                child: pw.Text('${data.first_name} ${data.last_name}',
+                child: pw.Text('${_data.first_name} ${_data.last_name}',
                     style: pw.Theme.of(context).header0)),
             pw.Divider(),
             pw.SizedBox(height: 20),
@@ -169,33 +171,36 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                             style: pw.Theme.of(context).header1),
                         pw.SizedBox(height: 10),
                         pw.Container(
-                            padding: pw.EdgeInsets.all(10),
-                            width: format.availableWidth * .35,
-                            height: format.availableHeight * .185,
-                            decoration: pw.BoxDecoration(
-                              color: futrdocBlue,
-                              borderRadius: pw.BorderRadius.circular(10),
-                            ),
-                            child: pw.Column(
-                                mainAxisAlignment: pw.MainAxisAlignment.center,
-                                children: [
-                                  pw.Text('University/College:',
-                                      style: pw.Theme.of(context)
-                                          .header5
-                                          .copyWith(
-                                              fontWeight: pw.FontWeight.bold)),
-                                  pw.Text('${data.institution}',
-                                      style: pw.Theme.of(context).header5),
-                                  pw.SizedBox(height: 10),
-                                  pw.Text('Degree/Major:',
-                                      style: pw.Theme.of(context)
-                                          .header5
-                                          .copyWith(
-                                              fontWeight: pw.FontWeight.bold)),
-                                  pw.Expanded(child:pw.Text('${data.degree}',
-                                      style: pw.Theme.of(context).header5, textAlign: pw.TextAlign.center
-                                      ),),
-                                ]),),
+                          padding: pw.EdgeInsets.all(10),
+                          width: format.availableWidth * .35,
+                          height: format.availableHeight * .185,
+                          decoration: pw.BoxDecoration(
+                            color: futrdocBlue,
+                            borderRadius: pw.BorderRadius.circular(10),
+                          ),
+                          child: pw.Column(
+                              mainAxisAlignment: pw.MainAxisAlignment.center,
+                              children: [
+                                pw.Text('University/College:',
+                                    style: pw.Theme.of(context)
+                                        .header5
+                                        .copyWith(
+                                            fontWeight: pw.FontWeight.bold)),
+                                pw.Text('${_data.institution}',
+                                    style: pw.Theme.of(context).header5),
+                                pw.SizedBox(height: 10),
+                                pw.Text('Degree/Major:',
+                                    style: pw.Theme.of(context)
+                                        .header5
+                                        .copyWith(
+                                            fontWeight: pw.FontWeight.bold)),
+                                pw.Expanded(
+                                  child: pw.Text('${_data.degree}',
+                                      style: pw.Theme.of(context).header5,
+                                      textAlign: pw.TextAlign.center),
+                                ),
+                              ]),
+                        ),
                       ],
                     ),
                   ),
@@ -232,7 +237,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                       child: pw.RichText(
                           text: pw.TextSpan(children: [
                         pw.TextSpan(
-                          text: '${data.first_name} ${data.last_name} ',
+                          text: '${_data.first_name} ${_data.last_name} ',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
@@ -242,7 +247,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                           style: pw.Theme.of(context).header2,
                         ),
                         pw.TextSpan(
-                          text: '${data.total_hours} clinical shadowing hours ',
+                          text: '${_data.total_hours} clinical shadowing hours ',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
@@ -253,18 +258,18 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                         ),
                         pw.TextSpan(
                           text:
-                              '${DateFormat('MMMM').format(data.first_shadowing_date)}  ${data.first_shadowing_date.year}. ',
+                              '${DateFormat('MMMM').format(_data.first_shadowing_date)}  ${_data.first_shadowing_date.year}. ',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
                         ),
                         pw.TextSpan(
                           text:
-                              '${data.first_name} has extensive shaodwing experience in ',
+                              '${_data.first_name} has extensive shaodwing experience in ',
                           style: pw.Theme.of(context).header2,
                         ),
                         pw.TextSpan(
-                          text: '${data.top_icd_1}, ${data.top_icd_2}, ',
+                          text: '${_data.top_icd_1}, ${_data.top_icd_2}, ',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
@@ -274,7 +279,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                           style: pw.Theme.of(context).header2,
                         ),
                         pw.TextSpan(
-                          text: '${data.top_icd_3}.',
+                          text: '${_data.top_icd_3}.',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
@@ -293,7 +298,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                       style: pw.Theme.of(context).header1),
                   pw.Spacer(),
                   pw.Text(
-                      'Date Range: ${DateFormat("yMd").format(data.first_shadowing_date)} - ${DateFormat("yMd").format(DateTime.now())}',
+                      'Date Range: ${DateFormat("yMd").format(_data.first_shadowing_date)} - ${DateFormat("yMd").format(DateTime.now())}',
                       style: pw.Theme.of(context).header2)
                 ],
               ),
@@ -346,19 +351,18 @@ pw.Widget _contentTable(pw.Context context, PdfPageFormat format) {
           color: darkGrey,
           fontSize: 10,
         ),
-        oddRowDecoration:pw.BoxDecoration(
-           color: lightGrey,
-          
+        oddRowDecoration: pw.BoxDecoration(
+          color: lightGrey,
         ),
         headers: List<String>.generate(
           tableHeaders.length,
           (col) => tableHeaders[col],
         ),
         data: List<List<String>>.generate(
-          shadowings.length,
+          _shadowings.length,
           (row) => List<String>.generate(
             tableHeaders.length,
-            (col) => shadowings[row].getIndexForPdf(col),
+            (col) => _shadowings[row].getIndexForPdf(col),
           ),
         ),
       ));
