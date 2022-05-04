@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:futr_doc/theme/colors.dart';
 import 'appColor.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -6,6 +7,10 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class AppTheme {
   get darkTheme => ThemeData(
     
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+      backgroundColor: AppColors.primaryDARK
+    ),
       colorScheme: ColorScheme.fromSwatch(
         primarySwatch: materialLighterBlue,
         brightness: Brightness.light,
@@ -75,6 +80,10 @@ class AppTheme {
       ));
 
   get lightTheme => ThemeData(
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      backgroundColor: AppColors.offWhite
+    ),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: materialLighterBlue),
         unselectedWidgetColor: AppColors.primaryDARK,
         canvasColor: AppColors.lightGrey,

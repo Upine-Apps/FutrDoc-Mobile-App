@@ -47,13 +47,12 @@ class _PdfScreenState extends State<PdfScreen> {
           appBar: AppBar(
             title: Text('FutrDoc Report',
                 style: Theme.of(context).textTheme.headline3),
-            backgroundColor: AppColors.primaryDARK,
             leading: Container(
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * .05),
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
+                  icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).secondaryHeaderColor,),
                   onPressed: () {
                     Navigator.pop(context);
                   },

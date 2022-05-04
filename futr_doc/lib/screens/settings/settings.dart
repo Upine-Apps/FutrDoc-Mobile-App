@@ -50,7 +50,7 @@ class _SettingsState extends State<Settings> {
                       left: MediaQuery.of(context).size.width * .05),
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).secondaryHeaderColor),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -74,12 +74,15 @@ class _SettingsState extends State<Settings> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: ListView.builder(
-                            itemBuilder: (context, position) {
-                              return _createList(context, themes[position],
-                                  position, themeNotifier);
-                            },
-                            itemCount: themes.length,
+                         
+                              
+                              child: ListView.builder(
+                                itemBuilder: (context, position) {
+                                  return _createList(context, themes[position],
+                                      position, themeNotifier);
+                                },
+                                itemCount: themes.length,
+                             
                           ),
                         ),
                       ),
