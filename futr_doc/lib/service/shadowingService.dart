@@ -22,10 +22,10 @@ class ShadowingService {
   // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
-  // static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
+  static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
-  static final _hostUrl = 'http://localhost:3000/shadowing';
+  // static final _hostUrl = 'http://localhost:3000/shadowing';
 
   ShadowingService._privateConstructor();
   static final ShadowingService instance =

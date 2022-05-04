@@ -1,36 +1,21 @@
-import 'package:flutter/material.dart';
-
 import 'package:futr_doc/theme/pdfTheme.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
-
 import 'dart:async';
-import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
-
-import '../../custom-widgets/halfCircle.dart';
-import '../../models/ICD.dart';
-import '../../models/Shadowing.dart';
 import 'pdfData.dart';
-
-const PdfColor green = PdfColor.fromInt(0xff9ce5d0);
-const PdfColor lightGreen = PdfColor.fromInt(0xffcdf1e7);
-PdfGraphics? canvas;
 
 var pdfHeader;
 var futrdocLogo;
 var _data;
 var _shadowings;
+
 Future<Uint8List> generatePdf(
     PdfPageFormat format, PdfData data, dynamic shadowings) async {
   _data = data;
   _shadowings = shadowings;
-  print('PENSI');
-  print(data.first_name);
   final doc = pw.Document(title: 'FutrDoc Report');
   final pageTheme = await _myPageTheme(format);
   pdfHeader = pw.MemoryImage(
@@ -247,7 +232,8 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                           style: pw.Theme.of(context).header2,
                         ),
                         pw.TextSpan(
-                          text: '${_data.total_hours} clinical shadowing hours ',
+                          text:
+                              '${_data.total_hours} clinical shadowing hours ',
                           style: pw.Theme.of(context)
                               .header2
                               .copyWith(fontWeight: pw.FontWeight.bold),
@@ -265,7 +251,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                         ),
                         pw.TextSpan(
                           text:
-                              '${_data.first_name} has extensive shaodwing experience in ',
+                              '${_data.first_name} has extensive shadowing experience in ',
                           style: pw.Theme.of(context).header2,
                         ),
                         pw.TextSpan(
