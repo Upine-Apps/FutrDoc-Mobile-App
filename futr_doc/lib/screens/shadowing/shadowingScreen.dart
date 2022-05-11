@@ -89,7 +89,10 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                       ),
                       alignment: Alignment.centerLeft,
                       child: IconButton(
-                        icon: const Icon(Icons.home),
+                        icon: Icon(Icons.home,
+                            color: theme == 'Dark'
+                                ? AppColors.offWhite
+                                : AppColors.black),
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -218,7 +221,10 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                                                   .width *
                                               .025,
                                         ),
-                                        Icon(Icons.arrow_forward_ios)
+                                        Icon(Icons.arrow_forward_ios,
+                                            color: theme == 'Dark'
+                                                ? AppColors.offWhite
+                                                : AppColors.black)
                                       ],
                                     ))),
                           )
@@ -244,7 +250,7 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                                 isSpinner = false;
                               });
                               CustomToast.showDialog(
-                                  'Added shadowing!', context);
+                                  'Shadowing Entry Confirmed!', context, true);
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -253,7 +259,8 @@ class _ShadowingScreenState extends State<ShadowingScreen>
                             } else {
                               CustomToast.showDialog(
                                   'Failed to add shadowing, try again',
-                                  context);
+                                  context,
+                                  false);
                               setState(() {
                                 isSpinner = false;
                               });
@@ -289,35 +296,42 @@ class _ShadowingScreenState extends State<ShadowingScreen>
   bool get wantKeepAlive => true;
 
   fieldValidation(Shadowing lastShadowing) {
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(lastShadowing.physician_email!);
     if (lastShadowing.clinic_name!.isEmpty ||
         lastShadowing.clinic_name == null) {
-      CustomToast.showDialog('What\'s the clinic\'s name?', context);
+      CustomToast.showDialog('What\'s the clinic\'s name?', context, false);
       _pageController.jumpToPage(0);
       return false;
     } else if (lastShadowing.date!.isEmpty || lastShadowing.date == null) {
-      CustomToast.showDialog('Provide the day you shadowed', context);
+      CustomToast.showDialog('Provide the day you shadowed', context, false);
       _pageController.jumpToPage(1);
       return false;
     } else if (lastShadowing.duration!.isEmpty ||
         lastShadowing.duration == null) {
-      CustomToast.showDialog('How long did you shadow?', context);
+      CustomToast.showDialog('How long did you shadow?', context, false);
       _pageController.jumpToPage(2);
       return false;
     } else if (lastShadowing.activity!.isEmpty ||
         lastShadowing.activity == null) {
-      CustomToast.showDialog('Choose an activity that you did', context);
+      CustomToast.showDialog('Choose an activity that you did', context, false);
       _pageController.jumpToPage(3);
       return false;
     } else if (lastShadowing.patient_type!.isEmpty ||
         lastShadowing.patient_type == null) {
-      CustomToast.showDialog('Choose the patient type', context);
+      CustomToast.showDialog('Choose the patient type', context, false);
       _pageController.jumpToPage(4);
       return false;
     } else if (lastShadowing.icd10!.isEmpty || lastShadowing.icd10 == null) {
-      CustomToast.showDialog('Provide atleast one ICD10', context);
+      CustomToast.showDialog('Provide atleast one ICD10', context, false);
       _pageController.jumpToPage(5);
       return false;
+    } else if (lastShadowing.physician_email!.isEmpty || emailValid == false) {
+      CustomToast.showDialog('Provide a valid email', context, false);
+      _pageController.jumpToPage(6);
+      return false;
     }
-    return true;
+      return true;
   }
 }

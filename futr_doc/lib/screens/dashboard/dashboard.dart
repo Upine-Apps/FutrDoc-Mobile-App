@@ -112,7 +112,6 @@ class _DashboardState extends State<Dashboard> {
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
-       
         body: Align(
           alignment: Alignment.topCenter,
           child: SingleChildScrollView(
@@ -254,7 +253,6 @@ class _DashboardState extends State<Dashboard> {
                                                                     .format(
                                                                         date!);
                                                           });
-                                                          
                                                         }
                                                       },
                                                       text: selectedStartDate ==
@@ -588,8 +586,7 @@ class _DashboardState extends State<Dashboard> {
                                 dashboardData =
                                     result['body']['filteredDashboardData'];
                                 maxYrange =
-                                    result['body']['totalDuration'].toDouble() +
-                                        500.0;
+                                    result['body']['totalDuration'].toDouble()/60;
                               });
                             });
                           },
@@ -621,7 +618,7 @@ class _DashboardState extends State<Dashboard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Shadowing Data in Minutes',
+                                        'Shadowing Data in Hours',
                                         style: TextStyle(
                                             color: AppColors.primaryDARK,
                                             fontSize: 16,
@@ -710,20 +707,31 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       CustomElevatedButton(
                           onPressed: () async {
-                            var result = await ShadowingService.instance.getPdfData(context);
+                            var result = await ShadowingService.instance
+                                .getPdfData(context);
                             User user = context.read<UserProvider>().user;
-      //                       var userData = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
-      // 20, DateTime.now(), 'first icd', 'second icd', 'third icd', []);
-      print(user.degree!);
-                            var userData = PdfData(user.first_name!, user.last_name!, user.institution!, user.degree!,
-      20, earliestDate, 'first icd', 'second icd', 'third icd');
+                            //                       var userData = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
+                            // 20, DateTime.now(), 'first icd', 'second icd', 'third icd', []);
+                            print(user.degree!);
+                            var userData = PdfData(
+                                user.first_name!,
+                                user.last_name!,
+                                user.institution!,
+                                user.degree!,
+                                20,
+                                earliestDate,
+                                'first icd',
+                                'second icd',
+                                'third icd');
 
-                            if( result['status'] == true){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PdfScreen(userData: userData, shadowingData: result['body'])));
-                                    }
+                            if (result['status'] == true) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PdfScreen(
+                                          userData: userData,
+                                          shadowingData: result['body'])));
+                            }
                           },
                           elevation: 0,
                           text: 'View PDF',
@@ -731,7 +739,7 @@ class _DashboardState extends State<Dashboard> {
                           width: MediaQuery.of(context).size.width * .75,
                           height: MediaQuery.of(context).size.height * .05,
                           color: AppColors.lighterBlue),
-                          SizedBox(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                     ],

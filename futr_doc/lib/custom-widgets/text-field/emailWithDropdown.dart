@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:futr_doc/theme/appTheme.dart';
 
 class EmailWithDropdown extends StatelessWidget {
   final VoidCallback onEditingComplete;
@@ -51,6 +49,7 @@ class EmailWithDropdown extends StatelessWidget {
         ),
         labelText: labelText,
       ),
+      style: Theme.of(context).textTheme.bodyText2,
       onEditingComplete: onEditingComplete,
       controller: controller,
       onChanged: onChanged,

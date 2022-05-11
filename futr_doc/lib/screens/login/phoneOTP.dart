@@ -3,13 +3,15 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
 import 'package:futr_doc/service/userService.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../models/types/UnauthenticatedUserBody.dart';
 import '../../models/types/VerifyAttributeBody.dart';
+import '../../theme/appColor.dart';
 
 class PhoneOTP extends StatefulWidget {
+  
   final String phone_number;
   final String password;
   PhoneOTP({required this.phone_number, required this.password});
@@ -21,6 +23,19 @@ final TextEditingController _phoneCodeController = TextEditingController();
 final _phoneOTPKey = GlobalKey<FormState>();
 
 class _PhoneOTPState extends State<PhoneOTP> {
+  @override
+  void initState() {
+    super.initState();
+    getTheme();
+  }
+
+  getTheme() async {
+    var prefs = await SharedPreferences.getInstance();
+    setState(() {
+      theme = prefs.getString('Theme') ?? 'Light';
+    });
+  }
+  String theme = '';
   String code = '';
   bool isSpinner = false;
   @override
@@ -44,7 +59,7 @@ class _PhoneOTPState extends State<PhoneOTP> {
                         left: MediaQuery.of(context).size.width * .05),
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
+                      icon: Icon(Icons.arrow_back_ios, color: theme == 'Dark' ? AppColors.offWhite : AppColors.black,),
                       onPressed: () {
                         Navigator.pop(context);
                       },

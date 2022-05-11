@@ -67,23 +67,36 @@ class _SettingsState extends State<Settings> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       Container(
-                        height: 150,
                         child: Card(
                           elevation: 10,
                           color: AppColors.lightGrey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                         
-                              
-                              child: ListView.builder(
-                                itemBuilder: (context, position) {
-                                  return _createList(context, themes[position],
-                                      position, themeNotifier);
-                                },
-                                itemCount: themes.length,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Theme', style: TextStyle(
+                                      color: AppColors.primaryDARK,
+                                      fontSize: 16,
+                                      fontFamily: 'Share')),
+                                    Container(
+                                      height: MediaQuery.of(context).size.height * .1,
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.all(0),
+                                        itemBuilder: (context, position) {
+                                          return _createList(context, themes[position],
+                                              position, themeNotifier);
+                                        },
+                                        itemCount: themes.length,
                              
                           ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                         ),
                       ),
                       SizedBox(
@@ -127,7 +140,7 @@ class _SettingsState extends State<Settings> {
         _updateState(position, themeNotifier);
       },
       child: Row(
-        mainAxisSize: MainAxisSize.max,
+        // mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Radio(
             value: selectedPosition,

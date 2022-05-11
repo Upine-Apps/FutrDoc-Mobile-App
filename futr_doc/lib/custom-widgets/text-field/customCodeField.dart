@@ -23,6 +23,7 @@ class CustomCodeField extends StatelessWidget {
       controller: controller,
       keyboardType: TextInputType.number,
       onChanged: onChanged,
+      style: Theme.of(context).textTheme.bodyText2,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[0-9]+')),
       ],

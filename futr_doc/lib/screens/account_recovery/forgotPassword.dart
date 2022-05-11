@@ -4,9 +4,9 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customImage.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/models/types/UnauthenticatedUserBody.dart';
-import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/service/userService.dart';
+import 'package:futr_doc/theme/appColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom-widgets/text-field/customPhoneField.dart';
@@ -57,7 +57,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       left: MediaQuery.of(context).size.width * .05),
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios, color: theme == 'Dark' ? AppColors.offWhite : AppColors.black,),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -124,7 +124,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   isSpinner = false;
                                 });
                                 CustomToast.showDialog(
-                                    'Failed to send code', context);
+                                    'Failed to send code', context, false);
                               }
                             }
                           },

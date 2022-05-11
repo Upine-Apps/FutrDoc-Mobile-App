@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customPhoneField.dart';
+import '../../custom-widgets/text-field/customTextFormField.dart';
 import '../../models/Shadowing.dart';
 import '../../providers/ShadowingProvider.dart';
 
@@ -21,10 +22,10 @@ class ShadowingWho extends StatefulWidget {
   _ShadowingWhoState createState() => _ShadowingWhoState();
 }
 
-final TextEditingController _phonenumberController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
 
 class _ShadowingWhoState extends State<ShadowingWho> {
-  String phone_number = '';
+  String email = '';
 
   @override
   void initState() {
@@ -45,22 +46,40 @@ class _ShadowingWhoState extends State<ShadowingWho> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * .05),
-            CustomPhoneField(
-              onEditingComplete: () {},
-              labelText: 'PHONE NUMBER',
-              controller: _phonenumberController,
+            // CustomPhoneField(
+            //   onEditingComplete: () {},
+            //   labelText: 'PHONE NUMBER',
+            //   controller: _phonenumberController,
+            //   onChanged: (val) {
+            //     setState(() {
+            //       phone_number = val!;
+            //     });
+            //     Shadowing lastShadowing =
+            //         context.read<ShadowingProvider>().lastShadowing;
+            //     lastShadowing.phone_number = phone_number;
+            //     context
+            //         .read<ShadowingProvider>()
+            //         .setLastShadowing(lastShadowing);
+            //   },
+            // ),
+            CustomTextFormField(
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              controller: _emailController,
+              labelText: 'EMAIL',
               onChanged: (val) {
                 setState(() {
-                  phone_number = val!;
+                  email = val!;
                 });
                 Shadowing lastShadowing =
                     context.read<ShadowingProvider>().lastShadowing;
-                lastShadowing.phone_number = phone_number;
+                lastShadowing.physician_email = email;
                 context
                     .read<ShadowingProvider>()
                     .setLastShadowing(lastShadowing);
               },
-            ),
+            )
           ],
         ),
       ),

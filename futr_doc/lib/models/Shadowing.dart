@@ -4,7 +4,7 @@ import 'ICD.dart';
 class Shadowing {
   String? id;
   String? clinic_name;
-  String? phone_number;
+  String? physician_email;
   String? date;
   String? duration;
   String? activity;
@@ -16,7 +16,7 @@ class Shadowing {
   Shadowing(
       {this.id,
       this.clinic_name,
-      this.phone_number,
+      this.physician_email,
       this.date,
       this.duration,
       this.activity,
@@ -40,7 +40,7 @@ class Shadowing {
     return Shadowing(
         id: data['id'].toString(),
         clinic_name: data['clinic_name'],
-        phone_number: data['phone_number'],
+        physician_email: data['physician_email'],
         date: data['date'],
         duration: data['duration'].toString(),
         activity: data['activity'],
@@ -53,7 +53,7 @@ class Shadowing {
   Map<String, String> toJson() => {
         'id': id!,
         'clinic_name': clinic_name!,
-        'phone_number': phone_number!,
+        'physician_email': physician_email!,
         'date': date!,
         'duration': duration!,
         'activity': activity!,
@@ -86,7 +86,7 @@ String getIndexForPdf(int index) {
   static Shadowing emptyShadowingObject() => new Shadowing(
         id: '',
         clinic_name: '',
-        phone_number: '',
+        physician_email: '',
         date: '',
         duration: '',
         activity: '',

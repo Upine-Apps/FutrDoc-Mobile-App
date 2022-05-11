@@ -31,7 +31,7 @@ class _WalkthroughState extends State<Walkthrough> {
           PageViewModel(
             title: 'TRACKING',
             body:
-                'FutrDoc gives you the best tools to track every clinical shadowing experience',
+                'FutrDoc gives you the best tools to track every clinical shadowing experience!',
             image: Center(
                 child: CustomImage(
               imagePath: theme == 'Dark'
@@ -43,7 +43,7 @@ class _WalkthroughState extends State<Walkthrough> {
           PageViewModel(
             title: 'REPORTING',
             body:
-                'Use the FutrDoc dashboard and report feature to showcase your experiences',
+                'Use the FutrDoc dashboard and report feature to showcase your experiences!',
             image: Center(
                 child: CustomImage(
               imagePath: theme == 'Dark'

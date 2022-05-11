@@ -27,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       controller: controller,
       onChanged: onChanged,
+      style: Theme.of(context).textTheme.bodyText2,
       // inputFormatters: <TextInputFormatter>[
       //   FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\-\ ]"))
       // ],

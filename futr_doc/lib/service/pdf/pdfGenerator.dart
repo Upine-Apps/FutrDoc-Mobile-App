@@ -77,7 +77,6 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                         left: format.availableWidth * .025,
                         right: format.availableWidth * .025,
                       ),
-                      // width: format.availableWidth * .2,
                       decoration: pw.BoxDecoration(
                         color: futrdocBlue,
                         borderRadius: pw.BorderRadius.circular(10),
@@ -85,107 +84,30 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                       child: futrdocLogo != null
                           ? pw.Center(child: pw.Image(futrdocLogo))
                           : null),
-                  pw.SizedBox(width: 7),
+                  pw.SizedBox(width: 20),
                   pw.Container(
-                    // width: format.availableWidth * .3,
+                    width: 340,
+                    alignment: pw.Alignment.centerLeft,
                     child: pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('Report ID',
+                        // pw.SizedBox(height: 20),
+                        pw.Text(
+                            'Date: ${DateFormat("yMd").format(DateTime.now())}',
                             style: pw.Theme.of(context).header1),
-                        pw.SizedBox(height: 10),
-                        pw.Container(
-                            padding: pw.EdgeInsets.all(10),
-                            width: format.availableWidth * .35,
-                            height: format.availableHeight * .185,
-                            decoration: pw.BoxDecoration(
-                              color: futrdocBlue,
-                              borderRadius: pw.BorderRadius.circular(10),
-                            ),
-                            child: pw.Column(
-                                mainAxisAlignment: pw.MainAxisAlignment.center,
-                                children: [
-                                  pw.Row(
-                                      mainAxisAlignment:
-                                          pw.MainAxisAlignment.center,
-                                      children: [
-                                        pw.Text('Date:',
-                                            style: pw.Theme.of(context)
-                                                .header5
-                                                .copyWith(
-                                                    fontWeight:
-                                                        pw.FontWeight.bold)),
-                                        pw.SizedBox(width: 10),
-                                        pw.Text(
-                                            '${DateFormat("yMd").format(DateTime.now())}',
-                                            style:
-                                                pw.Theme.of(context).header5),
-                                      ]),
-                                  pw.SizedBox(height: 10),
-                                  pw.Row(
-                                      mainAxisAlignment:
-                                          pw.MainAxisAlignment.center,
-                                      children: [
-                                        pw.Text('Time:',
-                                            style: pw.Theme.of(context)
-                                                .header5
-                                                .copyWith(
-                                                    fontWeight:
-                                                        pw.FontWeight.bold)),
-                                        pw.SizedBox(width: 10),
-                                        pw.Text(
-                                            '${DateFormat("jm").format(DateTime.now())}',
-                                            style:
-                                                pw.Theme.of(context).header5),
-                                      ]),
-                                ])),
-                      ],
-                    ),
-                  ),
-                  pw.SizedBox(width: 6),
-                  pw.VerticalDivider(
-                      indent: format.availableWidth * .045,
-                      endIndent: format.availableWidth * .045,
-                      thickness: 2),
-                  pw.SizedBox(width: 6),
-                  pw.Container(
-                    child: pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.center,
-                      children: [
-                        pw.Text('Student Info',
+                        //  pw.SizedBox(height: 10),
+                        pw.Text(
+                            'Time: ${DateFormat("jm").format(DateTime.now())}',
+                            style: pw.Theme.of(context).header1,
+                            textAlign: pw.TextAlign.left),
+                        // pw.SizedBox(height: 10),
+                        pw.Text('University/College: ${_data.institution}',
                             style: pw.Theme.of(context).header1),
-                        pw.SizedBox(height: 10),
-                        pw.Container(
-                          padding: pw.EdgeInsets.all(10),
-                          width: format.availableWidth * .35,
-                          height: format.availableHeight * .185,
-                          decoration: pw.BoxDecoration(
-                            color: futrdocBlue,
-                            borderRadius: pw.BorderRadius.circular(10),
-                          ),
-                          child: pw.Column(
-                              mainAxisAlignment: pw.MainAxisAlignment.center,
-                              children: [
-                                pw.Text('University/College:',
-                                    style: pw.Theme.of(context)
-                                        .header5
-                                        .copyWith(
-                                            fontWeight: pw.FontWeight.bold)),
-                                pw.Text('${_data.institution}',
-                                    style: pw.Theme.of(context).header5),
-                                pw.SizedBox(height: 10),
-                                pw.Text('Degree/Major:',
-                                    style: pw.Theme.of(context)
-                                        .header5
-                                        .copyWith(
-                                            fontWeight: pw.FontWeight.bold)),
-                                pw.Expanded(
-                                  child: pw.Text('${_data.degree}',
-                                      style: pw.Theme.of(context).header5,
-                                      textAlign: pw.TextAlign.center),
-                                ),
-                              ]),
-                        ),
+                        //  pw.SizedBox(height: 10),
+
+                        pw.Text('Degree/Major: ${_data.degree}',
+                            style: pw.Theme.of(context).header1)
                       ],
                     ),
                   ),
@@ -281,7 +203,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
               child: pw.Row(
                 children: [
                   pw.Text('Clinical Shadowing Report',
-                      style: pw.Theme.of(context).header1),
+                      style: pw.Theme.of(context).header2),
                   pw.Spacer(),
                   pw.Text(
                       'Date Range: ${DateFormat("yMd").format(_data.first_shadowing_date)} - ${DateFormat("yMd").format(DateTime.now())}',
@@ -289,7 +211,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
                 ],
               ),
             ),
-            pw.Divider(),
+            pw.Divider(height: 1),
           ],
         ),
       ),
@@ -312,7 +234,7 @@ pw.Widget _contentHeader(pw.Context context, PdfPageFormat format) {
 pw.Widget _contentTable(pw.Context context, PdfPageFormat format) {
   const tableHeaders = ['Date', 'Duration (HR)', 'Clinic Name', 'ICD10'];
   return pw.Container(
-      padding: pw.EdgeInsets.only(left: 72.5, right: 72.5, top: 10),
+      padding: pw.EdgeInsets.only(left: 72.5, right: 72.5, top: 25),
       child: pw.Table.fromTextArray(
         border: null,
         cellAlignment: pw.Alignment.centerLeft,

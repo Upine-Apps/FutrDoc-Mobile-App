@@ -43,6 +43,7 @@ class _LoginHeroState extends State<LoginHero> {
                     children: <Widget>[
                       SizedBox(height: MediaQuery.of(context).size.height * .2),
                       CustomImage(
+                        height: MediaQuery.of(context).size.height * .15,
                         imagePath: theme == 'Dark'
                             ? 'assets/images/futrdoc-logo-dark.png'
                             : 'assets/images/futrdoc-logo-light.png',

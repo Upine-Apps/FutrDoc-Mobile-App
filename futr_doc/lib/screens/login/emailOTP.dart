@@ -3,13 +3,12 @@ import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
 import 'package:futr_doc/models/types/LoginBody.dart';
 import 'package:futr_doc/models/types/VerifyAttributeBody.dart';
-import 'package:futr_doc/screens/account_recovery/resetPassword.dart';
 import 'package:futr_doc/screens/login/profileSetup.dart';
-import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
+import '../../theme/appColor.dart';
 
 class EmailOTP extends StatefulWidget {
   final String phone_number;
@@ -23,11 +22,19 @@ final TextEditingController _emailCodeController = TextEditingController();
 final _emailOTPKey = GlobalKey<FormState>();
 
 class _EmailOTPState extends State<EmailOTP> {
+  getTheme() async {
+    var prefs = await SharedPreferences.getInstance();
+    setState(() {
+      theme = prefs.getString('Theme') ?? 'Light';
+    });
+  }
+  String theme = '';
   String code = '';
   bool isSpinner = false;
   @override
   void initState() {
     super.initState();
+    getTheme();
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       await UserService.instance.getEmailCode(
           LoginBody(username: widget.phone_number, password: widget.password),
@@ -56,7 +63,7 @@ class _EmailOTPState extends State<EmailOTP> {
                         left: MediaQuery.of(context).size.width * .05),
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
+                      icon: Icon(Icons.arrow_back_ios, color: theme == 'Dark' ? AppColors.offWhite : AppColors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
