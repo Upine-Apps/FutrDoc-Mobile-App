@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 overview.totalDuration),
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline5)),
+                                                .headline4)),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -276,8 +276,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                            overview.totalSpecialties
-                                                .toString(),
+                                            overview.topClinic.length > 20
+                                                ? '${overview.topClinic.substring(0, 20)}...'
+                                                : overview.topClinic,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline4)),

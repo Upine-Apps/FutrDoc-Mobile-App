@@ -50,7 +50,8 @@ class _SettingsState extends State<Settings> {
                       left: MediaQuery.of(context).size.width * .05),
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).secondaryHeaderColor),
+                    icon: Icon(Icons.arrow_back_ios,
+                        color: Theme.of(context).secondaryHeaderColor),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -73,30 +74,34 @@ class _SettingsState extends State<Settings> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Theme', style: TextStyle(
-                                      color: AppColors.primaryDARK,
-                                      fontSize: 16,
-                                      fontFamily: 'Share')),
-                                    Container(
-                                      height: MediaQuery.of(context).size.height * .1,
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.all(0),
-                                        itemBuilder: (context, position) {
-                                          return _createList(context, themes[position],
-                                              position, themeNotifier);
-                                        },
-                                        itemCount: themes.length,
-                             
-                          ),
-                                    ),
-                                  ],
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Theme',
+                                    style: TextStyle(
+                                        color: AppColors.primaryDARK,
+                                        fontSize: 16,
+                                        fontFamily: 'Share')),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * .125,
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.all(0),
+                                    itemBuilder: (context, position) {
+                                      return _createList(
+                                          context,
+                                          themes[position],
+                                          position,
+                                          themeNotifier);
+                                    },
+                                    itemCount: themes.length,
+                                  ),
                                 ),
-                              ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(

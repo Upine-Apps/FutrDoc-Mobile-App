@@ -91,7 +91,6 @@ class _DashboardState extends State<Dashboard> {
   double maxYrange = 1000;
   String displayClinicname = '';
 
-  // graph shit
   static const pilateColor = Color(0xff632af2);
   static const cyclingColor = Color(0xffffb3ba);
   static const quickWorkoutColor = Color(0xff578eff);
@@ -139,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
                           height: MediaQuery.of(context).size.height * .01,
                         ),
                         Text(
-                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} of Shadowing Hours, nice!',
+                          'Since ${textData.firstShadowingMonth} ${textData.firstShadowingYear}, you completed a total of ${totalDuration} of Shadowing Sessions, nice!',
                           style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
                         )
@@ -586,7 +585,8 @@ class _DashboardState extends State<Dashboard> {
                                 dashboardData =
                                     result['body']['filteredDashboardData'];
                                 maxYrange =
-                                    result['body']['totalDuration'].toDouble()/60;
+                                    result['body']['topDuration'].toDouble() /
+                                        60;
                               });
                             });
                           },
@@ -710,19 +710,25 @@ class _DashboardState extends State<Dashboard> {
                             var result = await ShadowingService.instance
                                 .getPdfData(context);
                             User user = context.read<UserProvider>().user;
-                            //                       var userData = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
-                            // 20, DateTime.now(), 'first icd', 'second icd', 'third icd', []);
+                            var topIcdResult = await ShadowingService.instance
+                                .getTopIcds(context);
+                            var topIcds = [];
+                            topIcdResult['body'].forEach((key, value) {
+                              topIcds.add(key);
+                            });
+                            topIcds[2] = null;
                             print(user.degree!);
                             var userData = PdfData(
-                                user.first_name!,
-                                user.last_name!,
-                                user.institution!,
-                                user.degree!,
-                                20,
-                                earliestDate,
-                                'first icd',
-                                'second icd',
-                                'third icd');
+                              user.first_name!,
+                              user.last_name!,
+                              user.institution!,
+                              user.degree!,
+                              20,
+                              earliestDate,
+                              topIcds[0] != null ? topIcds[0] : 'N/A',
+                              topIcds[1] != null ? topIcds[1] : 'N/A',
+                              topIcds[2] != null ? topIcds[2] : 'N/A',
+                            );
 
                             if (result['status'] == true) {
                               Navigator.push(
