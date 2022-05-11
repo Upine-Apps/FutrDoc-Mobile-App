@@ -44,9 +44,10 @@ class CreateGraph {
           color: AppColors.futrdocPurple,
           width: 5,
         ),
-         BarChartRodData(
+
+        BarChartRodData(
           //Geriatric
-          fromY:pediatric +
+          fromY: pediatric +
               betweenSpace +
               adolescent +
               betweenSpace +
@@ -57,7 +58,8 @@ class CreateGraph {
               adolescent +
               betweenSpace +
               adult +
-              betweenSpace + geriatric,
+              betweenSpace +
+              geriatric,
           color: AppColors.offWhite,
           width: 5,
         ),
@@ -79,7 +81,6 @@ class CreateGraph {
           color: AppColors.futrdocRed,
           width: 5,
         ),
-       
       ],
     );
   }
@@ -151,19 +152,22 @@ class CreateGraph {
     Set<String> patientTypes = Set();
     for (var month in dashboardData.keys) {
       for (var patientType in dashboardData[month].keys) {
-        if(patientType == 'Pediatric') isPediatric = true;
+        if (patientType == 'Pediatric') isPediatric = true;
         patientTypes.add(patientType);
       }
     }
     patientList = patientTypes.toList();
     patientList.sort();
-    if (isPediatric) {var sortedPatientList = ["Pediatric", ...patientList.sublist(0,patientList.length-1)];
-    patientList = sortedPatientList;
+    if (isPediatric) {
+      var sortedPatientList = [
+        "Pediatric",
+        ...patientList.sublist(0, patientList.length - 1)
+      ];
+      patientList = sortedPatientList;
     }
-    
+
     for (var i = 0; i < patientList.length; i++) {
-      legendList.add(
-          Legend(patientList[i], legendColors[patientList[i]]!));
+      legendList.add(Legend(patientList[i], legendColors[patientList[i]]!));
     }
     return (legendList);
   }

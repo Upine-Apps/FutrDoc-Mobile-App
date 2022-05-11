@@ -68,6 +68,21 @@ class Shadowing {
 //
 //
 
+String getIndexForPdf(int index) {
+ 
+    switch (index) {
+      case 0:
+        return this.date!;
+      case 1:
+        return this.duration!;
+      case 2:
+        return this.clinic_name!;
+      case 3:
+        return this.icd10![0]['icd'];
+    }
+    return '';
+  }
+
   static Shadowing emptyShadowingObject() => new Shadowing(
         id: '',
         clinic_name: '',

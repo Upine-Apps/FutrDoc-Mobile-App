@@ -4,12 +4,17 @@ import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:futr_doc/screens/dashboard/createGraph.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:futr_doc/screens/dashboard/pdfScreen.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../models/ICD.dart';
+import '../../models/User.dart';
 import '../../models/types/Shadowing/DataDashboardBody.dart';
+import '../../providers/UserProvider.dart';
+import '../../service/pdf/pdfData.dart';
 import '../../service/shadowingService.dart';
 import '../../service/utils.dart';
 import '../../theme/appColor.dart';
@@ -249,10 +254,7 @@ class _DashboardState extends State<Dashboard> {
                                                                     .format(
                                                                         date!);
                                                           });
-                                                          if (selectedStartDate !=
-                                                                  '' &&
-                                                              selectedEndDate !=
-                                                                  '') {}
+                                                          
                                                         }
                                                       },
                                                       text: selectedStartDate ==
@@ -585,7 +587,9 @@ class _DashboardState extends State<Dashboard> {
                                 selectedEndDate = '';
                                 dashboardData =
                                     result['body']['filteredDashboardData'];
-                                maxYrange = result['body']['totalDuration'].toDouble() + 500.0;
+                                maxYrange =
+                                    result['body']['totalDuration'].toDouble() +
+                                        500.0;
                               });
                             });
                           },
@@ -604,14 +608,11 @@ class _DashboardState extends State<Dashboard> {
                               // height: MediaQuery.of(context).size.height * .5,
                               // width: MediaQuery.of(context).size.width * 1,
                               child: Card(
-                                 color: 
-                                    AppColors.lightGrey,
-                                    
-                               
+                                color: AppColors.lightGrey,
                                 elevation: 4,
-                                 shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(24),
                                   child: Column(
@@ -620,42 +621,61 @@ class _DashboardState extends State<Dashboard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                      'Shadowing Data in Minutes',
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
+                                        'Shadowing Data in Minutes',
+                                        style: TextStyle(
+                                            color: AppColors.primaryDARK,
+                                            fontSize: 16,
+                                            fontFamily: 'Share'),
                                       ),
-                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .025),
                                       Row(
-                                      children: [
-                                        Text(
-                                      'Clinic: ',
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
-                                        ),
-                                        Expanded(child: Text(
-                                      displayClinicname == ''
-                                          ? 'All'
-                                          : displayClinicname.split(',')[0],
-                                      style: TextStyle(
-              color: AppColors.primaryDARK, fontSize: 16, fontFamily: 'Share'),
-                                        ))
-                                      ],
+                                        children: [
+                                          Text(
+                                            'Clinic: ',
+                                            style: TextStyle(
+                                                color: AppColors.primaryDARK,
+                                                fontSize: 16,
+                                                fontFamily: 'Share'),
+                                          ),
+                                          Expanded(
+                                              child: Text(
+                                            displayClinicname == ''
+                                                ? 'All'
+                                                : displayClinicname
+                                                    .split(',')[0],
+                                            style: TextStyle(
+                                                color: AppColors.primaryDARK,
+                                                fontSize: 16,
+                                                fontFamily: 'Share'),
+                                          ))
+                                        ],
                                       ),
-                                      
-                                      SizedBox(height: MediaQuery.of(context).size.height * .025),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .025),
                                       LegendsListWidget(
                                         legends: createGraph
                                             .getLegendList(dashboardData),
                                         //Legend(String, color)
                                         // {status: true, body: {filteredDashboardData: {April: {Adult: 180}, March: {Adolescent: 420, Adult: 120}}, firstShadowingMonth: March, firstShadowingYear: 2022, totalDuration: 1830}}
                                       ),
-                                      SizedBox(height: MediaQuery.of(context).size.height * .075),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .075),
                                       AspectRatio(
-                                        aspectRatio:1.5,
+                                        aspectRatio: 1.5,
                                         child: BarChart(
                                           BarChartData(
-                                              alignment: BarChartAlignment
-                                                  .spaceEvenly,
+                                              alignment:
+                                                  BarChartAlignment.spaceEvenly,
                                               titlesData: FlTitlesData(
                                                 leftTitles: AxisTitles(),
                                                 rightTitles: AxisTitles(),
@@ -663,19 +683,17 @@ class _DashboardState extends State<Dashboard> {
                                                 bottomTitles: AxisTitles(
                                                   sideTitles: SideTitles(
                                                     showTitles: true,
-                                                    getTitlesWidget:
-                                                        createGraph
-                                                            .bottomTitles,
+                                                    getTitlesWidget: createGraph
+                                                        .bottomTitles,
                                                     reservedSize: 22,
                                                   ),
                                                 ),
                                               ),
-                                              barTouchData: BarTouchData(
-                                                  enabled: false),
+                                              barTouchData:
+                                                  BarTouchData(enabled: false),
                                               borderData:
                                                   FlBorderData(show: false),
-                                              gridData:
-                                                  FlGridData(show: false),
+                                              gridData: FlGridData(show: false),
                                               barGroups:
                                                   createGraph.generateBarData(
                                                       dashboardData),
@@ -687,6 +705,35 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                      ),
+                      CustomElevatedButton(
+                          onPressed: () async {
+                            var result = await ShadowingService.instance.getPdfData(context);
+                            User user = context.read<UserProvider>().user;
+      //                       var userData = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
+      // 20, DateTime.now(), 'first icd', 'second icd', 'third icd', []);
+      print(user.degree!);
+                            var userData = PdfData(user.first_name!, user.last_name!, user.institution!, user.degree!,
+      20, earliestDate, 'first icd', 'second icd', 'third icd');
+
+                            if( result['status'] == true){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PdfScreen(userData: userData, shadowingData: result['body'])));
+                                    }
+                          },
+                          elevation: 0,
+                          text: 'View PDF',
+                          textColor: AppColors.offWhite,
+                          width: MediaQuery.of(context).size.width * .75,
+                          height: MediaQuery.of(context).size.height * .05,
+                          color: AppColors.lighterBlue),
+                          SizedBox(
+                        height: MediaQuery.of(context).size.height * .05,
+                      ),
                     ],
                   ),
                 ),
