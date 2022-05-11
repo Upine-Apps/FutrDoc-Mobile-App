@@ -68,8 +68,7 @@ class Shadowing {
 //
 //
 
-String getIndexForPdf(int index) {
- 
+  String getIndexForPdf(int index) {
     switch (index) {
       case 0:
         return this.date!;
@@ -78,7 +77,11 @@ String getIndexForPdf(int index) {
       case 2:
         return this.clinic_name!;
       case 3:
-        return this.icd10![0]['icd'];
+        var icd10Name = '';
+        this.icd10![0]['name'].length > 20
+            ? icd10Name = '${this.icd10![0]['name'].substring(0, 20)} ...'
+            : icd10Name = this.icd10![0]['name'];
+        return icd10Name;
     }
     return '';
   }
