@@ -716,7 +716,6 @@ class _DashboardState extends State<Dashboard> {
                             topIcdResult['body'].forEach((key, value) {
                               topIcds.add(key);
                             });
-                            topIcds[2] = null;
                             print(user.degree!);
                             var userData = PdfData(
                               user.first_name!,
