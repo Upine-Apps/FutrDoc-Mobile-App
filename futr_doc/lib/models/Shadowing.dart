@@ -78,7 +78,7 @@ String getIndexForPdf(int index) {
       case 2:
         return this.clinic_name!;
       case 3:
-        return this.icd10![0]['icd'];
+        return this.icd10![0]['name'];
     }
     return '';
   }

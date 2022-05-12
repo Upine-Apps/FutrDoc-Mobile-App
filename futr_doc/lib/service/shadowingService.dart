@@ -19,10 +19,10 @@ class ShadowingService {
   }
 
   //Uncomment for prod testing
-  // static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
+  static final _hostUrl = 'http://54.91.210.147:3000/shadowing';
 
   //Uncomment for local testing on Android
-  static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
+  // static final _hostUrl = 'http://10.0.2.2:3000/shadowing';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/shadowing';
@@ -186,7 +186,7 @@ class ShadowingService {
       http.Response response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         var bodyData = json.decode(response.body);
-        return {'status': true, 'body': bodyData['data'][0]};
+        return {'status': true, 'body': bodyData['data']};
       } else {
         return {'status': false};
       }
