@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:futr_doc/models/Shadowing.dart';
 import 'package:futr_doc/providers/ShadowingProvider.dart';
 import 'package:futr_doc/providers/tokenProvider.dart';
-import 'package:futr_doc/screens/dashboard/dashboard.dart';
-import 'package:futr_doc/screens/home/homeScreen.dart';
-import 'package:futr_doc/screens/login/emailOTP.dart';
-import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/screens/login/loginHero.dart';
-import 'package:futr_doc/screens/login/phoneOTP.dart';
-import 'package:futr_doc/screens/login/profileSetup.dart';
-import 'package:futr_doc/screens/login/walkthrough.dart';
-import 'package:futr_doc/screens/settings/settings.dart';
-import 'package:futr_doc/screens/shadowing/shadowingWhen.dart';
-import 'package:futr_doc/screens/shadowing/shadowingScreen.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
 import 'package:oktoast/oktoast.dart';
@@ -56,7 +45,7 @@ class MyApp extends StatelessWidget {
       child: OKToast(
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: LoginHero(),
+          home:LoginHero(),
           theme: AppTheme().lightTheme,
           darkTheme: AppTheme().darkTheme,
           themeMode: themeNotifier.getThemeMode(),

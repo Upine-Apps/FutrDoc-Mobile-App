@@ -36,7 +36,7 @@ class _ShadowingRecapState extends State<ShadowingRecap>
             ? '${lastShadowing.duration} minutes'
             : ''));
     final TextEditingController _providerController =
-        TextEditingController(text: lastShadowing.phone_number);
+        TextEditingController(text: lastShadowing.physician_email);
     final TextEditingController _dateController =
         TextEditingController(text: lastShadowing.date);
     final TextEditingController _activityController =
@@ -78,7 +78,7 @@ class _ShadowingRecapState extends State<ShadowingRecap>
                       enabled: false,
                       onEditingComplete: () {},
                       onChanged: (val) {},
-                      labelText: 'Provider'),
+                      labelText: 'Provider Email'),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .025,
                   ),

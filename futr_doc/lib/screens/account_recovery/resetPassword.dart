@@ -3,7 +3,6 @@ import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
 import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/buttons/customTextButton.dart';
 import '../../custom-widgets/customImage.dart';
@@ -11,6 +10,7 @@ import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customCodeField.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
 import '../../models/types/UnauthenticatedUserBody.dart';
+import '../../theme/appColor.dart';
 
 class ResetPassword extends StatefulWidget {
   final String phone_number;
@@ -64,7 +64,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         left: MediaQuery.of(context).size.width * .05),
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
+                      icon: Icon(Icons.arrow_back_ios, color: theme == 'Dark' ? AppColors.offWhite : AppColors.black,),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -129,7 +129,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               if (_resetPasswordKey.currentState!.validate()) {
                                 if (confirmPassword != password) {
                                   CustomToast.showDialog(
-                                      'Passwords do not match', context);
+                                      'Passwords do not match', context, false);
                                 } else {
                                   setState(() {
                                     isSpinner = true;
@@ -145,7 +145,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                       isSpinner = false;
                                     });
                                     CustomToast.showDialog(
-                                        'Wrong code provided', context);
+                                        'Wrong code provided', context, false);
                                   } else if (response['status'] == true) {
                                     setState(() {
                                       isSpinner = false;
@@ -169,10 +169,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   .resendSms(UnauthenticatedUserBody(
                                       username: widget.phone_number));
                               if (response['status'] == true) {
-                                CustomToast.showDialog('Code resent!', context);
+                                CustomToast.showDialog('Code resent!', context, false);
                               } else {
                                 CustomToast.showDialog(
-                                    response['message'], context);
+                                    response['message'], context, false);
                               }
                             },
                             text: 'Resend code')

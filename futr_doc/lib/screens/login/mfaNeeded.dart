@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customCodeField.dart';
-import 'package:futr_doc/screens/home/homeScreen.dart';
 import 'package:futr_doc/screens/login/emailOTP.dart';
-import 'package:futr_doc/screens/login/login.dart';
 import 'package:futr_doc/service/userService.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';

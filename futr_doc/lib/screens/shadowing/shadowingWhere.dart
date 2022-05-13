@@ -21,6 +21,7 @@ class _ShadowingWhereState extends State<ShadowingWhere>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final node = FocusScope.of(context);
     return Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
@@ -43,7 +44,9 @@ class _ShadowingWhereState extends State<ShadowingWhere>
                   searchResults = response;
                 });
               },
-              onEditingComplete: () {},
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
             ),
             if (searchResults != null && searchResults.length != 0) ...[
               Container(

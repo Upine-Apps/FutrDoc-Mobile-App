@@ -6,18 +6,12 @@ import 'package:futr_doc/custom-widgets/halfCircle.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPasswordFormField.dart';
 import 'package:futr_doc/custom-widgets/text-field/customPhoneField.dart';
 import 'package:futr_doc/screens/account_recovery/forgotPassword.dart';
-import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/service/userService.dart';
-import 'package:futr_doc/theme/appColor.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../custom-widgets/customToast.dart';
-import '../../models/User.dart';
 import '../../models/types/LoginBody.dart';
-import '../../providers/UserProvider.dart';
 import '../home/homeScreen.dart';
 
 class Login extends StatefulWidget {
@@ -77,6 +71,7 @@ class _LoginState extends State<Login> {
                               height:
                                   MediaQuery.of(context).size.height * .125),
                           CustomImage(
+                            height: MediaQuery.of(context).size.height * .15,
                             imagePath: theme == 'Dark'
                                 ? 'assets/images/futrdoc-logo-light.png'
                                 : 'assets/images/futrdoc-logo-dark.png',

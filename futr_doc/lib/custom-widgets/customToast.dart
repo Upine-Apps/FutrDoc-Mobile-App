@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../theme/appColor.dart';
+
 class CustomToast {
-  static showDialog(String msg, BuildContext context) {
+  static showDialog(String msg, BuildContext context, [bool? showCheckIcon]) {
     showToastWidget(
       Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Theme.of(context).secondaryHeaderColor,
-            border: Border.all(color: Theme.of(context).primaryColor),
+            color: AppColors.lighterBlue,
+            border: Border.all(color: AppColors.lighterBlue),
             borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: DefaultTextStyle(
-            style: TextStyle(
-                fontFamily: 'Share',
-                fontSize: 20,
-                color: Theme.of(context).primaryColor),
-            child: Text(msg,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if(showCheckIcon == true) ... [
+              Icon(Icons.check, color: AppColors.offWhite),
+              SizedBox(width: 10),
+            ],
+            DefaultTextStyle(
+              
                 style: TextStyle(
                     fontFamily: 'Share',
-                    fontSize: 16,
-                    color: Theme.of(context).primaryColor))),
+                    fontSize: 20,
+                    color: AppColors.offWhite),
+                child: Text(msg,
+                    style: TextStyle(
+                        fontFamily: 'Share',
+                        fontSize: 16,
+                        color: AppColors.offWhite))),
+          ],
+        ),
       ),
       duration: Duration(seconds: 5),
       position: ToastPosition.center,

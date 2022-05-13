@@ -1,27 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
-import 'package:futr_doc/custom-widgets/customImage.dart';
-import 'package:futr_doc/custom-widgets/loadingOverlay.dart';
-import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
 import 'package:futr_doc/models/types/UserSignUpBody.dart';
-import 'package:futr_doc/screens/login/mfaNeeded.dart';
 import 'package:futr_doc/screens/login/phoneOTP.dart';
 import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
-import '../../custom-widgets/customCheckBox.dart';
 import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
 import '../../custom-widgets/text-field/customPhoneField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
-import '../../models/User.dart';
 import '../../theme/appColor.dart';
 import 'login.dart';
-import '../../providers/UserProvider.dart';
-
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();

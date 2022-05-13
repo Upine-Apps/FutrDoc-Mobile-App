@@ -55,7 +55,9 @@ class _ShadowingICDState extends State<ShadowingICD>
                     print(searchResults);
                   });
                 },
-                onEditingComplete: () {},
+                onEditingComplete: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
               ),
               if (searchResults != null && searchResults?.length != 0) ...[
                 Container(
@@ -82,7 +84,7 @@ class _ShadowingICDState extends State<ShadowingICD>
                               context.read<ShadowingProvider>().lastShadowing;
                           if (lastShadowing.icd10!.length == 3) {
                             CustomToast.showDialog(
-                                'You can only add 3 experiences', context);
+                                'You can only add 3 experiences', context, false);
                           } else {
                             lastShadowing.icd10?.add(searchResults![index]);
                             print(lastShadowing.icd10);

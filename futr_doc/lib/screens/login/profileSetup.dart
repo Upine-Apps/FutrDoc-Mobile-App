@@ -3,12 +3,9 @@ import 'package:futr_doc/custom-widgets/buttons/customElevatedButton.dart';
 import 'package:futr_doc/custom-widgets/customDropDown.dart';
 import 'package:futr_doc/custom-widgets/customToast.dart';
 import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
-import 'package:futr_doc/custom-widgets/text-field/customYearField.dart';
 import 'package:futr_doc/models/types/UserUpdateBody.dart';
-import 'package:futr_doc/screens/login/signUp.dart';
 import 'package:futr_doc/screens/login/walkthrough.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/User.dart';
 import '../../providers/UserProvider.dart';
 import '../../service/userService.dart';

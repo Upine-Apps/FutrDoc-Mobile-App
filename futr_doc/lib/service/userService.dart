@@ -29,10 +29,10 @@ class UserService {
   }
 
   //Uncomment for prod testing
-  // static final _hostUrl = 'http://54.91.210.147:3000/user';
+  static final _hostUrl = 'http://54.91.210.147:3000/user';
 
   //Uncomment for local testing on Android
-  static final _hostUrl = 'http://10.0.2.2:3000/user';
+  // static final _hostUrl = 'http://10.0.2.2:3000/user';
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/user';
@@ -278,14 +278,12 @@ class UserService {
     final url = '$_hostUrl';
     final Map<String, String> tokens =
         context.read<TokenProvider>().tokens.toJson();
-    print('TOKENS');
-    print(tokens);
     var headers = await getHeaders(jsonEncode(tokens));
     final User user = context.read<UserProvider>().user;
     userUpdateBody.phone_number = user.phone_number;
     userUpdateBody.email = user.email;
-    print(user);
-    userUpdateBody.institution = getInstitution(user.email, context);
+    // userUpdateBody.institution = getInstitution(user.email, context);
+        userUpdateBody.institution = getInstitution('shamer@utrgv.edu', context);
 
     Object body = userUpdateBody.toJson();
 
@@ -377,15 +375,15 @@ class UserService {
     var index = email.indexOf('@');
     var emailEnd = email.substring(index, email.length);
     switch (emailEnd) {
-      case 'utrgv.edu':
+      case '@utrgv.edu':
         return 'Univeristy of Texas Rio Grande Valley';
-      case 'tamu.edu':
+      case '@tamu.edu':
         return 'Texas A&M University';
-      case 'baylor.edu':
+      case '@baylor.edu':
         return 'Baylor University';
-      case 'upineapps.com':
+      case '@upineapps.com':
         return 'Upine Apps University';
-      case 'futrdoc.com':
+      case '@futrdoc.com':
         return 'FutrDoc University';
       default:
         return 'Upine Apps University';

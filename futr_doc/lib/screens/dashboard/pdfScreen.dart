@@ -24,9 +24,6 @@ class _PdfScreenState extends State<PdfScreen> {
     getTheme();
   }
 
-  var _data = PdfData('Tate', 'Walker', 'Upine Apps University', 'Aerospace',
-      20, DateTime.now(), 'first icd', 'second icd', 'third icd');
-
   getTheme() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -40,7 +37,6 @@ class _PdfScreenState extends State<PdfScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.userData);
     return WillPopScope(
       onWillPop: () async => true,
       child: Scaffold(
@@ -52,7 +48,10 @@ class _PdfScreenState extends State<PdfScreen> {
                     left: MediaQuery.of(context).size.width * .05),
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).secondaryHeaderColor,),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).secondaryHeaderColor,
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },

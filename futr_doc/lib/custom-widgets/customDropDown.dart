@@ -35,7 +35,7 @@ class CustomDropDown extends StatelessWidget {
       },
       items: items.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             value: value,
             child: Text(
               value,
