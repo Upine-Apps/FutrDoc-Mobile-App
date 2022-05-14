@@ -10,7 +10,6 @@ import 'package:futr_doc/screens/dashboard/pdfScreen.dart';
 
 import '../../custom-widgets/buttons/customElevatedButton.dart';
 import '../../custom-widgets/customToast.dart';
-import '../../models/ICD.dart';
 import '../../models/User.dart';
 import '../../models/types/Shadowing/DataDashboardBody.dart';
 import '../../providers/UserProvider.dart';
@@ -18,7 +17,6 @@ import '../../service/pdf/pdfData.dart';
 import '../../service/shadowingService.dart';
 import '../../service/utils.dart';
 import '../../theme/appColor.dart';
-import '../../theme/colors.dart';
 import 'legend_widget.dart';
 
 class Dashboard extends StatefulWidget {
