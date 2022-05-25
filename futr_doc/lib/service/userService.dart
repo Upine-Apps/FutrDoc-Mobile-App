@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:futr_doc/models/Tokens.dart';
 import 'package:futr_doc/models/types/ForgotPasswordBody.dart';
@@ -24,6 +23,7 @@ class UserService {
     final _headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       "Cognito": tokens ?? ''
+
     };
     return _headers;
   }
@@ -36,6 +36,7 @@ class UserService {
 
   //Uncomment for local testing on iOS
   // static final _hostUrl = 'http://localhost:3000/user';
+
 
   UserService._privateConstructor();
   static final UserService instance = new UserService._privateConstructor();
@@ -366,6 +367,7 @@ class UserService {
         return {'status': true};
       } else
         throw Error();
+
     } catch (err) {
       return {'status': false};
     }
@@ -389,8 +391,4 @@ class UserService {
         return 'Upine Apps University';
     }
   }
-
-  // Future changeUserAttribute() async{
-  //   //create type on the frontend as well
-  // }
 }
