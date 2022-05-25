@@ -24,16 +24,19 @@ class ShadowingWho extends StatefulWidget {
 
 final TextEditingController _emailController = TextEditingController();
 
-class _ShadowingWhoState extends State<ShadowingWho> {
+class _ShadowingWhoState extends State<ShadowingWho>
+    with AutomaticKeepAliveClientMixin {
   String email = '';
 
   @override
   void initState() {
     super.initState();
+    _emailController.text = '';
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
@@ -46,22 +49,6 @@ class _ShadowingWhoState extends State<ShadowingWho> {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * .05),
-            // CustomPhoneField(
-            //   onEditingComplete: () {},
-            //   labelText: 'PHONE NUMBER',
-            //   controller: _phonenumberController,
-            //   onChanged: (val) {
-            //     setState(() {
-            //       phone_number = val!;
-            //     });
-            //     Shadowing lastShadowing =
-            //         context.read<ShadowingProvider>().lastShadowing;
-            //     lastShadowing.phone_number = phone_number;
-            //     context
-            //         .read<ShadowingProvider>()
-            //         .setLastShadowing(lastShadowing);
-            //   },
-            // ),
             CustomTextFormField(
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -87,6 +74,5 @@ class _ShadowingWhoState extends State<ShadowingWho> {
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
