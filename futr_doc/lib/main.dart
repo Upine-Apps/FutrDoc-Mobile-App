@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:futr_doc/screens/login/login.dart';
-import 'package:futr_doc/screens/settings/settings.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:futr_doc/providers/ShadowingProvider.dart';
+import 'package:futr_doc/providers/tokenProvider.dart';
+import 'package:futr_doc/screens/login/loginHero.dart';
 import 'package:futr_doc/theme/appTheme.dart';
 import 'package:futr_doc/theme/themeNotifier.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'providers/UserProvider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  await dotenv.load(fileName: ".env");
   prefs.then((value) {
     runApp(
       ChangeNotifierProvider<ThemeNotifier>(
@@ -30,12 +35,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Login(),
-      theme: AppTheme().lightTheme,
-      darkTheme: AppTheme().darkTheme,
-      themeMode: themeNotifier.getThemeMode(),
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ShadowingProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => TokenProvider())
+      ],
+      child: OKToast(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home:LoginHero(),
+          theme: AppTheme().lightTheme,
+          darkTheme: AppTheme().darkTheme,
+          themeMode: themeNotifier.getThemeMode(),
+        ),
+      ),
     );
   }
 }

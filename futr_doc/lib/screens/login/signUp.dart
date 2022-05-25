@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:futr_doc/custom-widgets/buttons/customTextButton.dart';
-import 'package:futr_doc/custom-widgets/customImage.dart';
-import 'package:futr_doc/custom-widgets/text-field/customTextFormField.dart';
+import 'package:futr_doc/models/types/UserSignUpBody.dart';
+import 'package:futr_doc/screens/login/phoneOTP.dart';
+import 'package:futr_doc/service/userService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom-widgets/buttons/customElevatedButton.dart';
-import '../../custom-widgets/text-field/customEmailFormField.dart';
+import '../../custom-widgets/customToast.dart';
 import '../../custom-widgets/text-field/customPasswordFormField.dart';
+import '../../custom-widgets/text-field/customPhoneField.dart';
 import '../../custom-widgets/text-field/emailWithDropdown.dart';
+import '../../theme/appColor.dart';
 import 'login.dart';
-
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
@@ -32,6 +34,11 @@ class _SignUpState extends State<SignUp> {
 
   String theme = '';
   bool terms = false;
+  String email = '';
+  String phone_number = '';
+  String password = '';
+  String confirmPassword = '';
+  bool isSpinner = false;
   final _signUpFormKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
@@ -39,6 +46,9 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  static const spinkit =
+      SpinKitWave(color: Colors.white, size: 25.0, type: SpinKitWaveType.start);
   String dropdownValue = '@utrgv.edu';
   @override
   Widget build(BuildContext context) {
@@ -58,41 +68,22 @@ class _SignUpState extends State<SignUp> {
                   child: Form(
                     key: _signUpFormKey,
                     child: Column(children: <Widget>[
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * .075),
-                      CustomImage(
-                          imagePath: theme == 'Dark'
-                              ? 'assets/images/sign-up-logo.png'
-                              : 'assets/images/sign-up-logo-light.png',
-                          height: MediaQuery.of(context).size.height * .035),
+                      SizedBox(height: MediaQuery.of(context).size.height * .1),
+                      Text('Welcome to the easiest way to track your hours!',
+                          style: Theme.of(context).textTheme.headline2),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
-                      CustomTextFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'FIRST NAME',
-                        controller: _firstNameController,
-                        onChanged: (val) {},
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * .025),
-                      CustomTextFormField(
-                        onEditingComplete: () {
-                          node.nextFocus();
-                        },
-                        labelText: 'LAST NAME',
-                        controller: _lastNameController,
-                        onChanged: (val) {},
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .025,
-                      ),
                       EmailWithDropdown(
-                          onEditingComplete: () {},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           labelText: 'EMAIL',
                           controller: _emailController,
-                          onChanged: (val) {},
+                          onChanged: (val) {
+                            setState(() {
+                              email = val!;
+                            });
+                          },
                           onChangedDropdown: (value) {
                             setState(() {
                               dropdownValue = value!;
@@ -101,20 +92,44 @@ class _SignUpState extends State<SignUp> {
                           dropdownValue: dropdownValue),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
+                      CustomPhoneField(
+                        onEditingComplete: () {
+                          node.nextFocus();
+                        },
+                        labelText: 'PHONE NUMBER',
+                        controller: _phoneController,
+                        onChanged: (val) {
+                          setState(() {
+                            phone_number = val!;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
                           onEditingComplete: () {
                             node.nextFocus();
                           },
                           labelText: 'PASSWORD',
                           controller: _passwordController,
-                          onChanged: (val) {}),
+                          onChanged: (val) {
+                            setState(() {
+                              password = val!;
+                            });
+                          }),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       CustomPasswordFormField(
-                          onEditingComplete: () {},
+                          onEditingComplete: () {
+                            node.nextFocus();
+                          },
                           labelText: 'CONFIRM PASSWORD',
                           controller: _passwordConfirmController,
-                          onChanged: (val) {}),
+                          onChanged: (val) {
+                            setState(() {
+                              confirmPassword = val!;
+                            });
+                          }),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .025),
                       Row(
@@ -142,35 +157,109 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .035),
                       CustomElevatedButton(
-                        onPressed: () {
-                          if (_signUpFormKey.currentState!.validate()) {}
+                        onPressed: () async {
+                          if (_signUpFormKey.currentState!.validate()) {
+                            if (terms == false) {
+                              CustomToast.showDialog(
+                                  'Please accept the Terms and Conditions',
+                                  context);
+                            } else if (confirmPassword != password) {
+                              CustomToast.showDialog(
+                                  'Passwords do not match', context);
+                            } else {
+                              setState(() {
+                                isSpinner = true;
+                              });
+                              var result = await UserService.instance
+                                  .registerUser(
+                                      UserSignUpBody(
+                                          email: email,
+                                          dropdown_value: dropdownValue,
+                                          phone_number: phone_number,
+                                          legal: terms,
+                                          password: password),
+                                      context);
+                              if (result['status'] == false) {
+                                setState(() {
+                                  isSpinner = false;
+                                });
+                                CustomToast.showDialog(
+                                    'Error creating user, try again', context);
+                              } else {
+                                setState(() {
+                                  isSpinner = false;
+                                  terms = false;
+                                });
+                                _clearAllController();
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PhoneOTP(
+                                      phone_number: phone_number,
+                                      password: password,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          }
                         },
-                        text: 'Sign Up',
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        width: MediaQuery.of(context).size.width * .7,
-                        height: MediaQuery.of(context).size.height * .1,
+                        text: 'Register',
+                        textColor: AppColors.offWhite,
+                        color: AppColors.lighterBlue,
+                        width: MediaQuery.of(context).size.width * .75,
+                        height: MediaQuery.of(context).size.height * .05,
+                        spinner: isSpinner,
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * .025),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          CustomTextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(_createRoute());
+                              },
+                              text: 'Login'),
+                        ],
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * .05),
-                      Text(
-                        'Already have an account? ',
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      CustomTextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()));
-                          },
-                          text: 'Login'),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * .01),
                     ]),
                   ),
                 )),
           ))),
     );
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, -1.0);
+        const end = Offset.zero;
+        const curve = Curves.decelerate;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  void _clearAllController() {
+    _emailController.clear();
+    _phoneController.clear();
+    _passwordController.clear();
+    _passwordConfirmController.clear();
   }
 }

@@ -19,6 +19,7 @@ class CustomPasswordFormField extends StatelessWidget {
     return TextFormField(
         decoration: InputDecoration(labelText: labelText),
         onEditingComplete: onEditingComplete,
+        style: Theme.of(context).textTheme.bodyText2,
         controller: controller,
         validator: (String? val) {
           if (val!.isEmpty) {

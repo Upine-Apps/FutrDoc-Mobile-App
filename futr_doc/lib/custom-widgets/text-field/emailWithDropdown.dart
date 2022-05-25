@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:futr_doc/theme/appTheme.dart';
 
 class EmailWithDropdown extends StatelessWidget {
   final VoidCallback onEditingComplete;
@@ -33,11 +31,17 @@ class EmailWithDropdown extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
-              items: <String>['@utrgv.edu', '@tamu.edu', '@baylor.edu']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                '@utrgv.edu',
+                '@tamu.edu',
+                '@baylor.edu',
+                '@upineapps.com',
+                '@futrdoc.com'
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child:
+                      Text(value, style: Theme.of(context).textTheme.bodyText2),
                 );
               }).toList(),
             ),
@@ -45,12 +49,10 @@ class EmailWithDropdown extends StatelessWidget {
         ),
         labelText: labelText,
       ),
+      style: Theme.of(context).textTheme.bodyText2,
       onEditingComplete: onEditingComplete,
       controller: controller,
       onChanged: onChanged,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\-\ ]"))
-      ],
       validator: (String? val) {
         if (val!.isEmpty) {
           return 'Field cannot be empty';
